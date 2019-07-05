@@ -10,9 +10,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class MyWebMvcConfig implements WebMvcConfigurer {
 
+    /**
+     * 自定义视图映射器
+     * @param registry
+     */
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/main").setViewName("main");
-        registry.addViewController("/login").setViewName("Login");
+        //当访问/时重定向到main.html页面
+        registry.addRedirectViewController("/", "main");
     }
 }

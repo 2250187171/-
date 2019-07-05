@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class DeomCotroller {
+public class SkipCotroller {
     @RequestMapping("front/{act}")
     public String req(@PathVariable("act") String act){
         return "front/"+act;

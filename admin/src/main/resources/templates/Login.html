@@ -1,18 +1,14 @@
-
 <!DOCTYPE html>
 <!-- saved from url=(0069)http://www.chinawutong.com/login.html?url=http://www.chinawutong.com/ -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
 
-<link th:href="@{/Content/css/pub_sty.css}" rel="stylesheet" />
-<script type="text/javascript" th:src="@{/Content/js/jquery-3.2.1.min.js}"></script>
+<!--<link th:href="@{/Content/css/pub_sty.css}" rel="stylesheet" />-->
 
-<link rel="stylesheet" th:href="@{/Content/css/memberlogin.css}"
-	type="text/css"></link>
 
-<script type="text/javascript" th:src="@{/Content/layer/layer.js}"></script>
-<script th:src="@{/Content/js/h.js}"></script>
+<!--<link rel="stylesheet" th:href="@{/Content/css/memberlogin.css}"/>-->
+
 
 
 <title>登录</title>
@@ -26,7 +22,7 @@ input:-webkit-autofill {
 </head>
 <body>
 	<form name="form1" method="post" onsubmit="return false"
-		action="${ctx}/LoginController/userLogin.do" id="ForShuJu">
+		th:action="@{/login}" id="ForShuJu">
 
 		<!--顶部-->
 		<div class="top_warpper">
@@ -54,9 +50,9 @@ input:-webkit-autofill {
 
 					<div class="text_uid cl">
 						<ul class="login_namewar">
-							<li><label class="login_name"></label> <input name="PhoneNumber"
+							<li><label class="login_name"></label> <input name="username"
 								type="text" id="PhoneNumber" class="login_text" autocomplete="off"
-								placeholder="请输入您的手机号码" value="${PhoneNumber }" maxlength="11"
+								placeholder="请输入您的手机号码" th:value="${session.user?.phoneNumber}" maxlength="11"
 								onkeyup="this.value=this.value.replace(/\D/g,'')"
 								onafterpaste="this.value=this.value.replace(/\D/g,'')"
 								onchange="YanZheng(this.id,value)" /><span
@@ -64,7 +60,7 @@ input:-webkit-autofill {
 								id="Uidhide">*</span></li>
 							<li><label class="login_pwd"></label> <input name="Password"
 								type="password" id="txtPwd" class="login_text2" maxlength="20"
-								placeholder="请输入您的密码" value="${Password }" /><span
+								placeholder="请输入您的密码" value="${loginPassword }" /><span
 								style="color: red; display: none; float: right; margin: 5px;"
 								id="Pwdhide">*</span></li>
 							<li><img src="${ctx}/LoginController/Identity.do" id="ValidateCode"
@@ -127,100 +123,103 @@ input:-webkit-autofill {
 		</div>
 
 	</form>
-	<script type="text/javascript">
-		var check = '${ISTrue}';
+	<script type="text/javascript" th:src="@{/Content/layer/layer.js}"></script>
+	<script th:src="@{/Content/js/h.js}"></script>
+	<script type="text/javascript" th:src="@{/Content/js/jquery-3.2.1.min.js}"></script>
+	<!--<script type="text/javascript">-->
+		<!--var check = '${ISTrue}';-->
 
-		$(function() {
-			if (check == "true") {
-				$("#IsRemember").prop("checked", "true");
-				$("#IsRemember").val(true);
-				$("#IsTrue").val(true);
-			} else {
-				$("#IsRemember").prop("checked", false);
-				$("#IsRemember").val(false);
-				$("#IsTrue").val(false);
-			}
-		});
+		<!--$(function() {-->
+			<!--if (check == "true") {-->
+				<!--$("#IsRemember").prop("checked", "true");-->
+				<!--$("#IsRemember").val(true);-->
+				<!--$("#IsTrue").val(true);-->
+			<!--} else {-->
+				<!--$("#IsRemember").prop("checked", false);-->
+				<!--$("#IsRemember").val(false);-->
+				<!--$("#IsTrue").val(false);-->
+			<!--}-->
+		<!--});-->
 
-		//判断是否选中
-		function CheckBox(ID) {
-			var IsTrue = $("#" + ID).val();
-			if (IsTrue == "true") {
-				$("#" + ID).val(false);
-				$("#IsTrue").val(false);
-			} else {
-				$("#" + ID).val(true);
-				$("#IsTrue").val(true);
-			}
-		}
+		<!--//判断是否选中-->
+		<!--function CheckBox(ID) {-->
+			<!--var IsTrue = $("#" + ID).val();-->
+			<!--if (IsTrue == "true") {-->
+				<!--$("#" + ID).val(false);-->
+				<!--$("#IsTrue").val(false);-->
+			<!--} else {-->
+				<!--$("#" + ID).val(true);-->
+				<!--$("#IsTrue").val(true);-->
+			<!--}-->
+		<!--}-->
 
-		//点击刷新二维码
-		$("#ValidateCode").click(
-				function() {
-					$("#ValidateCode").attr(
-							"src",
-							"${ctx}/LoginController/Identity.do?ts="
-									+ new Date().getTime());//浏览器有一个缓存机制，这里借用时间是为了生成不重复图片。
-				});
+		<!--//点击刷新二维码-->
+		<!--$("#ValidateCode").click(-->
+				<!--function() {-->
+					<!--$("#ValidateCode").attr(-->
+							<!--"src",-->
+							<!--"${ctx}/LoginController/Identity.do?ts="-->
+									<!--+ new Date().getTime());//浏览器有一个缓存机制，这里借用时间是为了生成不重复图片。-->
+				<!--});-->
 
-		function Login() {
+		<!--function Login() {-->
 
-			var Form = $("#ForShuJu").serializeArray();
-			$.post("${ctx}/LoginController/userLogin.do", Form, function(data) {
+			<!--var Form = $("#ForShuJu").serializeArray();-->
+			<!--$.post("${ctx}/LoginController/userLogin.do", Form, function(data) {-->
 
-				if ((typeof data) == "string") {
-					data = JSON.parse(data);
-				}
-				if (data.state == true) {
+				<!--if ((typeof data) == "string") {-->
+					<!--data = JSON.parse(data);-->
+				<!--}-->
+				<!--if (data.state == true) {-->
 
-					window.location.href = "${ctx}/MainController/main.do";
-				} else {
-					layer.alert(data.msg, {
-						icon : 0,
-						title : "提示"
-					});
-					$("#ValidateCode").click();
-				}
+					<!--window.location.href = "${ctx}/MainController/main.do";-->
+				<!--} else {-->
+					<!--layer.alert(data.msg, {-->
+						<!--icon : 0,-->
+						<!--title : "提示"-->
+					<!--});-->
+					<!--$("#ValidateCode").click();-->
+				<!--}-->
 
-			});
+			<!--});-->
 
-		}
+		<!--}-->
 
-		$(document).keypress(function(e) {
-			// 回车键事件
-			if (e.which == 13) {
-				Login();
-			}
-		});
-		function YanZheng(ID, value) {
+		<!--$(document).keypress(function(e) {-->
+			<!--// 回车键事件-->
+			<!--if (e.which == 13) {-->
+				<!--Login();-->
+			<!--}-->
+		<!--});-->
+		<!--function YanZheng(ID, value) {-->
 
-			var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
-			if (!myreg.test(value)) {
-				$("#" + ID).val("");
-			}
+			<!--var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;-->
+			<!--if (!myreg.test(value)) {-->
+				<!--$("#" + ID).val("");-->
+			<!--}-->
 
-		}
+		<!--}-->
 
-		function cleanLogin() {
+		<!--function cleanLogin() {-->
 
-			$.post("${ctx}/LoginController/cleanLogin.do", function(data) {
+			<!--$.post("${ctx}/LoginController/cleanLogin.do", function(data) {-->
 
-				if ((typeof data) == "string") {
-					data = JSON.parse(data);
-				}
-				if (data.state == true) {
-					layer.alert(data.msg, {
-						icon : 1,
-						btn : [ "确定" ]
-					}, function(layerIndex) {
-						layer.close(layerIndex);//关闭提示框
-						window.location.reload();
-					});
-				}
-			});
+				<!--if ((typeof data) == "string") {-->
+					<!--data = JSON.parse(data);-->
+				<!--}-->
+				<!--if (data.state == true) {-->
+					<!--layer.alert(data.msg, {-->
+						<!--icon : 1,-->
+						<!--btn : [ "确定" ]-->
+					<!--}, function(layerIndex) {-->
+						<!--layer.close(layerIndex);//关闭提示框-->
+						<!--window.location.reload();-->
+					<!--});-->
+				<!--}-->
+			<!--});-->
 
-		}
-	</script>
+		<!--}-->
+	<!--</script>-->
 </body>
 </html>
 
