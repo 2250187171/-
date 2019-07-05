@@ -1,0 +1,160 @@
+/*banner轮播*/
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+a {
+	text-decoration: none;
+}
+
+ul {
+	list-style: outside none none;
+}
+
+.slider,.slider-panel img,.slider-extra {
+	width: 100%;
+	height: 400px;
+}
+
+.slider { /*text-align: center; */
+	/*margin: 30px auto; */
+	position: relative;
+}
+
+.slider .slider-main .img1 {
+	width: 100%;
+	height: 400px;
+	text-align: center;
+}
+
+.slider .slider-main .img2 {
+	width: 100%;
+	height: 400px;
+	text-align: center;
+}
+
+.slider .slider-main .img3 {
+	width: 100%;
+	height: 400px;
+	text-align: center;
+}
+
+.slider-panel,.slider-nav,.slider-pre,.slider-next {
+	position: absolute;
+	z-index: 8;
+}
+
+.slider-panel {
+	position: absolute;
+}
+
+.slider-panel img {
+	border: none;
+}
+
+.slider-extra {
+	position: relative;
+	z-index: 100;
+}
+
+.slider-nav {
+	margin-left: -30px;
+	position: absolute;
+	left: 50%;
+	bottom: 24px;
+}
+
+.slider-nav li {
+	background: #999;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+	color: #fff;
+	cursor: pointer;
+	margin: 0 10px 0 0;
+	overflow: hidden;
+	text-align: center;
+	/*display: inline-block; */
+	float: left;
+	height: 13px;
+	width: 13px;
+}
+
+.slider-nav .slider-item-selected {
+	background: #fff;
+}
+
+.slider-page a {
+	background: rgba(0, 0, 0, 0.2);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#33000000,
+		endColorstr=#33000000 );
+	color: #fff;
+	text-align: center;
+	display: block;
+	font-family: "simsun";
+	font-size: 22px;
+	width: 35px;
+	height: 35px;
+	line-height: 35px;
+	margin-top: -31px;
+	position: absolute;
+	top: 50%;
+	border-radius: 50%;
+	-webkit-border-radius: 50%;
+	-moz-border-radius: 50%;
+}
+
+.slider-page a:HOVER {
+	background: rgba(0, 0, 0, 0.4);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#66000000,
+		endColorstr=#66000000 );
+}
+
+.slider-next {
+	left: 100%;
+	margin-left: -228px;
+}
+
+.slider-pre {
+	margin-left: 200px;
+}
+
+.mask {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	background: rgba(0, 0, 0, .5);
+	z-index: 9998;
+	overflow: hidden;
+}
+
+.fws {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 9999;
+}
+
+.fwsImg {
+	display: block;
+	background: url(/template/Tem_blue_1/images/2018fws.png) top center
+		no-repeat;
+	width: 434px;
+	height: 496px;
+	margin: 0 auto;
+}
+
+.fwsClose {
+	display: block;
+	background: url(/template/Tem_blue_1/images/2018close.png) center
+		no-repeat;
+	width: 34px;
+	height: 34px;
+	position: absolute;
+	right: 0;
+	top: 100px;
+}
