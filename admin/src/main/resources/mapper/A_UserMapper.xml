@@ -5,6 +5,6 @@
 
     <!--根据手机号码查询用户-->
     <select id="findByPhoneNumber" resultType="map">
-        select*from a_user where phoneNumber=#{phoneNumber}
+        select * from a_user a JOIN a_user_role b ON(a.userID=b.userID) JOIN a_role c ON(b.roleID=c.roleID) where a.phoneNumber=#{phoneNumber}
     </select>
 </mapper>

@@ -17,9 +17,9 @@ import java.util.Map;
  * shiro的认证授权类
  */
 public class AuthRealm extends AuthorizingRealm {
+
     @Autowired
     private A_UserService service;
-
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -30,9 +30,9 @@ public class AuthRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         //获得用户凭证
         String phoneNumber = (String) authenticationToken.getPrincipal();
+        System.out.println("realm的凭证："+phoneNumber);
         //查询数据库判断该用户是否存在
-        Map user = service.findByPhoneNumber(phoneNumber);
-        //
+        Map user= service.findByPhoneNumber(phoneNumber);
         if(user==null){
             return null;
         }
@@ -40,7 +40,7 @@ public class AuthRealm extends AuthorizingRealm {
         String loginPassword=user.get("loginPassword").toString();
         //加密盐
         String salt="accp";
-        SimpleAuthenticationInfo info=new SimpleAuthenticationInfo(user.get("phoneNumber"), loginPassword, ByteSource.Util.bytes(salt),"myrealm");
+        SimpleAuthenticationInfo info=new SimpleAuthenticationInfo(phoneNumber, loginPassword, ByteSource.Util.bytes(salt),"myrealm");
         return info;
     }
 }
