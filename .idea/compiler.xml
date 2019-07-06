@@ -8,12 +8,14 @@
         <outputRelativeToContentRoot value="true" />
         <module name="admin" />
         <module name="communication" />
+        <module name="financial" />
         <module name="myproject" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="admin" target="1.8" />
       <module name="communication" target="1.8" />
+      <module name="financial" target="1.8" />
       <module name="my_project" target="1.8" />
       <module name="myproject" target="1.8" />
     </bytecodeTargetLevel>
