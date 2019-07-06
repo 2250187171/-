@@ -27,6 +27,6 @@ public class LoginController {
                 throw new Exception("密码错误");
             }
         }
-        return "login";
+        return "/login";
     }
 }

@@ -34,7 +34,7 @@
             <li class="dropdown dropdown-user" >
                 <a class="dropdown-toggle" data-toggle="dropdown">
                     <img src="assets/images/placeholder.jpg" alt="">
-                    <span>管理员</span>
+                    <span>[[${session.user.userName}]]</span>
                     <i class="caret"></i>
                 </a>
 
@@ -110,8 +110,8 @@
                 <div class="media">
                     <a href="#" class="media-left"><img src="assets/images/placeholder.jpg" class="img-circle img-sm" alt=""></a>
                     <div class="media-body">
-                        <span class="media-heading text-semibold">用户名：管理员</span>
-                        <p>角色：系统管理员</p>
+                        <span class="media-heading text-semibold">用户名：[[${session.user.userName}]]</span>
+                        <p>角色：[[${session.user.roleName}]]</p>
                         <div class="text-size-mini text-muted">
                             <i class="icon-pin text-size-small"></i> &nbsp;当前位置：
                         </div>
