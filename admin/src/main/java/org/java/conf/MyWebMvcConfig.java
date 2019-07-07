@@ -17,7 +17,7 @@ public class MyWebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         //当访问/时重定向到main.html页面
-//        registry.addViewController("/").setViewName("Login");
+        registry.addViewController("/ditu").setViewName("ditu");
         registry.addRedirectViewController("/", "main");
     }
 }

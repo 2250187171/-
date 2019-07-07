@@ -36,6 +36,7 @@ public class ShiroConfig {
         Map<String,String> shiroFilterDefinitionMap = new LinkedHashMap<>();
         shiroFilterDefinitionMap.put("/assets/**","anon" );
         shiroFilterDefinitionMap.put("/Content/**","anon" );
+        shiroFilterDefinitionMap.put("/ditu","anon" );
         shiroFilterDefinitionMap.put("/logout","logout" );//退出
         shiroFilterDefinitionMap.put("/**","authc" );//剩余的所有请求，都需要认证访问
         //把规程放入shiroFilterFactoryBean中

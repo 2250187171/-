@@ -5,6 +5,7 @@ import org.apache.shiro.subject.Subject;
 import org.java.service.A_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
@@ -18,7 +19,7 @@ public class MainController {
     @Autowired
     private A_UserService service;
     @RequestMapping("/main")
-    public String main(HttpSession session){
+    public String main(HttpSession session, Model model){
         System.out.println("登录成功------------------------------------------------");
         //获得用户主体
         Subject subject = SecurityUtils.getSubject();
@@ -26,6 +27,7 @@ public class MainController {
         String phoneNumber = (String) subject.getPrincipal();
         Map user = service.findByPhoneNumber(phoneNumber);
         session.setAttribute("user", user);
+        model.addAttribute("activeUrl", "main");
         return "/main";
 
     }
