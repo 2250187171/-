@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.ClassUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
@@ -64,8 +65,9 @@ public class AdminApplicationTests {
         options.put("detect_risk", "false");// 是否开启身份证风险类型(身份证复印件、临时身份证、身份证翻拍、修改过的身份证)功能，默认不开启，即：false。
         // front - 份证含照片的一面(back - 身份证带国徽的一面)
         String idCardSide = "front";
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/images";
         // 参数为本地图片二进制数组
-        byte[] file = readFile("C:\\Users\\徐志坚\\Desktop\\1.jpg");
+        byte[] file = readFile(path+"/133232211221.jpg");
         JSONObject res = client.idcard(file, idCardSide, options);
         Map map = JsonUtil.jsonToPojo(res.get("words_result").toString(), Map.class);
         Map map1= (Map) map.get("公民身份号码");
@@ -81,29 +83,34 @@ public class AdminApplicationTests {
 
     @Test
     public void drivingLicence() throws JSONException {
-        // 初始化一个AipOcr
-        AipOcr client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
-        // 可选：设置网络连接参数
-        client.setConnectionTimeoutInMillis(2000);// 建立连接的超时时间（单位：毫秒）
-        client.setSocketTimeoutInMillis(60000);// 通过打开的连接传输数据的超时时间（单位：毫秒）
-        // 传入可选参数调用接口
-        HashMap<String, String> options = new HashMap<String, String>();
-        options.put("detect_direction", "true");// 是否检测图像朝向，默认不检测，即：false。
-//        options.put("detect_risk", "false");// 是否开启身份证风险类型(身份证复印件、临时身份证、身份证翻拍、修改过的身份证)功能，默认不开启，即：false。
-        // front - 份证含照片的一面(back - 身份证带国徽的一面)
-//        String idCardSide = "front";
-        // 参数为本地图片二进制数组
-        byte[] file = readFile("C:\\Users\\徐志坚\\Desktop\\2.jpg");
-        JSONObject res = client.drivingLicense(file, options);
-        Map map = JsonUtil.jsonToPojo(res.get("words_result").toString(), Map.class);
-        System.out.println(map);
-        Map map1= (Map) map.get("姓名");
-        Map map2= (Map) map.get("至");
-        Map m=new HashMap();
-        m.put("name", map1.get("words"));
-        m.put("start", map2.get("words"));
+        String images = cxt.getRealPath("images");
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/images";
 
-        System.out.println(m);
+        System.out.println(images);
+        System.out.println(path);
+//        // 初始化一个AipOcr
+//        AipOcr client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
+//        // 可选：设置网络连接参数
+//        client.setConnectionTimeoutInMillis(2000);// 建立连接的超时时间（单位：毫秒）
+//        client.setSocketTimeoutInMillis(60000);// 通过打开的连接传输数据的超时时间（单位：毫秒）
+//        // 传入可选参数调用接口
+//        HashMap<String, String> options = new HashMap<String, String>();
+//        options.put("detect_direction", "true");// 是否检测图像朝向，默认不检测，即：false。
+////        options.put("detect_risk", "false");// 是否开启身份证风险类型(身份证复印件、临时身份证、身份证翻拍、修改过的身份证)功能，默认不开启，即：false。
+//        // front - 份证含照片的一面(back - 身份证带国徽的一面)
+////        String idCardSide = "front";
+//        // 参数为本地图片二进制数组
+//        byte[] file = readFile(images+"/133232211221.jpg");
+//        JSONObject res = client.drivingLicense(file, options);
+//        Map map = JsonUtil.jsonToPojo(res.get("words_result").toString(), Map.class);
+//        System.out.println(map);
+//        Map map1= (Map) map.get("姓名");
+//        Map map2= (Map) map.get("至");
+//        Map m=new HashMap();
+//        m.put("name", map1.get("words"));
+//        m.put("start", map2.get("words"));
+//
+//        System.out.println(m);
 
     }
 

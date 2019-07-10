@@ -231,12 +231,12 @@
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="position: relative;margin-left: 37px">
                     <h3 style="position: absolute; top: 80px; left: 150px;">上传个人照片</h3>
-                    <input type="file" onchange="loadImg(0)" id="picture0" name="picture"
+                    <input type="file" onchange="loadImg(0)" id="picture0" name="picture" judge="no"
                            accept="image/*"
                            style="width:100%; height:95% ;opacity: 0; z-index: 99; position: absolute; "/>
                     <img id="imgContent0" style="width:350px;height:250px;z-index: 0"
                          th:src="@{/assets/images/photo/head1.jpg}"/><input
-                        id="FileName0" name="filelist[0]FileName" class="hidden">
+                        id="FileName0" name="photo" class="hidden">
                 </div>
             </div>
 
@@ -246,12 +246,12 @@
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="position: relative;margin-left: 30px">
                     <h3 style="position: absolute; top: 80px; left: 150px;">上传身份证照片</h3>
-                    <input type="file" onchange="loadImg(1)" id="picture1" name="picture"
+                    <input type="file" onchange="loadImg(1)" id="picture1" name="picture" judge="no"
                            accept="image/*"
                            style="width:100%; height:95% ;opacity: 0; z-index: 99; position: absolute; "/>
                     <img id="imgContent1" style="width:350px;height:250px;z-index: 0"
                          th:src="@{/assets/images/IDPhoto/IDNumber.png}"/><input
-                        id="FileName1" name="filelist[1]FileName" class="hidden">
+                        id="FileName1" name="IDPhoto" class="hidden">
                 </div>
             </div>
 
@@ -261,12 +261,12 @@
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="position: relative;margin-left: 30px">
                     <h3 style="position: absolute; top: 80px; left: 150px;">上传人车合照</h3>
-                    <input type="file" onchange="loadImg(2)" id="picture2" name="picture"
+                    <input type="file" onchange="loadImg(2)" id="picture2" name="picture" judge="no"
                            accept="image/*"
                            style="width:100%; height:95% ;opacity: 0; z-index: 99; position: absolute; "/>
                     <img id="imgContent2" style="width:350px;height:250px;z-index: 0"
                          th:src="@{/assets/images/IDPhoto/manCarPhoto.jpg}"/><input
-                        id="FileName2" name="filelist[2]FileName" class="hidden">
+                        id="FileName2" name="manCarPhoto" class="hidden">
                 </div>
             </div>
 
@@ -276,12 +276,12 @@
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                 <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9" style="position: relative;margin-left: 30px">
                     <h3 style="position: absolute; top: 80px; left: 150px;">上传驾驶证照片</h3>
-                    <input type="file" onchange="loadImg(3)" id="picture3" name="picture"
+                    <input type="file" onchange="loadImg(3)" id="picture3" name="picture" judge="no"
                            accept="image/*"
                            style="width:100%; height:95% ;opacity: 0; z-index: 99; position: absolute; "/>
                     <img id="imgContent3" style="width:350px;height:250px;z-index: 0"
                          th:src="@{/assets/images/IDPhoto/3.jpeg}"/> <input
-                        id="FileName3" name="filelist[3]FileName" class="hidden">
+                        id="FileName3" name="drivingLicencePhoto" class="hidden">
 
                 </div>
 
@@ -395,7 +395,7 @@
                             "data" : function(obj) {
                                 return ' <button class="btn btn-info AuditRecord" value="'
                                     + obj.phoneNumber
-                                    + '"  onclick="updateEmployee(this.value)" id="update">修改</button> '
+                                    + '"  onclick="updateUser(this.value)" id="update">修改</button> '
                             },
                             "width" : "80px"
 
@@ -454,7 +454,7 @@
             }
 
         }
-
+        var PANDUAN=1;
         //---------------------------------------------------------------------------
         //信息非空验证-----------------------------------------------------------------
         function inputemployee() {
@@ -475,17 +475,17 @@
             //获得确认支付密码
             var confirmPayPassWord = $("#confirmPayPassWord").val();
             //获得员工角色
-            var role = $("#sectionID").val();
+            var role = $("#roleID").val();
             //获得部门
             var section = $("#sectionID").val();
             //获得个人照片路径
-            var picture0 = $("#picture0").val();
+            var picture0 = $("#FileName0").val();
             //获得身份证照片路径
-            var picture1 = $("#picture1").val();
+            var picture1 = $("#FileName1").val();
             //获得人车合照
-            var picture3 = $("#picture3").val();
+            var picture3 = $("#FileName3").val();
             //获得驾驶证照片
-            var picture2 = $("#picture2").val();
+            var picture2 = $("#FileName2").val();
             if (role == 1 && section == 2) {
                 if (userName == null || userName == "" || IDNumber == null || IDNumber == "" || PhoneNumber == null ||
                     PhoneNumber == "" || address == null || address == "" || LoginPassWord == null || LoginPassWord == "" ||
@@ -499,7 +499,6 @@
                     return false;
                 }
             } else {
-                alert(section + "-" + role);
                 if (userName == null || userName == "" || IDNumber == null || IDNumber == "" || PhoneNumber == null ||
                     PhoneNumber == "" || address == null || address == "" || LoginPassWord == null || LoginPassWord == "" ||
                     paymentPassword == null || paymentPassword == "" || role == "0" || section == "0" ||
@@ -511,27 +510,36 @@
                     return false;
                 }
             }
-            if (LoginPassWord != confirmLoginPassWord) {
-                layer.msg('登录密码输入不一致', {
-                    icon: 2,
-                    time: 1000
-                })
-                return false;
-            } else if (paymentPassword != confirmPayPassWord) {
-                layer.msg('支付密码输入不一致', {
-                    icon: 2,
-                    time: 1000
-                })
-                return false;
-            } else {
+            if(PANDUAN==1){
+                if (LoginPassWord != confirmLoginPassWord) {
+                    layer.msg('登录密码输入不一致', {
+                        icon: 2,
+                        time: 1000
+                    })
+                    return false;
+                } else if (paymentPassword != confirmPayPassWord) {
+                    layer.msg('支付密码输入不一致', {
+                        icon: 2,
+                        time: 1000
+                    })
+                    return false;
+                }
+            }
                     var index = layer.load(1); //添加laoding,0-2两种方式
                     $("#enterEmployeeFrom").ajaxSubmit(function (data) {
                         if (data == "1") {
                             layer.close(index);
-                            layer.msg("新增成功", {
-                                icon: 1,
-                                time: 1000
-                            })
+                            if(PANDUAN==1){
+                                layer.msg("新增成功", {
+                                    icon: 1,
+                                    time: 1000
+                                })
+                            }else{
+                                layer.msg("修改成功", {
+                                    icon: 1,
+                                    time: 1000
+                                })
+                            }
                         } else {
                             layer.close(index);
                             layer.msg(data, {
@@ -540,41 +548,25 @@
                             })
                         }
                     })
-            }
 
         }
 
         //加载图片---------------------------------------------------------
         function loadImg(Count) {
-
             //获取文件
             var file = $("#picture" + Count)[0].files[0];
             $("#FileName" + Count).val(file.name);
             //创建读取文件的对象
             var reader = new FileReader();
-
             //创建文件读取相关的变量
             var imgFile;
-
             //为文件读取成功设置事件
             reader.onload = function (e) {
-
                 imgFile = e.target.result;
-
                 $("#imgContent" + Count).attr('src', imgFile);
             };
-
             //正式读取文件
             reader.readAsDataURL(file);
-            if (Count == 0) {
-                $("#FileName" + Count).val("personPhoto");
-            } else if (Count == 2) {
-                $("#FileName" + Count).val("driverPhoto");
-            } else if (Count == 3) {
-                $("#FileName" + Count).val("manCarPhoto");
-            } else if (Count == 1) {
-                $("#FileName" + Count).val("idPhoto");
-            }
 
         }
 
@@ -587,14 +579,8 @@
             role = ID;
             if (ID == '1' && section == '2') {
                 $(".driver").show();
-                $("#imgContent3").attr("src", "/assets/images/IDPhoto/3.jpeg");
-
-                $("#imgContent2").attr("src", "/assets/images/IDPhoto/manCarPhoto.jpg");
             } else {
                 $(".driver").hide();
-                $("#imgContent3").attr("src", "");
-
-                $("#imgContent2").attr("src", "");
             }
         }
 
@@ -602,61 +588,64 @@
             section = ID;
             if (ID == '2' && role == '1') {
                 $(".driver").show();
-                $("#imgContent3").attr("src", "/assets/images/IDPhoto/3.jpeg");
-
-                $("#imgContent2").attr("src", "/assets/images/IDPhoto/manCarPhoto.jpg");
             } else {
                 $(".driver").hide();
-                $("#imgContent3").attr("src", "");
-
-                $("#imgContent2").attr("src", "");
             }
         }
     //----------------------------------------------------
     //点击新增按钮
     function add(){
+        PANDUAN==1;
         $("#showUser").hide();
-        $("#addUser").show()
-        PanDuan = 2;
-        $.post(
-            "${ctx}/EmployeeInformationController/selectDriver.do?UserID="
-            + UserID, function(data) {
-
-                $("#ModalOne").show();
-                $("#EmployeeTab").hide();
-                $(".password").hide();
-                if ((typeof data) == "string") {
-                    data = JSON.parse(data);
-                }
-                if (data != '') {
-                    loadDataToForm("enterEmployeeFrom", data);
-                }
-                if (data.institutionalorganizationid == 3) {
-                    $(".driver").show();
-                }
-                $("#imgContent0").attr2(
-                    "src",
-                    "${ctx}/LoginController/getPicture.do?fileName="
-                    + data.photo);
-                $("#imgContent1").attr2(
-                    "src",
-                    "${ctx}/LoginController/getPicture.do?fileName="
-                    + data.idphoto);
-                $("#imgContent2").attr2(
-                    "src",
-                    "${ctx}/LoginController/getPicture.do?fileName="
-                    + data.drivinglicencephoto);
-                $("#imgContent3").attr2(
-                    "src",
-                    "${ctx}/LoginController/getPicture.do?fileName="
-                    + data.mancarphoto);
-            });
+        $("#addUser").show();
+        $(".password").show();
+        $("#imgContent1").attr("src", "/assets/images/IDPhoto/IDNumber.png");
+        $("#imgContent0").attr("src", "/assets/images/photo/head1.jpg");
+        $("#imgContent3").attr("src", "/assets/images/IDPhoto/3.jpeg");
+        $("#imgContent2").attr("src", "/assets/images/IDPhoto/manCarPhoto.jpg");
+        $("#enterEmployeeFrom").attr("action","/userManage/addUser");
     }
 
     //点击关闭按钮
     function userGuanBi(){
         $("#addUser").hide();
         $("#showUser").show();
+        $("#enterEmployeeFrom input").val("");
+        $("#sectionID").val(0);
+        $("#roleID").val(0);
+    }
+
+    //点击修改按钮
+    function updateUser(phoneNumber){
+        PANDUAN==2;
+        $("#showUser").hide();
+        $("h1").text='修改用户';
+        $.post("/userManage/findByPhoneNumber/"+phoneNumber,{},function (data) {
+            $("#userName").val(data.userName);
+            $("#IDNumber").val(data.IDNumber);
+            $("#PhoneNumber").val(data.phoneNumber);
+            $("#address").val(data.address);
+            $("#sectionID").val(data.sectionID);
+            $("#roleID").val(data.roleID);
+            $(".password").hide();
+            $("#imgContent1").attr("src","/images/"+data.IDPhoto);
+            $("#imgContent0").attr("src","/images/"+data.photo);
+            $("#FileName1").val(data.IDPhoto)
+            $("#FileName0").val(data.photo)
+            if(data.manCarPhoto==data.phoneNumber){
+                $("#imgContent3").attr("src", "/assets/images/IDPhoto/3.jpeg");
+                $("#imgContent2").attr("src", "/assets/images/IDPhoto/manCarPhoto.jpg");
+            }else
+            {
+                $("#imgContent3").attr("src","/images/"+data.drivingLicencePhoto);
+                $("#imgContent2").attr("src","/images/"+data.manCarPhoto);
+                $("#FileName3").val(data.drivingLicencePhoto)
+                $("#FileName2").val(data.manCarPhoto)
+            }
+
+            $("#enterEmployeeFrom").attr("action","/userManage/updateUser");
+        })
+        $("#addUser").show();
     }
 </script>
 </body>

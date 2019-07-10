@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ClassUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -59,6 +60,7 @@ public class UserController {
     @RequestMapping("userManage/addUser")
     @ResponseBody
     public String addUser(@RequestParam Map map, HttpServletRequest request) throws Exception {
+        System.out.println(map);
         if(service.findByPassword(map.get("phoneNumber").toString())!=null){
             return "该手机号已被注册";
         }else if(service.findByIDNumber(map.get("IDNumber").toString())!=0){
@@ -106,6 +108,7 @@ public class UserController {
                 return "您的驾驶证已过期";
             }
         }
+
         for (MultipartFile f:list) {
             //获得文件名称
             String fileName= map.get("phoneNumber")+f.getOriginalFilename();
@@ -123,11 +126,17 @@ public class UserController {
         Object paymentpassword = md5.passwordMD5(map.get("paymentpassword").toString());
         map.put("loginPassword",loginPassword.toString());
         map.put("paymentpassword", paymentpassword.toString());
+        map.put("photo", map.get("phoneNumber").toString()+map.get("photo"));
+        map.put("IDPhoto", map.get("phoneNumber").toString()+map.get("IDPhoto"));
+        map.put("manCarPhoto", map.get("phoneNumber").toString()+map.get("manCarPhoto"));
+        map.put("drivingLicencePhoto", map.get("phoneNumber").toString()+map.get("drivingLicencePhoto"));
         //新增用户
         service.addUser(map);
         return "1";
     }
 
+
+    //根据条件分页查询
     @RequestMapping("/userManage/findUserAll")
     @ResponseBody
     public Map findUserAll(@RequestParam Map map,int start,int length){
@@ -140,5 +149,89 @@ public class UserController {
         m.put("recordsFiltered", service.count());
         m.put("aaData", userAll);
         return m;
+    }
+
+    //根据手机号码查询用户
+    @RequestMapping("/userManage/findByPhoneNumber/{phoneNumber}")
+    @ResponseBody
+    public Map findByPhoneNumber(@PathVariable("phoneNumber")String phoneNumber){
+        return service.findByPhoneNumber(phoneNumber);
+    }
+
+    @RequestMapping("/userManage/updateUser")
+    @ResponseBody
+    public String updateUser(@RequestParam Map map, HttpServletRequest request)throws Exception{
+        //获得不是该手机号码的数量
+        int phoneCount = service.findNotPhoneNumber(map.get("phoneNumber").toString());
+        //获得不是该身份证的数量
+        int idCount = service.findNotIDNumber(map.get("IDNumber").toString());
+        if(phoneCount>=1){
+            return "该手机号码已被注册";
+        }else if(idCount>=1){
+            return "该身份证号已被注册";
+        }
+
+        //获得项目根路径
+        String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/images";
+        //获得文件上传的请求
+        MultipartHttpServletRequest re= (MultipartHttpServletRequest) request;
+        //获得所有名称为Myfile的文件
+        List<MultipartFile> list = re.getFiles("picture");
+        if(list.isEmpty()){//判断是否为空
+            return "文件上传失败";
+        }
+        //将文件转换成字节数组
+        byte[] IDNumberpath= list.get(1).getBytes();
+
+        //解析身份证图片获得图片的身份证信息
+        Map IDNumber = card.idCard(IDNumberpath);
+
+        //获得部门id
+        int sectionID=Integer.parseInt(map.get("sectionID").toString());
+        //获得角色ID
+        int roleID=Integer.parseInt(map.get("roleID").toString());
+        System.out.println(map);
+        System.out.println(IDNumber.get("name")+"-----"+map.get("username"));
+        //判断身份证
+        if(!IDNumber.get("ID").equals(map.get("IDNumber"))){
+            return "身份证号码和输入号码不一致";
+        }else if(!IDNumber.get("name").equals(map.get("username"))){
+            return "身份证姓名和输入姓名不一致";
+        }else if(sectionID==2&&roleID==1){//判断该用户是不是司机
+            byte[] drivingLicence=list.get(3).getBytes();
+            //解析驾驶证图片获得驾驶证信息
+            Map Licence=card.drivingLicence(drivingLicence);
+            SimpleDateFormat format=new SimpleDateFormat("yyyyMMdd");
+            //获得当前时间的时间戳
+            long time = new Date().getTime();
+            //获得驾驶证到期时间的时间戳
+            long time1 = format.parse(Licence.get("endDate").toString()).getTime();
+            //获得当前时间
+            if(!map.get("username").equals(Licence.get("name"))){
+                return "驾驶证姓名和输入姓名不一致";
+            }else if(time1<time){
+                return "您的驾驶证已过期";
+            }
+        }
+
+        for (MultipartFile f:list) {
+            //获得文件名称
+            String fileName= map.get("phoneNumber")+f.getOriginalFilename();
+
+            //创建文件
+            File newfile=new File(path, fileName);
+            //判断文件的父级目录是否存在，不存在创建
+            if(!newfile.getParentFile().exists()){
+                newfile.getParentFile().mkdirs();
+            }
+            f.transferTo(newfile);
+        }
+        map.put("photo", map.get("phoneNumber").toString()+map.get("photo"));
+        map.put("IDPhoto", map.get("phoneNumber").toString()+map.get("IDPhoto"));
+        map.put("manCarPhoto", map.get("phoneNumber").toString()+map.get("manCarPhoto"));
+        map.put("drivingLicencePhoto", map.get("phoneNumber").toString()+map.get("drivingLicencePhoto"));
+        //新增用户
+        service.addUser(map);
+        return "1";
     }
 }

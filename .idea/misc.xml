@@ -2,6 +2,7 @@
 <project version="4">
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/../linemodule" />
+    <file type="web" url="file://$PROJECT_DIR$/../personalcenter" />
     <file type="web" url="file://$PROJECT_DIR$/admin" />
     <file type="web" url="file://$PROJECT_DIR$/center" />
     <file type="web" url="file://$PROJECT_DIR$/communication" />
@@ -9,7 +10,6 @@
     <file type="web" url="file://$PROJECT_DIR$/my_project" />
     <file type="web" url="file://$PROJECT_DIR$/myproject" />
     <file type="web" url="file://$PROJECT_DIR$/personalcenter" />
-    <file type="web" url="file://$PROJECT_DIR$/../personalcenter" />
   </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
@@ -18,6 +18,11 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/../center/pom.xml" />
+        <option value="$PROJECT_DIR$/admin/pom.xml" />
+        <option value="$PROJECT_DIR$/communication/pom.xml" />
+        <option value="$PROJECT_DIR$/myproject/pom.xml" />
+        <option value="$PROJECT_DIR$/personalcenter/pom.xml" />
+        <option value="$PROJECT_DIR$/financial/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

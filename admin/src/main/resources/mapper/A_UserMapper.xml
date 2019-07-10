@@ -6,7 +6,7 @@
     </sql>
     <sql id="userWhere">
         <if test="phoneNumber!=null and phoneNumber!=''">
-            and a.phoneNumber=#{phoneNumber}
+            and a.phoneNumber like '%${phoneNumber}%'
         </if>
         <if test="sectionID!='0' and sectionID!=0">
             and a.sectionID=#{sectionID}
@@ -19,7 +19,7 @@
 
     <!--根据手机号码查询用户-->
     <select id="findByPhoneNumber" resultType="map">
-        select a.phoneNumber,userName,roleName from a_user a JOIN a_user_role b ON(a.phoneNumber=b.phoneNumber) JOIN a_role c ON(b.roleID=c.roleID) where a.phoneNumber=#{phoneNumber}
+        select * from a_user a JOIN a_user_role b ON(a.phoneNumber=b.phoneNumber) JOIN a_role c ON(b.roleID=c.roleID) where a.phoneNumber=#{phoneNumber}
     </select>
     <!--查询用户获得密码-->
     <select id="findByPassword" resultType="String">
@@ -57,4 +57,20 @@
     <insert id="addUser_Role" parameterType="map">
         insert a_user_role values(null,#{phoneNumber},#{roleID})
     </insert>
+    <!--修改用户信息-->
+    <select id="updateUser" parameterType="map">
+        update a_user set username=#{username},sectionID=#{sectionID},
+        phoneNumber=#{phoneNumber},address=#{address},IDNumber=#{IDNumber},
+        sex=#{sex},IDPhoto=#{IDPhoto},photo=#{photo},drivingLicencePhoto=#{drivingLicencePhoto},
+        manCarPhoto=#{manCarPhoto} where phoneNumber=#{userid}
+    </select>
+    <!--查询不是该手机号的数量-->
+    <select id="findNotPhoneNumber" resultType="int">
+        select count(*) from a_user where phoneNumber!=#{phoneNumber}
+    </select>
+
+    <!--查询不是该身份证的数量-->
+    <select id="findNotIDNumber" resultType="int">
+        select count(*) from a_user where IDNumber!=#{IDNumber}
+    </select>
 </mapper>

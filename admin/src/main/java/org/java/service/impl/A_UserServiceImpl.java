@@ -61,4 +61,23 @@ public class A_UserServiceImpl implements A_UserService {
     public void addUser_Role(Map map) {
         a_userMapper.addUser_Role(map);
     }
+
+
+    //修改用户信息
+    @Override
+    public void updateUser(Map map) {
+        a_userMapper.updateUser(map);
+    }
+
+    //查询不是该手机号的数量
+    @Override
+    public int findNotPhoneNumber(String phoneNumber) {
+        return a_userMapper.findNotPhoneNumber(phoneNumber);
+    }
+
+    //查询不是该身份证的数量
+    @Override
+    public int findNotIDNumber(String IDNumber) {
+        return a_userMapper.findNotIDNumber(IDNumber);
+    }
 }
