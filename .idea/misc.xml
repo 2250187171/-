@@ -3,10 +3,13 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$/../linemodule" />
     <file type="web" url="file://$PROJECT_DIR$/admin" />
+    <file type="web" url="file://$PROJECT_DIR$/center" />
     <file type="web" url="file://$PROJECT_DIR$/communication" />
     <file type="web" url="file://$PROJECT_DIR$/financial" />
     <file type="web" url="file://$PROJECT_DIR$/my_project" />
     <file type="web" url="file://$PROJECT_DIR$/myproject" />
+    <file type="web" url="file://$PROJECT_DIR$/personalcenter" />
+    <file type="web" url="file://$PROJECT_DIR$/../personalcenter" />
   </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
@@ -14,12 +17,13 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/myproject/pom.xml" />
-        <option value="$PROJECT_DIR$/admin/pom.xml" />
-        <option value="$PROJECT_DIR$/communication/pom.xml" />
-        <option value="$PROJECT_DIR$/financial/pom.xml" />
-        <option value="$PROJECT_DIR$/../linemodule/pom.xml" />
+        <option value="$PROJECT_DIR$/../center/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/center/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
