@@ -13,8 +13,9 @@
 	<link th:href="@{/assets/css/minified/core.min.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/assets/css/minified/components.min.css}" rel="stylesheet" type="text/css">
 	<link th:href="@{/assets/css/minified/colors.min.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/assets/layui/css/layui.css}" rel="stylesheet" type="text/css">
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ERuIpcY6utL2GVFXGpQamaKKICP8Rueq"></script>
-	<script type="text/javascript" th:src="@{/assets/js/core/libraries/jquery.min.js}"></script>
+
 
 
 	<style type="text/css">
@@ -205,12 +206,22 @@
 
 			<!-- 主页内容-->
 			<div class="content-wrapper">
-				12312312312
+			<div class="layui-tab" lay-filter="demo" lay-allowclose="true">
+				<ul class="layui-tab-title">
+					<li class="layui-this" lay-id="main">主页</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">内容1</div>
+				</div>
+			</div>
 			</div>
 		</div>
 	</div>
 </div>
+	<script type="text/javascript" th:src="@{/assets/js/core/libraries/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/assets/js/core/app.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/admin/main.js}"></script>
 </body>
 </html>

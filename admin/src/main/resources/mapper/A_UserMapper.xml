@@ -1,10 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.java.dao.A_UserMapper">
-
+    <sql id="userFrom">
+        a_user a JOIN a_section b ON(a.sectionID=b.sectionID) JOIN a_user_role c ON(a.phoneNumber=c.phoneNumber) JOIN a_role d ON(c.roleID=d.roleID)
+    </sql>
+    <sql id="userWhere">
+        <if test="phoneNumber!=null and phoneNumber!=''">
+            and a.phoneNumber=#{phoneNumber}
+        </if>
+        <if test="sectionID!='0' and sectionID!=0">
+            and a.sectionID=#{sectionID}
+        </if>
+        <if test="roleID!='0' and roleID!=0" >
+            and d.roleID=#{roleID}
+        </if>
+        limit #{start},#{length}
+    </sql>
 
     <!--根据手机号码查询用户-->
     <select id="findByPhoneNumber" resultType="map">
-        select * from a_user a JOIN a_user_role b ON(a.userID=b.userID) JOIN a_role c ON(b.roleID=c.roleID) where a.phoneNumber=#{phoneNumber}
+        select a.phoneNumber,userName,roleName from a_user a JOIN a_user_role b ON(a.phoneNumber=b.phoneNumber) JOIN a_role c ON(b.roleID=c.roleID) where a.phoneNumber=#{phoneNumber}
     </select>
+    <!--查询用户获得密码-->
+    <select id="findByPassword" resultType="String">
+        select loginPassword from a_user where phoneNumber=#{phoneNumber}
+    </select>
+    <!--根据手机号查询用户-->
+    <select id="findByIDNumber" resultType="int">
+        select count(*) from a_user where IDNumber=#{IDNumber}
+    </select>
+
+    <!--查询所有用户-->
+    <select id="findUserAll" resultType="map">
+        select *from a_user;
+    </select>
+    <!--查询用户总数-->
+    <select id="count" resultType="int">
+        select count(*) from a_user;
+    </select>
+    <!--根据条件分页查询-->
+    <select id="findUserPaging" resultType="map" parameterType="map">
+        select a.*,sectionName,roleName from
+        <include refid="userFrom"/>
+        where 1=1
+        <include refid="userWhere"/>
+    </select>
+    <!--新增用户-->
+    <insert id="addUser" parameterType="map">
+        insert a_user values
+        (#{sectionID},0,#{username},#{phoneNumber},#{loginPassword},
+        #{paymentpassword},#{IDNumber},#{IDPhoto},#{photo},#{sex},
+        #{drivingLicencePhoto},#{manCarPhoto},'1',0,now(),null,#{address},1,null)
+    </insert>
+
+    <!--新增关联表-->
+    <insert id="addUser_Role" parameterType="map">
+        insert a_user_role values(null,#{phoneNumber},#{roleID})
+    </insert>
 </mapper>

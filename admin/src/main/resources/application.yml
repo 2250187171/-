@@ -14,9 +14,9 @@ spring:
     name: admin
   #配置数据源
   datasource:
-    url: jdbc:mysql://localhost:3306/logistics
+    url: jdbc:mysql://47.52.128.159:3306/logistics
     driver-class-name: com.mysql.jdbc.Driver
-    username: root
+    username: xzj
     password: 123
     tomcat:
       min-idle: 10
@@ -32,3 +32,7 @@ spring:
 mybatis:
   mapper-locations: mapper/*Mapper.xml
   type-aliases-package: java.util
+
+logging:
+  level:
+    org.java.dao: debug

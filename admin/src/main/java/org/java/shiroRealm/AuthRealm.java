@@ -11,8 +11,6 @@ import org.apache.shiro.util.ByteSource;
 import org.java.service.A_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Map;
-
 /**
  * shiro的认证授权类
  */
@@ -32,15 +30,13 @@ public class AuthRealm extends AuthorizingRealm {
         String phoneNumber = (String) authenticationToken.getPrincipal();
         System.out.println("realm的凭证："+phoneNumber);
         //查询数据库判断该用户是否存在
-        Map user= service.findByPhoneNumber(phoneNumber);
-        if(user==null){
+        String password= service.findByPassword(phoneNumber);
+        if(password==null){
             return null;
         }
-        //获得用户的密码
-        String loginPassword=user.get("loginPassword").toString();
         //加密盐
         String salt="accp";
-        SimpleAuthenticationInfo info=new SimpleAuthenticationInfo(phoneNumber, loginPassword, ByteSource.Util.bytes(salt),"myrealm");
+        SimpleAuthenticationInfo info=new SimpleAuthenticationInfo(phoneNumber, password, ByteSource.Util.bytes(salt),"myrealm");
         return info;
     }
 }

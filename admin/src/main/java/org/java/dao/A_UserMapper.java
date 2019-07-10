@@ -3,6 +3,7 @@ package org.java.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +14,25 @@ public interface A_UserMapper {
 
     //根据手机号码查询用户
     public Map findByPhoneNumber(@Param("phoneNumber")String phoneNumber);
+
+    //根据手机号码查询用户获得用户名和密码
+    public String findByPassword(@Param("phoneNumber")String phoneNumber);
+
+    //根据身份证查询用户
+    public int findByIDNumber(@Param("IDNumber")String IDNumber);
+
+    //新增用户
+    public void addUser(Map map);
+
+    //新增关联表
+    public void addUser_Role(Map map);
+
+    //查询所有用户
+    public List<Map> findUserAll();
+
+    //多条件分页查询用户
+    public List<Map> findUserPaging(Map map);
+
+    //查询用户总数
+    public int count();
 }

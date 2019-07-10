@@ -80,7 +80,7 @@
     </div>
 
     <div class="page-header-content">
-        <div class="page-title" style="border: 1px solid red;">
+        <div class="page-title">
             <h4><span class="text-semibold">欢迎使用汉达物流系统</span><span id="div_time" style="padding-left: 100px"></span></h4>
         </div>
         <div class="heading-elements">
@@ -130,6 +130,7 @@
         });
         tpwidget("show");
     </script>
+    <script type="text/javascript" th:src="@{/assets/js/core/libraries/jquery.min.js}"></script>
     <script>
         $(function(){
             // 显示当前时间
@@ -197,14 +198,14 @@
                         <span class="myFont">主要</span>
                         <i class="icon-menu" title="主要"></i>
                     </li>
-                    <li th:class="${activeUrl=='main'?'active':''}">
-                        <a th:href="@{/main}">
+                    <li>
+                        <a url="/main" name="tab" href="javascript:;" id="main">
                             <i class="icon-home4"></i>
                             <span class="myFont">主页</span>
                         </a>
                     </li>
 
-                    <li th:class="${activeUrl=='personalcenter'?'active':''}">
+                    <li>
                         <a href="#">
                             <i class="glyphicon glyphicon-cog"></i>
                             <span class="myFont">个人中心</span>
@@ -216,7 +217,7 @@
                         </ul>
                     </li>
 
-                    <li th:class="${activeUrl=='ordermanagement'?'active':''}">
+                    <li>
                         <a href="#">
                             <i class="glyphicon glyphicon-list-alt"></i>
                             <span class="myFont">订单管理</span>
@@ -323,14 +324,14 @@
                             <li><a href="purchaseOrder.do?method=select" class="myFont">财务记录</a></li>
                         </ul>
                     </li>
-                    <li th:class="${activeUrl=='userMessage'?'active':''}">
+                    <li>
                         <a>
                             <i class="icon-users"></i>
                             <span class="myFont">用户管理</span>
                         </a>
                         <ul>
-                            <li><a href="purApply.do?methoa=select" class="myFont">权限分配</a></li>
-                            <li><a th:href="@{/userManage/userMessage}" class="myFont">用户信息</a></li>
+                            <li><a href="purApply.do?methoa=select" class="myFont" >权限分配</a></li>
+                            <li><a class="myFont" url="/userManage/userMessage" name="tab" href="javascript:;" id='tabUser'>用户信息</a></li>
                         </ul>
                     </li>
                     <li>
