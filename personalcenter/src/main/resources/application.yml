@@ -1,0 +1,39 @@
+
+#设置服务器端口号
+server:
+  port: 8600
+  servlet:
+   context-path: /
+#在eureka服务中心注册客户端
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+#指定服务器名称
+spring:
+  application:
+    name: admin
+  #配置数据源
+  datasource:
+    url: jdbc:mysql://47.52.128.159:3306/logistics
+    driver-class-name: com.mysql.jdbc.Driver
+    username: xzj
+    password: 123
+    tomcat:
+      min-idle: 10
+      max-wait: 50
+      max-active: 10000
+      max-idle: 100
+  #设置thymeleaf的配置
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    mode: LEGACYHTML5
+#mybatis的配置
+mybatis:
+  mapper-locations: mapper/*Mapper.xml
+  type-aliases-package: java.util
+
+logging:
+  level:
+    org.java.dao: debug
