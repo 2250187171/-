@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/../linemodule" />
     <file type="web" url="file://$PROJECT_DIR$/admin" />
     <file type="web" url="file://$PROJECT_DIR$/communication" />
     <file type="web" url="file://$PROJECT_DIR$/financial" />
@@ -17,6 +18,7 @@
         <option value="$PROJECT_DIR$/admin/pom.xml" />
         <option value="$PROJECT_DIR$/communication/pom.xml" />
         <option value="$PROJECT_DIR$/financial/pom.xml" />
+        <option value="$PROJECT_DIR$/../linemodule/pom.xml" />
       </list>
     </option>
   </component>
