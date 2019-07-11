@@ -80,4 +80,30 @@ public class IdentificationCard {
         return null;
 
     }
+
+
+    //获得照片上的身份证信息
+    public Map idCard2(String path){
+        // 初始化一个AipOcr
+        AipOcr client = new AipOcr(APP_ID, API_KEY, SECRET_KEY);
+        // 可选：设置网络连接参数
+        client.setConnectionTimeoutInMillis(2000);// 建立连接的超时时间（单位：毫秒）
+        client.setSocketTimeoutInMillis(60000);// 通过打开的连接传输数据的超时时间（单位：毫秒）
+        // 传入可选参数调用接口
+        HashMap<String, String> options = new HashMap<String, String>();
+        options.put("detect_direction", "true");// 是否检测图像朝向，默认不检测，即：false。
+        options.put("detect_risk", "false");// 是否开启身份证风险类型(身份证复印件、临时身份证、身份证翻拍、修改过的身份证)功能，默认不开启，即：false。
+        // front - 份证含照片的一面(back - 身份证带国徽的一面)
+        String idCardSide = "front";
+        // 参数为本地图片二进制数组
+        byte[] file = readFile(path);
+        JSONObject res = client.idcard(file, idCardSide, options);
+        Map map = JsonUtil.jsonToPojo(res.get("words_result").toString(), Map.class);
+        Map map1= (Map) map.get("公民身份号码");
+        Map map2= (Map) map.get("姓名");
+        Map m=new HashMap();
+        m.put("ID", map1.get("words"));
+        m.put("name", map2.get("words"));
+        return m;
+    }
 }

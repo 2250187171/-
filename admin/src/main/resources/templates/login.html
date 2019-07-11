@@ -122,7 +122,7 @@ input:-webkit-autofill {
 		</div>
 
 	</form>
-
+	<script type="text/javascript" th:src="@{/Content/layer/layer.js}"></script>
 	<script type="text/javascript">
 		// var check = '${ISTrue}';
 		//
@@ -160,27 +160,9 @@ input:-webkit-autofill {
 		// 		});
 
 		function login() {
-		    alert(1);
+            var index = layer.load(1); //添加laoding,0-2两种方式
 			var Form = $("#ForShuJu").serializeArray();
             $("#ForShuJu").submit();
-			// $.post("${ctx}/LoginController/userLogin.do", Form, function(data) {
-			//
-			// 	if ((typeof data) == "string") {
-			// 		data = JSON.parse(data);
-			// 	}
-			// 	if (data.state == true) {
-			//
-			// 		window.location.href = "${ctx}/MainController/main.do";
-			// 	} else {
-			// 		layer.alert(data.msg, {
-			// 			icon : 0,
-			// 			title : "提示"
-			// 		});
-			// 		$("#ValidateCode").click();
-			// 	}
-			//
-			// });
-
 		}
 
 		$(document).keypress(function(e) {

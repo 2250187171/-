@@ -14,7 +14,6 @@
         <if test="roleID!='0' and roleID!=0" >
             and d.roleID=#{roleID}
         </if>
-        limit #{start},#{length}
     </sql>
 
     <!--根据手机号码查询用户-->
@@ -36,7 +35,10 @@
     </select>
     <!--查询用户总数-->
     <select id="count" resultType="int">
-        select count(*) from a_user;
+        select count(*) from
+        <include refid="userFrom"/>
+        where 1=1
+        <include refid="userWhere"/> ;
     </select>
     <!--根据条件分页查询-->
     <select id="findUserPaging" resultType="map" parameterType="map">
@@ -44,13 +46,14 @@
         <include refid="userFrom"/>
         where 1=1
         <include refid="userWhere"/>
+        limit #{start},#{length}
     </select>
     <!--新增用户-->
     <insert id="addUser" parameterType="map">
         insert a_user values
         (#{sectionID},0,#{username},#{phoneNumber},#{loginPassword},
         #{paymentpassword},#{IDNumber},#{IDPhoto},#{photo},#{sex},
-        #{drivingLicencePhoto},#{manCarPhoto},'1',0,now(),null,#{address},1,null)
+        #{drivingLicencePhoto},#{manCarPhoto},'1',0,now(),null,#{address},1,null,uuid())
     </insert>
 
     <!--新增关联表-->
@@ -62,15 +65,20 @@
         update a_user set username=#{username},sectionID=#{sectionID},
         phoneNumber=#{phoneNumber},address=#{address},IDNumber=#{IDNumber},
         sex=#{sex},IDPhoto=#{IDPhoto},photo=#{photo},drivingLicencePhoto=#{drivingLicencePhoto},
-        manCarPhoto=#{manCarPhoto} where phoneNumber=#{userid}
+        manCarPhoto=#{manCarPhoto} where phoneNumber=#{key}
     </select>
     <!--查询不是该手机号的数量-->
     <select id="findNotPhoneNumber" resultType="int">
-        select count(*) from a_user where phoneNumber!=#{phoneNumber}
+        select count(*) from a_user where userID!=#{userID} and phoneNumber=#{phoneNumber}
     </select>
 
     <!--查询不是该身份证的数量-->
     <select id="findNotIDNumber" resultType="int">
-        select count(*) from a_user where IDNumber!=#{IDNumber}
+        select count(*) from a_user where  userID!=#{userID} and IDNumber=#{IDNumber}
     </select>
+
+    <!--修改关联表-->
+    <update id="update_user_role" parameterType="map">
+        update a_user_role set phoneNumber=#{phoneNumber},roleID=#{roleID} where phoneNumber=#{key}
+    </update>
 </mapper>

@@ -26,7 +26,7 @@ public interface A_UserService
     public List<Map> findUserPaging(@Param("map")Map map);
 
     //查询用户总数
-    public int count();
+    public int count(Map map);
 
     //新增关联表
     public void addUser_Role(Map map);
@@ -35,8 +35,11 @@ public interface A_UserService
     public void updateUser(Map map);
 
     //查询不是该手机号的数量
-    public int findNotPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    public int findNotPhoneNumber( String phoneNumber,String userID);
 
     //查询不是该身份证的数量
-    public int findNotIDNumber(@Param("IDNumber")String IDNumber);
+    public int findNotIDNumber(String IDNumber,String userID);
+
+    //修改关联表
+    public void update_user_role(Map map);
 }

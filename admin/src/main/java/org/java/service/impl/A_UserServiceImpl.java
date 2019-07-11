@@ -52,8 +52,8 @@ public class A_UserServiceImpl implements A_UserService {
     }
     //查询总数据
     @Override
-    public int count() {
-        return a_userMapper.count();
+    public int count(Map map) {
+        return a_userMapper.count(map);
     }
 
     //新增关联表
@@ -67,17 +67,23 @@ public class A_UserServiceImpl implements A_UserService {
     @Override
     public void updateUser(Map map) {
         a_userMapper.updateUser(map);
+        update_user_role(map);
     }
 
     //查询不是该手机号的数量
     @Override
-    public int findNotPhoneNumber(String phoneNumber) {
-        return a_userMapper.findNotPhoneNumber(phoneNumber);
+    public int findNotPhoneNumber(String phoneNumber,String userID) {
+        return a_userMapper.findNotPhoneNumber(phoneNumber,userID);
     }
 
     //查询不是该身份证的数量
     @Override
-    public int findNotIDNumber(String IDNumber) {
-        return a_userMapper.findNotIDNumber(IDNumber);
+    public int findNotIDNumber(String IDNumber,String userID) {
+        return a_userMapper.findNotIDNumber(IDNumber,userID);
+    }
+
+    @Override
+    public void update_user_role(Map map) {
+        a_userMapper.update_user_role(map);
     }
 }

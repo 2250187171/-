@@ -34,14 +34,17 @@ public interface A_UserMapper {
     public List<Map> findUserPaging(Map map);
 
     //查询用户总数
-    public int count();
+    public int count(Map map);
 
     //修改用户信息
     public void updateUser(Map map);
 
     //查询不是该手机号的数量
-    public int findNotPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    public int findNotPhoneNumber(@Param("phoneNumber") String phoneNumber,@Param("userID")String userID);
 
     //查询不是该身份证的数量
-    public int findNotIDNumber(@Param("IDNumber")String IDNumber);
+    public int findNotIDNumber(@Param("IDNumber")String IDNumber,@Param("userID")String userID);
+
+    //修改关联表
+    public void update_user_role(Map map);
 }

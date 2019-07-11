@@ -134,6 +134,7 @@
                 <label for="PhoneNumber"
                        class="col-lg-3 col-md-3 col-sm-3 col-xs-3  control-label text-right text-primary lb">手机号码：</label>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 interval">
+                    <input type="hidden" id="key" name="key">
                     <input class="form-control" id="PhoneNumber" name="phoneNumber"
                            maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"
@@ -237,6 +238,7 @@
                     <img id="imgContent0" style="width:350px;height:250px;z-index: 0"
                          th:src="@{/assets/images/photo/head1.jpg}"/><input
                         id="FileName0" name="photo" class="hidden">
+                    <input id="File0" name="a" class="hidden">
                 </div>
             </div>
 
@@ -252,6 +254,7 @@
                     <img id="imgContent1" style="width:350px;height:250px;z-index: 0"
                          th:src="@{/assets/images/IDPhoto/IDNumber.png}"/><input
                         id="FileName1" name="IDPhoto" class="hidden">
+                    <input id="File1" name="b" class="hidden">
                 </div>
             </div>
 
@@ -267,6 +270,7 @@
                     <img id="imgContent2" style="width:350px;height:250px;z-index: 0"
                          th:src="@{/assets/images/IDPhoto/manCarPhoto.jpg}"/><input
                         id="FileName2" name="manCarPhoto" class="hidden">
+                    <input id="File2" name="v" class="hidden">
                 </div>
             </div>
 
@@ -282,6 +286,7 @@
                     <img id="imgContent3" style="width:350px;height:250px;z-index: 0"
                          th:src="@{/assets/images/IDPhoto/3.jpeg}"/> <input
                         id="FileName3" name="drivingLicencePhoto" class="hidden">
+                    <input id="File3" name="c" class="hidden">
 
                 </div>
 
@@ -340,7 +345,7 @@
 
                         }
                     },
-                    "lengthMenu" : [ 5, 10, 20, 50, 100 ],
+                    "lengthMenu" : [ 2, 5, 10, 20, 50 ],
                     "processing" : true, //打开数据加载时的等待效果
                     "serverSide" : true,//打开后台分页
                     "ajax" : {
@@ -408,8 +413,6 @@
     function Change() {
         TabEmployee.ajax.reload();
     }
-</script>
-<script>
 
     var PanDuan=1;
         //输入验证------------------------------------------------------------------------
@@ -486,13 +489,21 @@
             var picture3 = $("#FileName3").val();
             //获得驾驶证照片
             var picture2 = $("#FileName2").val();
+            if(PANDUAN==1){
+                if ( LoginPassWord == null || LoginPassWord == "" || paymentPassword == null || paymentPassword == "" ) {
+                    layer.msg('请填写完整信息11', {
+                        icon: 2,
+                        time: 1000
+                    })
+                    return false;
+                }
+            }
             if (role == 1 && section == 2) {
                 if (userName == null || userName == "" || IDNumber == null || IDNumber == "" || PhoneNumber == null ||
-                    PhoneNumber == "" || address == null || address == "" || LoginPassWord == null || LoginPassWord == "" ||
-                    paymentPassword == null || paymentPassword == "" || role == 0 || section == 0 ||
+                    PhoneNumber == "" || address == null || address == "" || role == '0' || section == '0' ||
                     picture0 == null || picture0 == "" || picture1 == null || picture1 == "" ||
                     picture3 == null || picture3 == "" || picture2 == null || picture2 == "") {
-                    layer.msg('请填写完整信息', {
+                    layer.msg('请填写完整信息22', {
                         icon: 2,
                         time: 1000
                     })
@@ -500,10 +511,9 @@
                 }
             } else {
                 if (userName == null || userName == "" || IDNumber == null || IDNumber == "" || PhoneNumber == null ||
-                    PhoneNumber == "" || address == null || address == "" || LoginPassWord == null || LoginPassWord == "" ||
-                    paymentPassword == null || paymentPassword == "" || role == "0" || section == "0" ||
+                    PhoneNumber == "" || address == null || address == "" || role == "0" || section == "0" ||
                     picture0 == null || picture0 == "" || picture1 == null || picture1 == "") {
-                    layer.msg('请填写完整信息', {
+                    layer.msg('请填写完整信息33', {
                         icon: 2,
                         time: 1000
                     })
@@ -535,6 +545,7 @@
                                     time: 1000
                                 })
                             }else{
+                                layer.close(index);
                                 layer.msg("修改成功", {
                                     icon: 1,
                                     time: 1000
@@ -556,6 +567,7 @@
             //获取文件
             var file = $("#picture" + Count)[0].files[0];
             $("#FileName" + Count).val(file.name);
+            $("File"+Count).val(file.name);
             //创建读取文件的对象
             var reader = new FileReader();
             //创建文件读取相关的变量
@@ -595,7 +607,7 @@
     //----------------------------------------------------
     //点击新增按钮
     function add(){
-        PANDUAN==1;
+        PANDUAN=1;
         $("#showUser").hide();
         $("#addUser").show();
         $(".password").show();
@@ -613,17 +625,19 @@
         $("#enterEmployeeFrom input").val("");
         $("#sectionID").val(0);
         $("#roleID").val(0);
+        Change();
     }
 
     //点击修改按钮
     function updateUser(phoneNumber){
-        PANDUAN==2;
+        PANDUAN=2;
         $("#showUser").hide();
         $("h1").text='修改用户';
         $.post("/userManage/findByPhoneNumber/"+phoneNumber,{},function (data) {
             $("#userName").val(data.userName);
             $("#IDNumber").val(data.IDNumber);
             $("#PhoneNumber").val(data.phoneNumber);
+            $("#key").val(data.phoneNumber);
             $("#address").val(data.address);
             $("#sectionID").val(data.sectionID);
             $("#roleID").val(data.roleID);
@@ -632,6 +646,8 @@
             $("#imgContent0").attr("src","/images/"+data.photo);
             $("#FileName1").val(data.IDPhoto)
             $("#FileName0").val(data.photo)
+            $("#UserID").val(data.userID);
+
             if(data.manCarPhoto==data.phoneNumber){
                 $("#imgContent3").attr("src", "/assets/images/IDPhoto/3.jpeg");
                 $("#imgContent2").attr("src", "/assets/images/IDPhoto/manCarPhoto.jpg");
@@ -644,8 +660,9 @@
             }
 
             $("#enterEmployeeFrom").attr("action","/userManage/updateUser");
+            $("#addUser").show();
         })
-        $("#addUser").show();
+
     }
 </script>
 </body>
