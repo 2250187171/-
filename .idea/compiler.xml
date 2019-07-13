@@ -8,8 +8,10 @@
         <outputRelativeToContentRoot value="true" />
         <module name="admin" />
         <module name="communication" />
+        <module name="config-service" />
+        <module name="eureka-service" />
         <module name="financial" />
-        <module name="myproject" />
+        <module name="gateway-service" />
         <module name="personalcenter" />
       </profile>
     </annotationProcessing>
@@ -17,10 +19,12 @@
       <module name="admin" target="1.8" />
       <module name="center" target="1.8" />
       <module name="communication" target="1.8" />
+      <module name="config-service" target="1.8" />
+      <module name="eureka-service" target="1.8" />
       <module name="financial" target="1.8" />
+      <module name="gateway-service" target="1.8" />
       <module name="linemodule" target="1.8" />
       <module name="my_project" target="1.8" />
-      <module name="myproject" target="1.8" />
       <module name="personalcenter" target="1.8" />
     </bytecodeTargetLevel>
   </component>

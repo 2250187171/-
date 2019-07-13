@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>主页</title>
+
+	<!-- Global stylesheets -->
+	<!-- Global stylesheets -->
+	<link th:href="@{/assets/css/icons/icomoon/styles.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/assets/css/minified/core.min.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/assets/css/minified/components.min.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/assets/css/minified/colors.min.css}" rel="stylesheet" type="text/css">
+	<link th:href="@{/assets/layui/css/layui.css}" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ERuIpcY6utL2GVFXGpQamaKKICP8Rueq"></script>
+
+
+
+	<style type="text/css">
+
+		#CalendarMain {
+			width: 300px;
+			height: 300px;
+			border: 1px solid #ccc;
+			margin: 0 auto;
+			margin-top: 30px;
+
+		}
+		#title {
+			width: 100%;
+			height: 30px;
+			background-color: #2F4050;
+		}
+		.selectBtn {
+			font-weight: 900;
+			font-size: 15px;
+			color: #fff;
+			cursor: pointer;
+			text-decoration: none;
+			padding: 7px 10px 6px 10px;
+		}
+		.selectBtn:hover {
+			background-color: #1d953f;
+		}
+		.selectYear {
+			float: left;
+			margin-left: 50px;
+			position: absolute;
+		}
+		.selectMonth {
+			float: left;
+			margin-left: 120px;
+			position: absolute;
+		}
+		.month {
+			float: left;
+			position: absolute;
+		}
+		.nextMonth {
+			float: right;
+		}
+		.currentDay {
+			float: right;
+		}
+		#context {
+			background-color: #fff;
+			opacity:0.7;
+			width: 100%;
+		}
+		.week {
+			width: 100%;
+			height: 30px;
+		}
+		.week>h3 {
+			float: left;
+			color: #808080;
+			text-align: center;
+			margin: 0;
+			padding: 0;
+			margin-top: 5px;
+			font-size: 16px;
+		}
+		.dayItem {
+			float: left;
+		}
+		.lastItem {
+			color: #d1c7b7 !important;
+		}
+		.item {
+			color: #333;
+			float: left;
+			text-align: center;
+			cursor: pointer;
+			margin: 0;
+			font-family: "微软雅黑";
+			font-size: 13px;
+		}
+		.item:hover {
+			color: #2F4050;
+		}
+		.currentItem>a {
+			background-color: #2F4050;
+			width: 25px;
+			line-height: 25px;
+			float: left;
+			-webkit-border-radius: 50%;
+			-moz-border-radius: 50%;
+			border-radius: 50%;
+			color: #fff;
+		}
+		#foots {
+			width: 100%;
+			height: 35px;
+			background-color: #fff;
+			border-top: 1px solid #ccc;
+			margin-top: -1px;
+		}
+		#footNow {
+			float: left;
+			margin: 6px 0 0 5px;
+			color: #009ad6;
+			font-family: "微软雅黑";
+		}
+		#Container {
+			overflow: hidden;
+			float: left;
+		}
+		#center {
+			width: 100%;
+			overflow: hidden;
+		}
+		#centerMain {
+			width: 300%;
+			margin-left: -100%;
+		}
+		#selectYearDiv {
+			float: left;
+			background-color: #fff;
+		}
+		#selectYearDiv>div {
+			float: left;
+			text-align: center;
+			font-family: "微软雅黑";
+			font-size: 16px;
+			border: 1px solid #ccc;
+			margin-left: -1px;
+			margin-top: -1px;
+			cursor: pointer;
+			color: #909090;
+		}
+		.currentYearSd, .currentMontSd {
+			color: #ff4400 !important;
+		}
+		#selectMonthDiv {
+			float: left;
+			background-color: #fff;
+		}
+		#selectMonthDiv>div {
+			color: #909090;
+			float: left;
+			text-align: center;
+			font-family: "微软雅黑";
+			font-size: 16px;
+			border: 1px solid #ccc;
+			margin-left: -1px;
+			margin-top: -1px;
+			cursor: pointer;
+		}
+		#selectYearDiv>div:hover, #selectMonthDiv>div:hover {
+			background-color: #efefef;
+		}
+		#centerCalendarMain {
+			float: left;
+		}
+		#Demo{
+			margin-left:65%;
+		}
+	</style>
+
+</head>
+
+<body>
+	<div>
+	<!-- Main navbar -->
+	<div th:replace="~{/bar/bar::#top}"></div>
+	<!-- /main navbar -->
+
+
+	<!-- Page header -->
+	<div th:replace="~{/bar/bar::#page_header}"></div>
+	<!-- /page header -->
+
+
+	<!-- Page container -->
+	<div class="page-container">
+
+		<!-- Page content -->
+		<div class="page-content">
+
+			<!-- Main sidebar -->
+			<div th:replace="~{bar/bar::#che}"></div>
+			<!-- /main sidebar -->
+
+
+			<!-- 主页内容-->
+			<div class="content-wrapper">
+			<div class="layui-tab" lay-filter="demo" lay-allowclose="true">
+				<ul class="layui-tab-title">
+					<li class="layui-this" lay-id="main">主页</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">内容1</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+	<script type="text/javascript" th:src="@{/assets/js/core/libraries/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/core/app.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/layui/layui.js}"></script>
+	<script type="text/javascript" th:src="@{/assets/js/admin/main.js}"></script>
+</body>
+</html>

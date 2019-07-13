@@ -11,7 +11,7 @@ eureka:
 #指定服务器名称
 spring:
   application:
-    name: admin
+    name: admin-service
   #配置数据源
   datasource:
     url: jdbc:mysql://47.52.128.159:3306/logistics

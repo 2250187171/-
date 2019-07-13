@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<!--头部-->
+<div class="navbar navbar-inverse navbar-fixed-top" id="top">
+    <div class="navbar-header">
+        <a class="navbar-brand">
+            <img th:src="@{/assets/images/logo_light.png}" alt="">
+        </a>
+
+        <ul class="nav navbar-nav pull-right visible-xs-block">
+            <li><a data-toggle="collapse" data-target="#navbar-mobile"><i class="icon-tree5"></i></a></li>
+            <li><a class="sidebar-mobile-main-toggle"><i class="icon-paragraph-justify3"></i></a></li>
+        </ul>
+    </div>
+
+    <div class="navbar-collapse collapse" id="navbar-mobile">
+        <ul class="nav navbar-nav">
+            <li>
+                <a class="sidebar-control sidebar-main-toggle hidden-xs">
+                    <i class="icon-paragraph-justify3"></i>
+                </a>
+            </li>
+        </ul>
+
+        <!--<p class="navbar-text"><span class="label bg-success-400">Online</span></p>-->
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li class="dropdown dropdown-user" >
+                <a class="dropdown-toggle" data-toggle="dropdown">
+                    <img th:src="@{/assets/images/placeholder.jpg}" alt="">
+                    <span>[[${session.user.userName}]]</span>
+                    <i class="caret"></i>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li class="myFont">
+                        <a href="/logout"><i class="icon-switch2"></i>退出登录</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<!-- Page header -->
+<div class="page-header" id="page_header">
+    <div class="breadcrumb-line breadcrumb-line-wide">
+        <ul class="breadcrumb">
+            <li><a href="userInfo.do?method=forMain"><i class="icon-home2 position-left"></i> 涛涛涛涛</a></li>
+            <li><a href="extension_velocity_examples.html">Velocity</a></li>
+            <li class="active">Examples</li>
+        </ul>
+
+        <ul class="breadcrumb-elements">
+            <li><a href="#"><i class="icon-comment-discussion position-left"></i> Support</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-gear position-left"></i>
+                    Settings
+                    <span class="caret"></span>
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#"><i class="icon-user-lock"></i> Account security</a></li>
+                    <li><a href="#"><i class="icon-statistics"></i> Analytics</a></li>
+                    <li><a href="#"><i class="icon-accessibility"></i> Accessibility</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#"><i class="icon-gear"></i> All settings</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="page-header-content">
+        <div class="page-title">
+            <h4><span class="text-semibold">欢迎使用汉达物流系统</span><span id="div_time" style="padding-left: 100px"></span></h4>
+        </div>
+        <div class="heading-elements">
+            <div class="heading-btn-group">
+                <span id="tp-weather-widget"></span>
+                <!--<a href="#" class="btn btn-link btn-float has-text"><i class="icon-bars-alt text-primary"></i><span>统计报表</span></a>-->
+                <!--					<a href="#" class="btn btn-link btn-float has-text"><i class="icon-calculator text-primary"></i> <span>Invoices</span></a>
+                                    <a href="#" class="btn btn-link btn-float has-text"><i class="icon-calendar5 text-primary"></i> <span>Schedule</span></a>-->
+            </div>
+        </div>
+    </div>
+    <script>
+        //显示天气
+        (function(T, h, i, n, k, P, a, g, e) {
+            g = function() {
+                P = h.createElement(i);
+                a = h.getElementsByTagName(i)[0];
+                P.src = k;
+                P.charset = "utf-8";
+                P.async = 1;
+                a.parentNode.insertBefore(P, a)
+            };
+            T["ThinkPageWeatherWidgetObject"] = n;
+            T[n] || (T[n] = function() {
+                (T[n].q = T[n].q || []).push(arguments)
+            });
+            T[n].l = +new Date();
+            if (T.attachEvent) {
+                T.attachEvent("onload", g)
+            } else {
+                T.addEventListener("load", g, false)
+            }
+        }(window, document, "script", "tpwidget", "//widget.seniverse.com/widget/chameleon.js"))
+        tpwidget("init", {
+            "flavor": "slim",
+            "location": "WX4FBXXFKE4F",
+            "geolocation": "enabled",
+            "language": "zh-chs",
+            "unit": "c",
+            "theme": "chameleon",
+            "container": "tp-weather-widget",
+            "bubble": "enabled",
+            "alarmType": "badge",
+            "color": "#F47837",
+            "uid": "UC6AD9E048",
+            "hash": "76465b415261736ddd08da3f7f9b24d0"
+        });
+        tpwidget("show");
+    </script>
+    <script type="text/javascript" th:src="@{/assets/js/core/libraries/jquery.min.js}"></script>
+    <script>
+        $(function(){
+            // 显示当前时间
+            showTime();
+        })
+        var weeks=["日","一","二","三","四","五","六"];
+        function showTime(){
+            var date=new Date();
+            var y=date.getFullYear();
+            var m=date.getMonth()+1;
+            var d=date.getDate();
+            var w=date.getDay();
+            var h=date.getHours();
+            var mi=date.getMinutes();
+            var s=date.getSeconds();
+            var ms=m<10?"0"+m:m;
+            var ds=d<10?"0"+d:d;
+            var hs=h<10?"0"+h:h;
+            var mis=mi<10?"0"+mi:mi;
+            var ss=s<10?"0"+s:s;
+            var time=y+"年"+ms+"月"+ds+"日  "+hs+":"+mis+":"+ss+"  星期"+weeks[w];
+            document.getElementById("div_time").innerText=time;
+            document.getElementById("div_time").style.color="blue";
+            document.getElementById("div_time").style.fontSize="17px";
+            document.getElementById("div_time").style.lineHeight="10px";
+            document.getElementById("div_time").style.marginLeft="20px";
+            setTimeout("showTime()",1000);
+        }
+
+    </script>
+</div>
+
+
+<div class="sidebar sidebar-main sidebar-default" id="che">
+    <div class="sidebar-content">
+
+        <!-- Main navigation -->
+        <div class="sidebar-category sidebar-category-visible">
+            <div class="category-title h6">
+                <span style="font-family:'幼圆'">内容导航</span>
+                <ul class="icons-list">
+                    <li><a href="#" data-action="collapse"></a></li>
+                </ul>
+            </div>
+
+            <div class="category-content sidebar-user">
+                <div class="media">
+                    <a href="#" class="media-left"><img th:src="@{/assets/images/placeholder.jpg}" class="img-circle img-sm" alt=""></a>
+                    <div class="media-body">
+                        <span class="media-heading text-semibold">用户名：[[${session.user.userName}]]</span>
+                        <p>角色：[[${session.user.roleName}]]</p>
+                        <div class="text-size-mini text-muted">
+                            <i class="icon-pin text-size-small"></i> &nbsp;当前位置：<sapn id="address"></sapn>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ***********************************导航栏开始****************************************** -->
+            <div class="category-content no-padding">
+                <ul class="navigation navigation-main navigation-accordion">
+
+                    <!-- Main -->
+                    <li class="navigation-header">
+                        <span class="myFont">主要</span>
+                        <i class="icon-menu" title="主要"></i>
+                    </li>
+                    <li>
+                        <a url="/main" name="tab" href="javascript:;" id="main">
+                            <i class="icon-home4"></i>
+                            <span class="myFont">主页</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-cog"></i>
+                            <span class="myFont">个人中心</span>
+                        </a>
+                        <ul>
+                            <li><a href="front/LogisticsSpecialLine" class="myFont">基础资料</a></li>
+                            <li><a href="repArea.do?method=select" class="myFont">账户安全</a></li>
+                            <li><a href="litera.do?method=WselectLitera" class="myFont">支付安全</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-list-alt"></i>
+                            <span class="myFont">订单管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="customer.do?method=WselectAll" class="myFont">订单信息</a></li>
+                            <li><a href="cusOrder.do?method=WselectAll&num=1" class="myFont">处理订单</a></li>
+                            <li><a href="cusOrder.do?method=WselectAll&num=1" class="myFont">新增订单</a></li>
+                            <li><a href="cusOrder.do?method=WselectAll&num=1" class="myFont">分配订单</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-user"></i>
+                            <span class="myFont">客户管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="supplier.do?method=caiShow" class="myFont">客户信息</a></li>
+                            <li><a href="purApply.do?method=caiShow" class="myFont">新增客户</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                            <span class="myFont">考勤管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="purchaseOrder.do?method=caiShowAccept" class="myFont">打卡信息</a></li>
+                            <li><a href="purchaseOrder.do?method=caiShowStock" class="myFont">申请请假</a></li>
+                            <li><a href="stock.do?method=caiShowManage" class="myFont">审批请假</a></li>
+                            <li><a href="stock.do?method=caiShowSend" class="myFont">请假记录</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-th-list"></i>
+                            <span class="myFont">司机管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="storageJob.do?method=caiShow" class="myFont">车队信息</a></li>
+                            <li><a href="storageJob.do?method=caiShowHand" class="myFont">司机信息</a></li>
+                            <li><a href="storageJob.do?method=caiShowCargo" class="myFont">车辆信息</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-home	"></i>
+                            <span class="myFont">仓库管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="outputJob.do?method=caiShow" class="myFont">仓库资料</a></li>
+                            <li><a href="outputJob.do?method=showPlace" class="myFont">区域资料</a></li>
+                            <li><a href="outputJob.do?method=caiShowHand" class="myFont">仓位资料</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-log-in"></i>
+                            <span class="myFont">入库管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="userInfo.do?method=loginTwo" class="myFont">到货审核</a></li>
+                            <li><a href="matCheck.do?method=materCheck" class="myFont">入货装卸</a></li>
+                            <li><a href="repCheck.do?method=materialScrap" class="myFont">入库验货</a></li>
+                            <li><a href="mateScrap.do?method=repertoryTack" class="myFont">仓位分发</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li>
+                        <a href="#">
+                            <i class="icon-train2"></i>
+                            <span class="myFont">出库管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="deliTask.do?method=findAll" class="myFont">出货审核</a></li>
+                            <li><a href="carContDeta.do?method=showDis" class="myFont">出库拣货</a></li>
+                            <li><a href="carWiring.do?method=load" class="myFont">出库装卸</a></li>
+                            <li><a href="carOut.do?method=findAll" class="myFont">确认出库</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="icon-home7"></i>
+                            <span class="myFont">仓储管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="purApply.do?methoa=select" class="myFont">货物检查</a></li>
+                            <li><a href="purchaseOrder.do?method=select" class="myFont">货物盘点</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-briefcase"></i>
+                            <span class="myFont">财务管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="purApply.do?methoa=select" class="myFont">提现审核</a></li>
+                            <li><a href="purchaseOrder.do?method=select" class="myFont">财务记录</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>
+                            <i class="icon-users"></i>
+                            <span class="myFont">用户管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="purApply.do?methoa=select" class="myFont" >权限分配</a></li>
+                            <li><a class="myFont" url="/userManage/userMessage" name="tab" href="javascript:;" id='tabUser'>用户信息</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-signal"></i>
+                            <span class="myFont">统计报表</span>
+                        </a>
+                        <ul>
+                            <li><a href="purApply.do?methoa=select" class="myFont">财务报表</a></li>
+                            <li><a href="purchaseOrder.do?method=select" class="myFont">客户报表</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="	glyphicon glyphicon-road"></i>
+                            <span class="myFont">站点管理</span>
+                        </a>
+                        <ul>
+                            <li><a href="purApply.do?methoa=select" class="myFont">路线信息</a></li>
+                            <li><a href="purchaseOrder.do?method=select" class="myFont">站点信息</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+            <div id="allmap" disabled="true"></div>
+            <script type="text/javascript">
+                // 百度地图API功能
+                var map = new BMap.Map("allmap");
+                function myFun(result){
+                    var cityName = result.name;
+                    map.setCenter(cityName);
+                    document.getElementById("address").innerText=cityName;
+                }
+                var myCity = new BMap.LocalCity();
+                myCity.get(myFun);
+            </script>
+
+        </div>
+        <!-- /main navigation -->
+        <!-- ***********************************导航栏结束****************************************** -->
+
+    </div>
+
+</div>
+</body>
+</html>

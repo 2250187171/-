@@ -1,0 +1,113 @@
+/* CSS Document */
+.cus_sel_box_comm {
+	font-size: 12px;
+	color: #333333;
+	position: relative;
+	height: 37px;
+	line-height: 26px;
+}
+
+.cus_sel_txt_comm {
+	border: 1px solid #ccc;
+	z-index: 1;
+	height: 27px;
+	padding-left: 100px;
+	
+	text-align: left;
+}
+
+.cus_sel_option {
+	z-index: 99;
+	border: 1px solid #c4c4c4;
+	display: none;
+	position: absolute;
+	background: #fff;
+	left: 0;
+	*top: 35px;
+}
+
+.cus_sel_option li {
+	text-align: center
+}
+
+.cus_sel_option li.cus_sel_selected {
+	background-color: #F3F3F3;
+	color: #333333;
+}
+
+.cus_sel_option li:hover {
+	background: #888;
+	color: #fff;
+}
+
+.cus_sel_option li {
+	cursor: pointer
+}
+
+.NameGoods ul {
+	width: 165px;
+}
+
+.NameGoods ul li {
+	float: left;
+	padding: 2px;
+	width: 74px;
+}
+
+.NameGoods2 ul li {
+	float: left;
+	padding: 2px;
+	width: 74px;
+}
+
+.goods_conversion ul {
+	width: 76px
+}
+
+.goods_conversion2 ul {
+	width: 56px
+}
+
+.NameGoods input {
+	background: url(../image/InternalPage.png) 62px -24px no-repeat;
+}
+
+.goods_conversion input {
+	background: url(../image/InternalPage.png) 56px -24px no-repeat;
+}
+
+.goods_conversion2 input {
+	background: url(../image/InternalPage.png) 40px -24px no-repeat;
+}
+
+.HeavyLight input {
+	background: url(../image/InternalPage.png) 48px -24px no-repeat;
+}
+
+.Gender input {
+	background: url(../image/InternalPage.png) 46px -24px no-repeat;
+}
+
+.HeavyLight ul,.Gender ul {
+	width: 64px
+}
+
+.HeavyLight input {
+	width: 54px;
+}
+
+.Gender input {
+	width: 54px
+}
+
+.NameGoods input,.goods_conversion input {
+	width: 155px
+}
+
+.cus_sel_txt_comm {
+	cursor: pointer
+}
+
+.spindex ul {
+	z-index: 99
+}

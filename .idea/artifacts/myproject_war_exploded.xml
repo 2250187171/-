@@ -1,10 +1,10 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="myproject:war exploded">
-    <output-path>$PROJECT_DIR$/myproject/target/myproject-0.0.1-SNAPSHOT</output-path>
+    <output-path>$PROJECT_DIR$/eureka-service/target/myproject-0.0.1-SNAPSHOT</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
-          <element id="module-output" name="myproject" />
+          <element id="module-output" name="eureka-service" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE" />
@@ -124,9 +124,9 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/myproject/target/myproject-0.0.1-SNAPSHOT/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/eureka-service/target/myproject-0.0.1-SNAPSHOT/META-INF/MANIFEST.MF" />
       </element>
-      <element id="javaee-facet-resources" facet="myproject/web/Web" />
+      <element id="javaee-facet-resources" facet="eureka-service/web/Web" />
     </root>
   </artifact>
 </component>

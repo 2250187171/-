@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.A_UserMapper">
+    <!--根据手机号码查询用户-->
+    <select id="findByPhoneNumber" resultType="map">
+        select * from a_user a JOIN a_user_role b ON(a.phoneNumber=b.phoneNumber) JOIN a_role c ON(b.roleID=c.roleID) where a.phoneNumber=#{phoneNumber}
+    </select>
+    <!--查询用户获得密码-->
+    <select id="findByPassword" resultType="String">
+        select loginPassword from a_user where phoneNumber=#{phoneNumber}
+    </select>
+</mapper>

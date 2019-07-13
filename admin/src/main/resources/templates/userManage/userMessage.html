@@ -7,6 +7,8 @@
 	<title>用户信息</title>
 	<link th:href="@{/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" th:href="@{/Content/css/datatables.min.css}" type="text/css"></link>
+    <link rel="stylesheet" th:href="@{/assets/layui/css/layui.css}">
+
     <style>
         #TabEmployee td {
             text-align: center;
@@ -57,6 +59,7 @@
             <th style="text-align:center;vertical-align: middle;"><b>住址</b></th>
             <th style="text-align:center;vertical-align: middle;"><b>部门</b></th>
             <th style="text-align:center;vertical-align: middle;"><b>角色</b></th>
+            <!--<th style="text-align:center;vertical-align: middle;"><b>状态</b></th>-->
             <th style="text-align:center;vertical-align: middle;"><b>操作</b></th>
         </tr>
         </thead>
@@ -65,7 +68,7 @@
 
 <!--新增用户-->
 <div th:align="center" id="addUser"  style="display: none;">
-    <h1>新增员工</h1>
+    <h1 id="top">新增员工</h1>
     <form role="form" class="form-horizontal" onsubmit="return false"
           id="enterEmployeeFrom" enctype="multipart/form-data"
           th:action="@{/userManage/addUser}"
@@ -395,7 +398,6 @@
                             "data" : "roleName",
                             "width" : "50px"
                         },
-
                         {
                             "data" : function(obj) {
                                 return ' <button class="btn btn-info AuditRecord" value="'
@@ -607,6 +609,7 @@
     //----------------------------------------------------
     //点击新增按钮
     function add(){
+        $("#top").text("修改用户")
         PANDUAN=1;
         $("#showUser").hide();
         $("#addUser").show();
@@ -632,7 +635,8 @@
     function updateUser(phoneNumber){
         PANDUAN=2;
         $("#showUser").hide();
-        $("h1").text='修改用户';
+        $("#top").text("修改用户")
+
         $.post("/userManage/findByPhoneNumber/"+phoneNumber,{},function (data) {
             $("#userName").val(data.userName);
             $("#IDNumber").val(data.IDNumber);

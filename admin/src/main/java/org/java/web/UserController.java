@@ -43,6 +43,7 @@ public class UserController {
     //跳转进入用户信息页面
     @RequestMapping("/userManage/userMessage")
     public String userMessage(Model model){
+        System.out.println("进入ADMIN-SERVICE-------------------------------------");
         //获得所有角色
         model.addAttribute("roles", roleService.findRoleAll());
         //获得所有部门

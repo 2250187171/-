@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/assets/layui/css/layui.css" rel="stylesheet">
+    <link href="/assets/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div align="center" style="margin-top:30px">
+    <form class="navbar-form navbar-default" role="search">
+        <div class="form-group">
+            <label for="role">角色：</label>
+            <select class="form-control" id="role" name="roleID">
+                <option value="0">请选择</option>
+                <option th:each="role:${roles}" th:value="${role.roleID}" th:text="${role.roleName}"></option>
+            </select>
+        </div>
+    </form>
+</div>
+<div>
+    <br><br>
+        <button type="button" class="btn btn-info" id="btn-expand">全部展开</button>
+        <button type="button" class="btn btn-info" id="btn-fold">全部折叠</button>
+    <div class="layui-btn-group" style="float: right;display: none" id="up">
+        <button class="layui-btn" id="btn-update" >修改</button>
+    </div>
+
+    <table id="table1" class="layui-table" lay-filter="table1"></table>
+</div>
+</body>
+<script src="/assets/layui/layui.js" charset="utf-8"></script>
+<script src="/assets/js/core/libraries/jquery.min.js" charset="utf-8"></script>
+<script>
+        layui.config({
+            base: '/assets/layui/module/'
+        }).extend({
+            treetable: 'treetable-lay/treetable'
+        }).use(['layer', 'table', 'treetable'], function () {
+            var val = null;
+            var $ = layui.jquery;
+            var table = layui.table;
+            var layer = layui.layer;
+            var form=layui.form;
+            var treetable = layui.treetable
+
+            // 渲染表格
+            var renderTable = function () {
+                layer.load(2);
+                treetable.render({
+                    treeColIndex: 1,
+                    treeSpid: -1,
+                    treeIdName: 'perID',
+                    treePidName: 'tree',
+                    treeDefaultClose: true,
+                    treeLinkage: false,
+                    elem: '#table1',
+                    url: '/userManage/authorityAll',
+                    page: false,
+                    cols: [
+                        [
+                        {type: 'numbers'},
+                        {field: 'perName', title: '权限名称'},
+                        {field: 'perID', title: '权限编号',align : 'center'},
+                        {field: 'perCode', title: '权限标识',align : 'center'},
+                        {
+                            field: 'TYPE', width: 80, align: 'center', templet: function (d) {
+                                if (d.TYPE == "permission") {
+                                    return '<span class="layui-badge layui-bg-black">按钮</span>';
+                                }
+                                if (d.TYPE == "menu") {
+                                    return '<span class="layui-badge layui-bg-blue">目录</span>';
+                                } else {
+                                    return '<span class="layui-badge">菜单</span>';
+                                }
+                            }, title: '类型'
+                        },
+                        {
+                            field: 'cz', align: 'center', templet: function (d) {
+                                var role_id=$("#id").val();
+                                var perm_id=d.id;
+                                if (role_id == 0) {
+                                    return '<input type="checkbox" name="perm" lay-filter="filter" lay-skin="switch" lay-text="开启|关闭" disabled>';
+                                }
+                                else
+                                {
+                                    var count;
+                                    $.ajax({
+                                        url : "perm_count",
+                                        async : false, // 注意此处需要同步，因为返回完数据后，下面才能让结果的第一条selected
+                                        type : "POST",
+                                        data:{"role_id":role_id,"perm_id":perm_id},
+                                        dataType : "json",
+                                        success : function(fields) {
+                                            count=fields;
+                                        }
+                                    });
+                                    if(count==1)
+                                    {
+                                        return "<input type='checkbox' name=c"+d.tree+" id=c"+d.id+" value="+d.id+" class='sw' lay-filter='filter' lay-skin='switch' lay-text='开启|关闭' checked>";
+                                    }
+                                    else
+                                    {
+                                        return "<input type='checkbox' name=c"+d.tree+" id=c"+d.id+" value="+d.id+" class='sw' lay-filter='filter' lay-skin='switch' lay-text='开启|关闭'>";
+                                    }
+                                }
+                            }, title: '操作'
+                        }
+                    ]
+                    ],
+                    done: function (res, curr, count) {
+                        layer.closeAll('loading');
+                    }
+                });
+            };
+
+            renderTable();
+
+            $('#btn-expand').click(function () {
+                treetable.expandAll('#table1');
+            });
+
+            $('#btn-fold').click(function () {
+                treetable.foldAll('#table1');
+            });
+
+            $('#btn-refresh').click(function () {
+                renderTable();
+            });
+            $('#btn-update').click(function () {
+                var arr=new Array();
+                //获取checkbox[class='sw']为选中状态的值
+                $("input:checkbox[class='sw']:checked").each(function(i){
+                    arr[i]=$(this).val();
+                })
+                //将数组转换为字符串
+                var perm_id=arr.join(",");
+                var role_id=$("#id").val();
+                $.post("perm_update",{"perm_id":perm_id,"role_id":role_id},function(data){
+                    if(data>0)
+                    {
+                        layer.msg('修改成功,重新登录后生效');
+                    }
+                    else
+                    {
+                        layer.msg('修改失败');
+                    }
+                },"json")
+            });
+            form.on('select(test)', function(data){
+                renderTable();
+                var id=$("#id").val();
+                if(id!=0)
+                {
+                    $("#up").show();
+                }
+                else
+                {
+                    $("#up").hide();
+                }
+
+            });
+            //状态按钮
+            form.on('switch(filter)', function(obj) {
+                if(obj.elem.checked){
+                    //获得目录name值
+                    var name1=obj.elem.name;
+                    //获得主菜单name值
+                    var name2=$("#"+name1).attr("name");
+                    //设置父级开关为开启状态
+                    $("#"+name1).prop("checked",true);
+                    $("#"+name2).prop("checked",true);
+                }
+                else
+                {
+                    //获得value值
+                    var menu=layui.jquery("input[name=c"+this.value+"]").val();
+                    //设置开关为关闭状态
+                    layui.jquery("input[name=c"+this.value+"]").removeAttr('checked');
+                    //设置子级菜单为关闭状态
+                    layui.jquery("input[name=c"+menu+"]").removeAttr('checked');
+                }
+                //重新渲染
+                form.render('checkbox');
+                //alert(this.value)
+                /* 			var locked=obj.elem.checked?1:0;
+                            $.post("user_updateLocked",{"username":this.value,"locked":locked},function(data){*/
+                //layer.msg(obj.elem.checked?'已启用':'已禁用');
+                /* 			  },"json") */
+            });
+        })
+
+</script>
+</html>
