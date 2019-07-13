@@ -1,0 +1,18 @@
+server:
+  port: 8555
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+spring:
+  application:
+    name: config-service
+  cloud:
+    config:
+      discovery:
+        enabled: true #启动配置中心
+      server:
+        git:
+          uri: https://gitee.com/xuzhijianproject/project
+          username: 13323998955
+          password: x19961123
