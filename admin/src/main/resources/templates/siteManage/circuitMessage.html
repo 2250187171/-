@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/assets/layui/css/layui.css" rel="stylesheet">
+
+</head>
+<body>
+<!-- 主页内容-->
+<div th:align="center" id="showUser">
+    <nav class="navbar navbar-default" style="border-radius: 10px">
+        <form class="navbar-form navbar-default" role="search">
+
+            <div class="form-group">
+                <label for="cprovince">出发地：</label>
+                <select class="form-control" id="cprovince" name="cprovinceID" style="width: 130px">
+                    <option value="0">请选择省份</option>
+                    <option th:each="p:${ps}" th:value="${p.proID}" th:text="${p.proName}"></option>
+                </select>
+                <select class="form-control" id="ccity" name="ccityID" style="width: 130px">
+                    <option value="0">请选择城市</option>
+                </select>
+                <select class="form-control" id="cdistrict" name="cdistrictID" style="width: 130px">
+                    <option value="0">请选择区县</option>
+                </select>
+            </div>
+            ——>
+            <div class="form-group">
+                <label for="dprovince">到达地：</label>
+                <select class="form-control" id="dprovince" name="dprovinceID" style="width: 130px">
+                    <option value="0">请选择省份</option>
+                    <option th:each="p:${ps}" th:value="${p.proID}" th:text="${p.proName}">1</option>
+                </select>
+                <select class="form-control" id="dcity" name="dcity" style="width: 130px">
+                    <option value="0">请选择城市</option>
+                </select>
+                <select class="form-control" id="ddistrict" name="ddistrict" style="width: 130px">
+                    <option value="0">请选择区县</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-info" onclick="Change()">查询</button>
+            <button  class="btn btn-primary" type="button" onclick="add()">新增</button>
+        </form>
+    </nav>
+    <table class="table table-hover" id="TabEmployee">
+        <thead>
+        <tr align="center">
+            <th style="text-align:center;vertical-align: middle;"><b>编号</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>出发地</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>到达地</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>联系人姓名</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>联系人电话</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>运价</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>时效</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>操作</b></th>
+        </tr>
+        </thead>
+    </table>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新增路线</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class="navbar-form" id="addform" role="search">
+
+                        <div class="form-group">
+                            <label for="cprovince">出发地：</label>
+                            <select class="form-control" id="addcprovince" name="addcprovinceID" style="width: 130px">
+                                <option value="0">请选择省份</option>
+                                <option th:each="p:${ps}" th:value="${p.proID}" th:text="${p.proName}"></option>
+                            </select>
+                            <select class="form-control" id="addccity" name="addccityID" style="width: 130px">
+                                <option value="0">请选择城市</option>
+                            </select>
+                            <select class="form-control" id="addcdistrict" name="addcdistrictID" style="width: 130px">
+                                <option value="0">请选择区县</option>
+                            </select>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group">
+                            <label for="cprovince">到达地：</label>
+                            <select class="form-control" id="adddprovince" name="adddprovinceID" style="width: 130px">
+                                <option value="0">请选择省份</option>
+                                <option th:each="p:${ps}" th:value="${p.proID}" th:text="${p.proName}"></option>
+                            </select>
+                            <select class="form-control" id="adddcity" name="adddcityID" style="width: 130px">
+                                <option value="0">请选择城市</option>
+                            </select>
+                            <select class="form-control" id="addddistrict" name="addddistrictID" style="width: 130px">
+                                <option value="0">请选择区县</option>
+                            </select>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group">
+                            <label for="userName">联系人：</label>
+                            <select class="form-control" id="userName" name="userID" style="width: 398px">
+                                <option value="0">请选择联系人</option>
+                            </select>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group" style="margin-left: 13px">
+                            <label for="FreightRate">运价：</label>
+                            <input type="text" name="FreightRate" class="form-control" id="FreightRate" style="width: 398px;">
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group" style="margin-left: 10px">
+                            <label for="Prescription">时效：</label>
+                            <input type="text" name="Prescription" class="form-control" id="Prescription" style="width: 398px">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+                    <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/Content/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/Content/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<link href="/assets/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<script>
+//查询下拉框事件------------------------------------------
+    //出发下拉框触发------------
+    //当省份的下拉框的值发生变化时
+    $("#cprovince").change(function () {
+        var proID=$("#cprovince").val();
+        //清空城市列表的选项，只保留标题
+        $("#ccity")[0].options.length=1;//只保留标题
+        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo("#ccity");
+            })
+        },"json")
+    })
+
+    //当城市的下拉框的值发生变化时
+    $("#ccity").change(function () {
+        var cityID=$("#ccity").val();
+        //清空城市列表的选项，只保留标题
+        $("#cdistrict")[0].options.length=1;//只保留标题
+        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo("#cdistrict");
+            })
+        },"json")
+    })
+
+//到达下拉框事件------------------------------------------
+    //当省份的下拉框的值发生变化时
+    $("#dprovince").change(function () {
+        var proID=$("#dprovince").val();
+        //清空城市列表的选项，只保留标题
+        $("#dcity")[0].options.length=1;//只保留标题
+        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo("#dcity");
+            })
+        },"json")
+    })
+
+    //当城市的下拉框的值发生变化时
+    $("#dcity").change(function () {
+        var cityID=$("#dcity").val();
+        //清空城市列表的选项，只保留标题
+        $("#ddistrict")[0].options.length=1;//只保留标题
+        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo("#ddistrict");
+            })
+        },"json")
+    })
+
+//新增下拉框事件-----------------------------------------------------------------
+    //出发地下拉框触发----------------------
+    //当省份的下拉框的值发生变化时
+    $("#addcprovince").change(function () {
+        var proID=$("#addcprovince").val();
+        //清空城市列表的选项，只保留标题
+        $("#addccity")[0].options.length=1;//只保留标题
+        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo("#addccity");
+            })
+        },"json")
+    })
+
+    //当城市的下拉框的值发生变化时
+    $("#addccity").change(function () {
+        var cityID=$("#addccity").val();
+        //清空城市列表的选项，只保留标题
+        $("#addcdistrict")[0].options.length=1;//只保留标题
+        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo("#addcdistrict");
+            })
+        },"json")
+    })
+    //到达地下拉框触发----------------------
+    //当省份的下拉框的值发生变化时
+    $("#adddprovince").change(function () {
+        var proID=$("#adddprovince").val();
+        //清空城市列表的选项，只保留标题
+        $("#adddcity")[0].options.length=1;//只保留标题
+        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo("#adddcity");
+            })
+        },"json")
+    })
+
+    //当城市的下拉框的值发生变化时
+    $("#adddcity").change(function () {
+        var cityID=$("#adddcity").val();
+        //清空城市列表的选项，只保留标题
+        $("#addddistrict")[0].options.length=1;//只保留标题
+        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo("#addddistrict");
+            })
+        },"json")
+    })
+//---------------------------------------------------------------》
+//点击新增按钮弹出新增表单
+function add(){
+    //清空联系人列表的选项，只保留标题
+    $("#userName")[0].options.length=1;//只保留标题
+    //动态加载联系人下拉框
+    $.ajax({
+        url:"/gateway/admin/userManage/findByRoleID",
+        data:{"roleID":4},
+        type:"GET",
+        dataType:'json',
+        success:function (data) {
+            $(data).each(function () {
+                $("<option value='"+this.userID+"'>"+this.userName+"</option>").appendTo("#userName");
+            })
+        }
+    })
+    $('#myModal').modal({
+        backdrop: false
+    });
+}
+
+$("#btn_submit").click(function () {
+    var index = layer.load(1); //添加laoding,0-2两种方式
+    $("#addform").ajaxSubmit(function (data) {
+        if(data=='1'){
+            layer.close(index);
+            ayer.msg("新增成功", {
+                icon: 1,
+                time: 1000
+            })
+        }
+    })
+})
+
+
+</script>
+</html>

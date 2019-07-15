@@ -177,6 +177,9 @@
 		#Demo{
 			margin-left:65%;
 		}
+		.layui-tab ul.layui-tab-title li:nth-child(1) i {
+			display: none;
+		}
 	</style>
 
 </head>
@@ -211,7 +214,7 @@
 					<li class="layui-this" lay-id="main">主页</li>
 				</ul>
 				<div class="layui-tab-content">
-					<div class="layui-tab-item layui-show">内容1</div>
+					<div class="layui-tab-item layui-show" lay-allowClose="false">内容1</div>
 				</div>
 			</div>
 			</div>

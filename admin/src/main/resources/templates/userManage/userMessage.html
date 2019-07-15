@@ -71,7 +71,7 @@
     <h1 id="top">新增员工</h1>
     <form role="form" class="form-horizontal" onsubmit="return false"
           id="enterEmployeeFrom" enctype="multipart/form-data"
-          th:action="@{/userManage/addUser}"
+          th:action="@{/gateway/admin/userManage/addUser}"
           method="post">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
              style="padding:0px;margin-top:10px;">
@@ -352,7 +352,7 @@
                     "processing" : true, //打开数据加载时的等待效果
                     "serverSide" : true,//打开后台分页
                     "ajax" : {
-                        "url" : "/userManage/findUserAll",
+                        "url" : "/gateway/admin/userManage/findUserAll",
                         "dataSrc" : "aaData",
                         "data" : function(d) {
                             d.phoneNumber = $("#phoneNumber").val();
@@ -609,7 +609,7 @@
     //----------------------------------------------------
     //点击新增按钮
     function add(){
-        $("#top").text("修改用户")
+        $("#top").text("新增用户")
         PANDUAN=1;
         $("#showUser").hide();
         $("#addUser").show();
@@ -618,7 +618,7 @@
         $("#imgContent0").attr("src", "/assets/images/photo/head1.jpg");
         $("#imgContent3").attr("src", "/assets/images/IDPhoto/3.jpeg");
         $("#imgContent2").attr("src", "/assets/images/IDPhoto/manCarPhoto.jpg");
-        $("#enterEmployeeFrom").attr("action","/userManage/addUser");
+        $("#enterEmployeeFrom").attr("action","/gateway/admin/userManage/addUser");
     }
 
     //点击关闭按钮
@@ -628,6 +628,9 @@
         $("#enterEmployeeFrom input").val("");
         $("#sectionID").val(0);
         $("#roleID").val(0);
+        $(".driver").hide();
+        section=0;
+        role=0;
         Change();
     }
 
@@ -637,7 +640,9 @@
         $("#showUser").hide();
         $("#top").text("修改用户")
 
-        $.post("/userManage/findByPhoneNumber/"+phoneNumber,{},function (data) {
+        $.post("/gateway/admin/userManage/findByPhoneNumber/"+phoneNumber,{},function (data) {
+            section=data.sectionID;
+            role=data.roleID;
             $("#userName").val(data.userName);
             $("#IDNumber").val(data.IDNumber);
             $("#PhoneNumber").val(data.phoneNumber);
@@ -646,24 +651,24 @@
             $("#sectionID").val(data.sectionID);
             $("#roleID").val(data.roleID);
             $(".password").hide();
-            $("#imgContent1").attr("src","/images/"+data.IDPhoto);
-            $("#imgContent0").attr("src","/images/"+data.photo);
+            $("#imgContent1").attr("src","/gateway/admin/images/"+data.IDPhoto);
+            $("#imgContent0").attr("src","/gateway/admin/images/"+data.photo);
             $("#FileName1").val(data.IDPhoto)
             $("#FileName0").val(data.photo)
             $("#UserID").val(data.userID);
 
-            if(data.manCarPhoto==data.phoneNumber){
-                $("#imgContent3").attr("src", "/assets/images/IDPhoto/3.jpeg");
-                $("#imgContent2").attr("src", "/assets/images/IDPhoto/manCarPhoto.jpg");
+            if(data.manCarPhoto==null||data.manCarPhoto==""){
+                $("#imgContent3").attr("src", "/gateway/admin/assets/images/IDPhoto/3.jpeg");
+                $("#imgContent2").attr("src", "/gateway/admin/assets/images/IDPhoto/manCarPhoto.jpg");
             }else
             {
-                $("#imgContent3").attr("src","/images/"+data.drivingLicencePhoto);
-                $("#imgContent2").attr("src","/images/"+data.manCarPhoto);
+                $("#imgContent3").attr("src","/gateway/admin/images/"+data.drivingLicencePhoto);
+                $("#imgContent2").attr("src","/gateway/admin/images/"+data.manCarPhoto);
                 $("#FileName3").val(data.drivingLicencePhoto)
                 $("#FileName2").val(data.manCarPhoto)
             }
 
-            $("#enterEmployeeFrom").attr("action","/userManage/updateUser");
+            $("#enterEmployeeFrom").attr("action","/gateway/admin/userManage/updateUser");
             $("#addUser").show();
         })
 

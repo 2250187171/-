@@ -271,4 +271,11 @@ public class UserController {
         service.updateUser(map);
         return "1";
     }
+
+    //根据角色查询用户
+    @RequestMapping("/userManage/findByRoleID")
+    @ResponseBody
+    public List<Map> findByRoleID(int roleID){
+       return service.findByRoleID(roleID);
+    }
 }

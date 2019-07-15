@@ -7,4 +7,6 @@ public interface A_RoleMapper {
 
     //查询所有角色
     public List<Map> findRoleAll();
+
+
 }

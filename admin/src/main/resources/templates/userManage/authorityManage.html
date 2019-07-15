@@ -7,7 +7,8 @@
     <link href="/assets/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div align="center" style="margin-top:30px">
+<div>
+    <nav class="navbar navbar-default" style="border-radius: 10px" th:align="center">
     <form class="navbar-form navbar-default" role="search">
         <div class="form-group">
             <label for="role">角色：</label>
@@ -17,14 +18,11 @@
             </select>
         </div>
     </form>
+    </nav>
+    <button type="button" class="btn btn-info" id="btn-expand">全部展开</button>
+    <button type="button" class="btn btn-info" id="btn-fold">全部折叠</button>
+    <button type="button" class="btn btn-success" id="btn-update" style="display: none;">修改权限</button>
 </div>
-<div>
-    <br><br>
-        <button type="button" class="btn btn-info" id="btn-expand">全部展开</button>
-        <button type="button" class="btn btn-info" id="btn-fold">全部折叠</button>
-    <div class="layui-btn-group" style="float: right;display: none" id="up">
-        <button class="layui-btn" id="btn-update" >修改</button>
-    </div>
 
     <table id="table1" class="layui-table" lay-filter="table1"></table>
 </div>
@@ -33,7 +31,7 @@
 <script src="/assets/js/core/libraries/jquery.min.js" charset="utf-8"></script>
 <script>
         layui.config({
-            base: '/assets/layui/module/'
+            base: '/gateway/admin/assets/layui/module/'
         }).extend({
             treetable: 'treetable-lay/treetable'
         }).use(['layer', 'table', 'treetable'], function () {
@@ -55,7 +53,7 @@
                     treeDefaultClose: true,
                     treeLinkage: false,
                     elem: '#table1',
-                    url: '/userManage/authorityAll',
+                    url: '/gateway/admin/userManage/authorityAll',
                     page: false,
                     cols: [
                         [
@@ -65,10 +63,10 @@
                         {field: 'perCode', title: '权限标识',align : 'center'},
                         {
                             field: 'TYPE', width: 80, align: 'center', templet: function (d) {
-                                if (d.TYPE == "permission") {
+                                if (d.perType == "permission") {
                                     return '<span class="layui-badge layui-bg-black">按钮</span>';
                                 }
-                                if (d.TYPE == "menu") {
+                                if (d.perType == "menu") {
                                     return '<span class="layui-badge layui-bg-blue">目录</span>';
                                 } else {
                                     return '<span class="layui-badge">菜单</span>';
@@ -77,8 +75,8 @@
                         },
                         {
                             field: 'cz', align: 'center', templet: function (d) {
-                                var role_id=$("#id").val();
-                                var perm_id=d.id;
+                                var role_id=$("#role").val();
+                                var perm_id=d.perID;
                                 if (role_id == 0) {
                                     return '<input type="checkbox" name="perm" lay-filter="filter" lay-skin="switch" lay-text="开启|关闭" disabled>';
                                 }
@@ -86,10 +84,10 @@
                                 {
                                     var count;
                                     $.ajax({
-                                        url : "perm_count",
+                                        url : "/gateway/admin/userManage/findByRoleIDAndPermID",
                                         async : false, // 注意此处需要同步，因为返回完数据后，下面才能让结果的第一条selected
                                         type : "POST",
-                                        data:{"role_id":role_id,"perm_id":perm_id},
+                                        data:{"roleID":role_id,"permID":perm_id},
                                         dataType : "json",
                                         success : function(fields) {
                                             count=fields;
@@ -97,11 +95,11 @@
                                     });
                                     if(count==1)
                                     {
-                                        return "<input type='checkbox' name=c"+d.tree+" id=c"+d.id+" value="+d.id+" class='sw' lay-filter='filter' lay-skin='switch' lay-text='开启|关闭' checked>";
+                                        return "<input type='checkbox' name=c"+d.tree+" id=c"+d.perID+" value="+d.perID+" class='sw' lay-filter='filter' lay-skin='switch' lay-text='开启|关闭' checked>";
                                     }
                                     else
                                     {
-                                        return "<input type='checkbox' name=c"+d.tree+" id=c"+d.id+" value="+d.id+" class='sw' lay-filter='filter' lay-skin='switch' lay-text='开启|关闭'>";
+                                        return "<input type='checkbox' name=c"+d.tree+" id=c"+d.perID+" value="+d.perID+" class='sw' lay-filter='filter' lay-skin='switch' lay-text='开启|关闭'>";
                                     }
                                 }
                             }, title: '操作'
@@ -134,10 +132,11 @@
                     arr[i]=$(this).val();
                 })
                 //将数组转换为字符串
-                var perm_id=arr.join(",");
-                var role_id=$("#id").val();
-                $.post("perm_update",{"perm_id":perm_id,"role_id":role_id},function(data){
-                    if(data>0)
+                var perm=arr.join(",");
+                var role_id=$("#role").val();
+                alert(role_id+"---"+perm)
+                $.post("/gateway/admin/userManage/updateRole_Perm",{"roleID":role_id,"perm":perm},function(data){
+                    if(data==1)
                     {
                         layer.msg('修改成功,重新登录后生效');
                     }
@@ -147,19 +146,18 @@
                     }
                 },"json")
             });
-            form.on('select(test)', function(data){
+            $("#role").change(function(){
                 renderTable();
-                var id=$("#id").val();
+                var id=$("#role").val();
                 if(id!=0)
                 {
-                    $("#up").show();
+                    $("#btn-update").show();
                 }
                 else
                 {
-                    $("#up").hide();
+                    $("#btn-update").hide();
                 }
-
-            });
+            })
             //状态按钮
             form.on('switch(filter)', function(obj) {
                 if(obj.elem.checked){

@@ -36,9 +36,9 @@ public class UserController {
         return service.findByPhoneNumber(phoneNumber);
     }
 
-    //调用用户管理服务
-    @RequestMapping("/userManage/userMessage")
-    public String showUserModule(Model model){
-        return "redirect:http://localhost:8100/userManage/userMessage";
-    }
+//    //调用用户管理服务
+//    @RequestMapping("/userManage/userMessage")
+//    public String showUserModule(Model model){
+//        return "redirect:http://localhost:8100/userManage/userMessage";
+//    }
 }

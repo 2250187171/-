@@ -38,4 +38,28 @@ public class AuthorityController {
         m.put("data", authorityService.findAll());
         return m;
     }
+
+    //根据角色Id和模块id查询
+    @RequestMapping("/userManage/findByRoleIDAndPermID")
+    @ResponseBody
+    public int findByRoleIDAndPermID(int roleID,int permID){
+        return authorityService.findByRoleIDAndPermID(roleID, permID);
+    }
+
+    //修改角色权限
+    @RequestMapping("/userManage/updateRole_Perm")
+    @ResponseBody
+    public int updateRole_Perm(Integer roleID,String perm){
+        System.out.println("进入修改操作==========================================="+roleID+"--"+perm);
+        //获得所有选中模块
+        String [] perms=perm.split(",");
+        //删除角色权限
+        authorityService.deleteRole_Perm(roleID);
+        //新增角色权限
+        for (String id : perms) {
+            authorityService.addRole_Perm(roleID, Integer.parseInt(id));
+        }
+        System.out.println("执行修改操作=======================================");
+        return 1;
+    }
 }

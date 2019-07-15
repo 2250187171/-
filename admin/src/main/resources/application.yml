@@ -36,3 +36,5 @@ mybatis:
 logging:
   level:
     org.java.dao: debug
+
+

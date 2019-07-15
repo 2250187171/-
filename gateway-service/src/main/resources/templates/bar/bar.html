@@ -81,7 +81,7 @@
 
     <div class="page-header-content">
         <div class="page-title">
-            <h4><span class="text-semibold">欢迎使用汉达物流系统</span><span id="div_time" style="padding-left: 100px"></span></h4>
+            <h4><span class="text-semibold">欢迎使用广达物流系统</span><span id="div_time" style="padding-left: 100px"></span></h4>
         </div>
         <div class="heading-elements">
             <div class="heading-btn-group">
@@ -330,8 +330,8 @@
                             <span class="myFont">用户管理</span>
                         </a>
                         <ul>
-                            <li><a href="purApply.do?methoa=select" class="myFont" >权限分配</a></li>
-                            <li><a class="myFont" url="/userManage/userMessage" name="tab" href="javascript:;" id='tabUser'>用户信息</a></li>
+                            <li><a url="http://localhost:9000/gateway/admin/userManage/authorityShow" name="tab" href="javascript:;" id='permission' class="myFont" >权限分配</a></li>
+                            <li><a class="myFont" url="http://localhost:9000/gateway/admin/userManage/userMessage" name="tab" href="javascript:;" id='tabUser'>用户信息</a></li>
                         </ul>
                     </li>
                     <li>
@@ -340,7 +340,7 @@
                             <span class="myFont">统计报表</span>
                         </a>
                         <ul>
-                            <li><a href="purApply.do?methoa=select" class="myFont">财务报表</a></li>
+                            <li><a href="http:localhost:8200/" class="myFont">财务报表</a></li>
                             <li><a href="purchaseOrder.do?method=select" class="myFont">客户报表</a></li>
                         </ul>
                     </li>
@@ -361,13 +361,24 @@
             <script type="text/javascript">
                 // 百度地图API功能
                 var map = new BMap.Map("allmap");
-                function myFun(result){
-                    var cityName = result.name;
-                    map.setCenter(cityName);
-                    document.getElementById("address").innerText=cityName;
-                }
-                var myCity = new BMap.LocalCity();
-                myCity.get(myFun);
+                //创建geolocation对象
+                var geolocation = new BMap.Geolocation();
+                //创建地址解析的实例
+                var geoc = new BMap.Geocoder();
+                //返回用户的当前位置信息
+                geolocation.getCurrentPosition(function(r){
+                    //返回完成后的状态码
+                    if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                        //对指定的坐标点进行反地址解析
+                        geoc.getLocation(r.point, function(rs){
+                            //addressComponents：结构化的地址描述
+                            var addComp = rs.addressComponents;
+                            document.getElementById("address").innerText=addComp.city + " " + addComp.district;
+                        });
+                    }else {
+                        alert('failed'+this.getStatus());
+                    }
+                })
             </script>
 
         </div>

@@ -82,8 +82,15 @@ public class A_UserServiceImpl implements A_UserService {
         return a_userMapper.findNotIDNumber(IDNumber,userID);
     }
 
+    //修改角色权限
     @Override
     public void update_user_role(Map map) {
         a_userMapper.update_user_role(map);
+    }
+
+    //根据角色查询用户
+    @Override
+    public List<Map> findByRoleID(int roleID) {
+        return a_userMapper.findByRoleID(roleID);
     }
 }

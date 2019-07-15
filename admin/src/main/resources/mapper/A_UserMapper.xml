@@ -15,7 +15,12 @@
             and d.roleID=#{roleID}
         </if>
     </sql>
-
+    <!--根据角色查询用户-->
+    <select id="findByRoleID" resultType="map">
+        select userID,userName from
+        <include refid="userFrom"/>
+        where c.roleID=#{roleID}
+    </select>
     <!--根据手机号码查询用户-->
     <select id="findByPhoneNumber" resultType="map">
         select * from a_user a JOIN a_user_role b ON(a.phoneNumber=b.phoneNumber) JOIN a_role c ON(b.roleID=c.roleID) where a.phoneNumber=#{phoneNumber}
