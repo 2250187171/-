@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/gateway/attend/Content/css/signin.css}" type="text/css"></link>
+    <link rel="stylesheet" th:href="@{/gateway/attend/Content/css/Map.css}" type="text/css"></link>
+    <link rel="stylesheet" th:href="@{/gateway/attend/Content/css/public.css}" type="text/css"></link>
+    <link th:href="@{/gateway/attend/assets/layui/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/gateway/attend/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/gateway/attend/Content/css/datatables.min.css}" type="text/css"></link>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ERuIpcY6utL2GVFXGpQamaKKICP8Rueq"></script>
+    <style type="text/css">
+        .panel-body {
+            padding: 10px 10px;
+        }
+
+        * {
+            font-family: "华文中宋";
+            overflow: scroll;
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        label {
+            float: inherit;
+            height: 34px;
+            font-family: '华文中宋';
+            color: #6f7b8a;
+            font-size: 13.5px;
+            line-height: 20px;
+            margin-right: -3px;
+            text-align: center;
+            font-weight: normal;
+            background: #F4F4F4;
+            border: #AAAAAA solid 1px;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-right: none;
+            z-index: 100;
+            font-size: 13.5px;
+            line-height: 20px;
+            margin-right: -3px;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        .control-label {
+            padding-left: 0;
+        }
+
+        .col-lg-8,.col-md-8,.col-sm-8,.col-xs-8 {
+            padding-left: 0;
+        }
+
+        td,th {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        div {
+            font-size: 14px
+        }
+        #TabAttendance td{
+            font-size: 15px;
+            font-weight: normal;
+        }
+        #TabAttendance th{
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div id="PingChang">
+        <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3">
+            <div class="top flex flex-align-end flex-pack-center flex-warp"
+                 style="margin-top: 30px;">
+                <div class="out-1 flex flex-align-center flex-pack-center" id="signIn">
+                    <div class="out-2 flex flex-align-center flex-pack-center"
+                         onclick="QianDao()" id="ShangBan">
+                        <div class="signBtn" style="cursor: pointer;">
+                            <strong id="sign-txt" style="font-size: 12px">[[${bol}]]</strong><img
+                                src="/gateway/attend/Content/image/328692.png" height="30px" width="30px"
+                                style="margin-left: 20px" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="Calendar">
+                <div id="toyear" class="flex flex-pack-center">
+                    <div id="idCalendarPre">
+                        <img src="/gateway/attend/Content/image/371404.png"
+                             style="cursor: pointer;" width="16px" height="16px" />
+                    </div>
+                    <div class="year-month">
+                        <span id="idCalendarYear">2018</span>年<span id="idCalendarMonth">12</span>月
+                    </div>
+                    <div id="idCalendarNext">
+                        <img src="/gateway/attend/Content/image/37140.png"
+                             style="cursor: pointer;" width="16px" height="16px" />
+                    </div>
+                </div>
+                <table border="1px" cellpadding="0" cellspacing="0">
+                    <thead>
+                    <tr class="tou">
+                        <td>日</td>
+                        <td>一</td>
+                        <td>二</td>
+                        <td>三</td>
+                        <td>四</td>
+                        <td>五</td>
+                        <td>六</td>
+                    </tr>
+                    </thead>
+                    <tbody id="idCalendar">
+                    <tr>
+                        <td><span>&nbsp;</span></td>
+                        <td><span>&nbsp;</span></td>
+                        <td><span>&nbsp;</span></td>
+                        <td><span>&nbsp;</span></td>
+                        <td><span>&nbsp;</span></td>
+                        <td><span>&nbsp;</span></td>
+                        <td><span>1</span></td>
+                    </tr>
+                    <tr>
+                        <td><span>2</span></td>
+                        <td><span>3</span></td>
+                        <td><span>4</span></td>
+                        <td><span>5</span></td>
+                        <td><span>6</span></td>
+                        <td><span>7</span></td>
+                        <td><span>8</span></td>
+                    </tr>
+                    <tr>
+                        <td><span>9</span></td>
+                        <td><span>10</span></td>
+                        <td><span>11</span></td>
+                        <td><span>12</span></td>
+                        <td class="onToday"><span>13</span></td>
+                        <td><span>14</span></td>
+                        <td><span>15</span></td>
+                    </tr>
+                    <tr>
+                        <td><span>16</span></td>
+                        <td><span>17</span></td>
+                        <td><span>18</span></td>
+                        <td><span>19</span></td>
+                        <td><span>20</span></td>
+                        <td><span>21</span></td>
+                        <td><span>22</span></td>
+                    </tr>
+                    <tr>
+                        <td><span>23</span></td>
+                        <td><span>24</span></td>
+                        <td><span>25</span></td>
+                        <td><span>26</span></td>
+                        <td><span>27</span></td>
+                        <td><span>28</span></td>
+                        <td><span>29</span></td>
+                    </tr>
+                    <tr>
+                        <td><span>30</span></td>
+                        <td><span>31</span></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class=" col-lg-9 col-sm-9 col-md-9 col-xs-9" id="div">
+            <table id="TabAttendance"
+                   class="display table table-hover table-striped table-bordered"
+                   cellspacing="0" width="100%" style="margin-top: 30px;">
+                <thead>
+                <tr>
+                    <th style="text-align: center;">用户名称</th>
+                    <th style="vertical-align: middle">上班时间</th>
+                    <th style="vertical-align: middle">下班时间</th>
+                    <th style="vertical-align: middle">操作</th>
+
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div id="TuFaShiJian" style="margin-top: 30px;display: none;">
+        <form class="form-horizontal" id="Form" onsubmit="return false">
+            <div class="form-group">
+                <div class="col-lg-2 col-sm-2 col-md-2"></div>
+                <div class="col-lg-10 col-sm-10 col-sm-10">
+                    <label class="control-label col-lg-3 col-sm-3 col-md-3">请假理由：</label>
+                    <div class="col-lg-6 col-sm-6 col-md-6" style="padding-left: 0px">
+                        <input class="form-control" id="Reason" name="Reason"
+                               placeholder="请输入请假的理由（50个字以内）" maxlength="100" /> <input
+                            class="form-control hidden" id="AttendanceID" name="AttendanceID" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-lg-2 col-sm-2 col-md-2"></div>
+                <div class="col-lg-10 col-sm-10 col-sm-10">
+
+                    <label class="control-label col-lg-3 col-sm-3 col-md-3">请假天数：</label>
+                    <div class="col-lg-6 col-sm-6 col-md-6" style="padding-left: 0px">
+                        <input class="form-control" id="LeaveDay" name="LeaveDay"
+                               placeholder="请输入请输入请假的天数（10个字以内）" maxlength="100" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-lg-8 col-sm-8 col-md-8"></div>
+                <div class="col-lg-2 col-sm-2 col-md-2">
+                    <button class="btn" onclick="QueDing()">确定</button>
+                    <button class="btn" onclick="GuanBi()">关闭</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+    <div class="modal fade" id="modalone">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">温馨提示：</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="Tip"></p>
+                </div>
+                <div class="modal-footer">
+                    <p style="display: inline-block;"></p>
+                    <button class="btn btn-info" onclick="GuanBiTip()">确定</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modaltwo">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">上传车辆信息:</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="FormCar" onsubmit="return false">
+                        <div class="form-group">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">油量：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="oilmass" name="oilmass"
+                                           placeholder="请输入车辆剩余油量" maxlength="4"
+                                           onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+                                           onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">里程：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="mileage" name="mileage"
+                                           placeholder="请输入车辆里程" maxlength="4"
+                                           onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
+                                           onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-12 col-sm-12 col-sm-12">
+                                <label class="control-label col-lg-2 col-sm-2 col-md-2">位置：</label>
+                                <div class="col-lg-10 col-sm-10 col-md-10" style="padding-left: 0px">
+                                    <input class="form-control" id="location" name="location"
+                                           placeholder="请保持网络通畅" maxlength="100" readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p style="display: inline-block;"></p>
+                    <button class="btn btn-info" onclick="ReFresh()">刷新位置</button>
+                    <button class="btn btn-info" onclick="uploadCar()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="modalthree">
+        <div class="modal-dialog" style="width: 1000px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="FormInfor" onsubmit="return false">
+
+                        <div class="form-group">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班签到时间：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="startworktime" name="startworktime"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班签到时间：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="offwork" name="offwork"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group driver" style="display: none;">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班车辆油量：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="startoilmass" name="startoilmass"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6 ">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班车辆油量：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="offoilmass" name="offoilmass"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group driver" style="display: none;">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班车辆位置：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="startlocation" name="startlocation"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班车辆位置：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="offlocation" name="offlocation"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group driver" style="display: none;">
+
+
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班车辆里程：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="startmileage" name="startmileage"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6 ">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班车辆里程：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="offmileage" name="offmileage"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">请假理由：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="reason" name="reason"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">请假天数：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="leaveday" name="leaveday"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">申请时间：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="applicationtime"
+                                           name="applicationtime" readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">审核时间：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="audittime" name="audittime"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">批准否：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="isratification" name="isratification"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">备注：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="remark" name="remark"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p style="display: inline-block;"></p>
+                    <div class="driver" style="display: none;">
+                        <input class="hidden" id="KaiShi" /><input id="JieShu" class="hidden" /><input
+                            type="button" value="查看车辆上班位置" class="btn" id="start"
+                            onclick="ChaKan(this.id)" /> <input type="button" value="查看车辆下班位置"
+                                                                class="btn" id="end" onclick="ChaKan(this.id)" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery.form.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/datatables.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/rili.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/mycustom.js}"></script>
+<script th:inline="javascript">
+
+    //获得打卡的日期
+    var List = [[${sty}]];
+    var TabAttendance;
+    var count = Math.round((window.screen.height - 450) / 50);
+    $(function () {
+        ChaKanChuQin();
+        TabAttendance = $('#TabAttendance')
+            .DataTable(
+                {
+                    "pagingType" : "simple_numbers",//设置分页控件的模式
+                    searching : false,//屏蔽datatales的查询框
+                    aLengthMenu : [ count ],//设置一页展示10条记录
+                    "bSort" : false,
+                    "bLengthChange" : false,//屏蔽tables的一页展示多少条记录的下拉列表
+                    "bAutoWidth" : false,
+                    "oLanguage" : { //对表格国际化
+                        "sLengthMenu" : "每页显示 _MENU_条",
+                        "sZeroRecords" : "没有找到符合条件的数据",
+                        //  "sProcessing": "&lt;img src=’./loading.gif’ /&gt;",
+                        "sInfo" : "当前第 _START_ - _END_ 条　共计 _TOTAL_ 条",
+                        "sInfoEmpty" : "木有记录",
+                        "sInfoFiltered" : "(从 _MAX_ 条记录中过滤)",
+                        "sSearch" : "搜索：",
+                        "sProcessing" : "正在加载中......",
+                        "oPaginate" : {
+                            "sFirst" : "首页",
+                            "sPrevious" : "前一页",
+                            "sNext" : "后一页",
+                            "sLast" : "尾页"
+
+                        }
+                    },
+                    "processing" : true, //打开数据加载时的等待效果
+                    "serverSide" : true,//打开后台分页
+                    "ajax" : {
+                        "url" : "/gateway/attend/getList",
+                        "dataSrc" : "aaData",
+                        "data" : function(d) {
+                            var Auditing = $("#Auditing").val();
+                            d.Auditing = Auditing;
+                        }
+                    },
+                    "aoColumnDefs" : [ {
+                        "sWidth" : "5%",
+                    }, {
+                        "sWidth" : "5%",
+
+                    }, {
+                        "sWidth" : "5%",
+
+                    }, {
+                        "sWidth" : "5%",
+
+                    }, {
+                        "sWidth" : "5%",
+
+                    } ],
+                    "columns" : [
+
+                        {
+                            "data" : "userName"
+                        },
+                        {
+                            "data" : function(obj) {
+                                return dateToStr(new Date(obj.startWorkTime));
+                            }
+                        },
+                        {
+                            "data" : function(obj) {
+                                return dateToStr(new Date(obj.offWork));
+                            }
+                        },
+                        {
+                            "data" : function(obj) {
+                                return '<button class="btn" id="'
+                                    + obj.attendanceID
+                                    + '" onclick="detail(this.id)" >详情</button>   <button class="btn" id="'
+                                    + obj.attendanceID
+                                    + '" onclick="TuFa(this.id,value)" value="'
+                                    + obj.startWorkTime
+                                    + '" class="suddenly" >请假</button>';
+                            }
+                        } ]
+                });
+        //不现实错误提示框
+        $.fn.dataTable.ext.errMode = 'none';
+    })
+
+    var Mark;
+    //打卡
+    function QianDao() {
+        //获得打卡状态
+        Mark=$("#sign-txt").text();
+        if(Mark=='下班签到'){
+            layer.msg("您下班已经签到成功 ，不需要再次签到！！", {
+                icon: 0,
+                offset: '100px'
+            })
+            return;
+        }else if(Mark=='上班签到'){
+            $.post("/gateway/attend/pl",{},function (data) {
+                if(data==1){
+                    //配置一个透明的询问框
+                    layer.msg('您确定要早退吗？', {
+                        time: 40000, //20s后自动关闭
+                        btn: ['确定', '取消'],
+                        yes:function(){
+                            clock();
+                        },
+                        cancel: function()
+                        {
+                            return;
+                        }
+                    })
+                }else{//正常下班打卡
+                    clock();
+                }
+            },"json")
+        }else{
+            clock();
+        }
+    }
+    //异步打卡
+    function clock(){
+        var role="";
+        if(role=="司机"){
+
+        }else
+        {
+            $.post("/gateway/attend/addClock/"+Mark,{},function (data) {
+                if(data==1){
+                    layer.msg("迟到超过2小时,已算旷工！", {
+                        icon: 0,
+                        offset: '100px'
+                    }, function(layerIndex) {
+                        layer.close(layerIndex);
+                        location.reload();
+                    });
+                }else if(data==2){
+                    layer.msg("迟到了！", {
+                        icon: 0,
+                        offset: '100px'
+                    }, function(layerIndex) {
+                        layer.close(layerIndex);
+                        location.reload();
+                    });
+                }else if(data==3){
+                    layer.msg("早退超过2小时,已算旷工！", {
+                        icon: 0,
+                        offset: '100px'
+                    }, function(layerIndex) {
+                        layer.close(layerIndex);
+                        location.reload();
+                    });
+                }else if(data==4){
+                    layer.msg("早退了！", {
+                        icon: 0,
+                        offset: '100px'
+                    }, function(layerIndex) {
+                        layer.close(layerIndex);
+                        location.reload();
+                    });
+                }else{
+                    layer.msg("打卡成功", {
+                        icon: 1,
+                        offset: '100px'
+                    }, function(layerIndex) {
+                        layer.close(layerIndex);
+                        location.reload();
+                    });
+                }
+            },"json")
+        }
+    }
+
+
+    //标识日历的打卡样式
+    function ChaKanChuQin() {
+        for ( var i = 0; i < List.length; i++) {
+            $("#" + List[i]).css("background-color", "#1485ff");
+        }
+    }
+
+
+    var myday = new Array(); //已签到的数组
+    var cale = new Calendar("idCalendar", {
+        qdDay : myday,
+        onToday : function(o) {
+            o.className = "onToday";
+        },
+        onSignIn : function() {
+
+        },
+        onFinish : function() {
+
+            $$("idCalendarYear").innerHTML = this.Year;
+            $$("idCalendarMonth").innerHTML = this.Month; //表头年份
+
+        }
+    });
+    $$("idCalendarPre").onclick = function() {
+        cale.PreMonth();
+    }
+    $$("idCalendarNext").onclick = function() {
+        cale.NextMonth();
+    }
+
+
+    //转换时间格式
+    function dateToStr(datetime){
+
+        var year = datetime.getFullYear();
+        var month = datetime.getMonth()+1;//js从0开始取
+        var date = datetime.getDate();
+        var hour = datetime.getHours();
+        var minutes = datetime.getMinutes();
+        var second = datetime.getSeconds();
+
+        if(month<10){
+            month = "0" + month;
+        }
+        if(date<10){
+            date = "0" + date;
+        }
+        if(hour <10){
+            hour = "0" + hour;
+        }
+        if(minutes <10){
+            minutes = "0" + minutes;
+        }
+        if(second <10){
+            second = "0" + second ;
+        }
+
+        var time = year+"-"+month+"-"+date+" "+hour+":"+minutes+":"+second; //2009-06-12 17:18:05
+// alert(time);
+        return time;
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="attendance:war">
+    <output-path>$PROJECT_DIR$/attendance/target</output-path>
+    <root id="archive" name="attendance-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="attendance:war exploded" />
+    </root>
+  </artifact>
+</component>

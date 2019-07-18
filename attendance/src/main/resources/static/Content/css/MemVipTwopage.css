@@ -1,0 +1,669 @@
+/* CSS Document */
+/*共用*/
+.wdBanner {
+	background: url(../image/smallBanner.jpg) center;
+	height: 192px
+}
+
+.r-point {
+	color: #d7211d
+}
+
+.LBlock {
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+
+.xiadan_Tab input {
+	line-height: 35px;
+}
+/*下单*/
+.xiadan_box {
+	width: 1200px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.xiadan_Tab {
+	margin: 12px 0 20px;
+	padding: 25px 35px;
+	background: #fff;
+}
+
+.xiadan-tits {
+	height: 42px;
+	line-height: 50px;
+	border-bottom: 1px #bfc6cd solid
+}
+
+.xiadan-tits h4 {
+	color: #333;
+	font-size: 20px;
+}
+
+.xiadan-tits span {
+	color: #999;
+	font-size: 14px;
+	padding-top: 3px;
+}
+
+.reg-con {
+	padding-right: 90px
+}
+
+.itemform_Th {
+	height: 43px;
+	line-height: 43px;
+	background: #f5f5f5;
+	margin-top: 40px;
+}
+
+.itemform_Th h4 {
+	font-size: 16px;
+	color: #666;
+}
+
+.icon-redbar {
+	display: block;
+	float: left;
+	margin: 14px 8px 0 20px;
+	background: #21b6ee;
+	width: 3px;
+	height: 16px;
+}
+
+.item-cell label {
+	display: inline-block;
+	width: 100px;
+	white-space: nowrap;
+	text-align: right;
+	padding-right: 5px;
+	line-height: 37px;
+	height: 37px
+}
+
+.item-cell2 label {
+	display: inline-block;
+	width: 100px;
+	white-space: nowrap;
+	text-align: right;
+	padding-right: 5px;
+	line-height: 37px;
+	height: 37px
+}
+
+.item-primary input {
+	color: #222;
+	padding: 0px 4px 0 6px;
+	border: 1px #c4c4c4 solid;
+	height: 35px;
+}
+
+.item-primary .end {
+	background: url(../image/ditu.png) no-repeat 370px center;
+}
+
+.item-mar {
+	margin: 32px 0 17px 0px
+}
+
+.item-cell {
+	margin-left: 146px;
+	font-size: 14px;
+	color: #222
+}
+
+.item-cell2 {
+	margin-left: 30px;
+	font-size: 14px;
+	color: #222;
+}
+
+.cl20 {
+	clear: both;
+	height: 20px;
+}
+
+.w392 {
+	width: 392px;
+	color: #999 !important
+}
+
+.w240 {
+	width: 240px;
+}
+
+.w70 {
+	width: 70px
+}
+
+.w40 {
+	width: 40px
+}
+
+.w46 {
+	width: 46px
+}
+
+.W54 {
+	width: 54px
+}
+
+.ml11 {
+	margin-left: 11px
+}
+
+.ml60 {
+	margin-left: 60px
+}
+
+.mt17 {
+	margin-top: 17px
+}
+
+.W152 {
+	width: 152px
+}
+
+.W125 {
+	width: 120px;
+}
+
+.ml50 {
+	margin-left: 50px
+}
+
+.w470 {
+	width: 470px
+}
+
+.W80 {
+	width: 80px
+}
+
+.w92 {
+	width: 100px
+}
+
+.mt13 {
+	margin-top: 13px
+}
+
+.VerCode {
+	vertical-align: middle;
+	margin-left: 10px;
+	*border: 1px #999 solid
+}
+
+.Remarks {
+	vertical-align: top
+}
+
+.date {
+	color: #999
+}
+
+.LongSupply {
+	vertical-align: middle;
+	margin-left: 40px;
+}
+
+.item-textarea {
+	color: #222;
+	padding: 0px 10px;
+	border: 1px #c4c4c4 solid;
+}
+
+.btn-blue {
+	border: 0px;
+	width: 152px;
+	height: 42px;
+	line-height: 42px;
+	background: #0078d4;
+	display: block;
+	border-radius: 5px;
+	color: #fff;
+	font-size: 16px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.btn {
+	margin: 60px 0 20px 254px;
+}
+
+.btn-blue:hover {
+	background: #0074cc
+}
+
+.item-input {
+	padding: 0 6PX;
+	height: 33px;
+	border: 1px #c4c4c4 solid
+}
+
+.clfl {
+	clear: left;
+	float: left
+}
+
+.item-form {
+	font-size: 14px;
+	color: #222
+}
+
+.Ctlabel {
+	width: 109px;
+	white-space: nowrap;
+	text-align: right;
+	padding-right: 5px;
+	line-height: 37px;
+	height: 37px
+}
+
+.item-primaryIE7 {
+	position: relative
+}
+
+.item-primaryIE7 INPUT {
+	position: absolute
+}
+
+.cus_sel_box_comm {
+	display: inline
+}
+
+.Dateinput {
+	cursor: pointer
+}
+
+.mt2 input {
+	*margin-top: -2px
+}
+
+.dropDownUl {
+	cursor: pointer;
+}
+
+#ContentPlaceHolder_txtHwzl {
+	width: 70px
+}
+
+.doubledate,#ContentPlaceHolder_txtTj {
+	vertical-align: middle
+}
+
+.NameGoods {
+	z-index: 120;
+}
+
+.NameGoods2 {
+	z-index: 120;
+}
+
+.goods-unit {
+	z-index: 99
+}
+
+/*公司简介*/
+.aboutUS_box {
+	width: 1200px;
+	margin: 0 auto;
+	padding-top: 12px;
+}
+
+.BMap_mask {
+	border: 1px solid #ddd
+}
+/*左侧*/
+.col_f {
+	color: #fff
+}
+
+.main_left {
+	width: 242px;
+	height: auto;
+	min-height: 240px;
+	background: url(../image/main_leftBj.jpg) repeat-y scroll 0px 0px;
+	overflow: hidden;
+}
+
+.main_leftTitle {
+	width: 242px;
+	height: 60px;
+	line-height: 64px;
+	text-align: center;
+	background: url(../image/InternalPage.png) no-repeat scroll 0px -180px;
+}
+
+.sidebar {
+	width: 180px;
+	height: auto;
+	margin: 0px auto;
+}
+
+.sidebar_li {
+	height: 38px;
+	line-height: 40px;
+	padding: 2px 0px;
+	text-align: center;
+}
+
+.sidebar_a {
+	display: block;
+	font-size: 14px;
+	line-height: 40px;
+	color: #333;
+	height: 40px;
+	border-bottom: 1px solid #E5E5E5;
+}
+/*.sidebar_a.active,.sidebar_a:hover{color:#008be7;text-decoration:none;background:url(../image/InternalPage.png) no-repeat scroll 140px center;}
+*/
+#tabTitle li a:hover,#tabTitle li.active a {
+	color: #008be7;
+	text-decoration: none;
+	background: url(../image/right.png) no-repeat scroll 140px center;
+}
+
+/*右侧*/
+.main_right {
+	width: 890px;
+	height: auto;
+	padding: 0px 34px 30px 30px;
+	min-height: 453px;
+	background: #fff;
+	margin-left: 4px;
+	overflow: hidden;
+}
+
+.main_rightTitle {
+	height: 25px;
+	padding-top: 30px;
+	line-height: 44px;
+	border-bottom: 1px solid #d3d3d3;
+	margin-bottom: 20px;
+	text-align: right;
+}
+
+.main_rightTitle_r {
+	padding-left: 20px;
+}
+
+.col_2691d5 {
+	color: #2691d5;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.col_666666,.rightTitle a {
+	color: #666;
+}
+
+.leftTitle {
+	height: 20px;
+	line-height: 20px;
+	font-size: 14px;
+}
+
+.rightTitle {
+	height: 20px;
+	line-height: 20px;
+	font-size: 14px;
+	background: url(../image/map.png) no-repeat;
+	padding-left: 20px;
+}
+
+.gslogo {
+	width: 268px;
+	height: 229px;
+	border: 1px solid #d5dde5;
+	display: inline-block;
+	text-align: center;
+	padding-top: 2px;
+	vertical-align: middle
+}
+
+.gsjj .gywm_Box p {
+	text-align: justify;
+	text-indent: 2em;
+	font-size: 14px;
+	color: #666;
+	line-height: 30px;
+	margin-bottom: 20px;
+}
+
+.gsjj .gywm_Box img {
+	float: left;
+	border: 1px solid #bfc6cd;
+	padding: 3px;
+	margin: 0 30px 20px 0;
+}
+
+.gsjj .gywm_Box {
+	overflow: hidden;
+}
+
+/*联系我们*/
+.lxwm .gywm_Box {
+	overflow: hidden;
+}
+
+.lxwm .lxwmL h4 {
+	font-size: 16px;
+	color: #454545;
+	margin-bottom: 10px;
+}
+
+.lxwmL p {
+	text-indent: 0em;
+	margin-bottom: 0;
+	line-height: 28px;
+	font-size: 14px;
+	color: #666;
+}
+
+.lxwmL .lxLTop,.lxwmL .lxLBottom {
+	margin-bottom: 50px;
+}
+
+.lxLBottom {
+	margin-top: 10px;
+}
+
+.lxwm .lxwmR {
+	border: 1px solid #bfc6cd;
+	width: 300px;
+	height: 300px;
+	margin-top: 15px;
+}
+
+.sidebar_li a {
+	text-decoration: none
+}
+
+/*形象展示*/
+.xxzs .gywm_Box {
+	overflow: hidden;
+	padding: 0 30px;
+}
+
+.xxzsTittle {
+	overflow: hidden;
+	width: 450px;
+	margin: 0 auto;
+}
+
+.xxzsTittle .zssubList li {
+	float: left;
+	padding: 0 5px;
+}
+
+.xxzsTittle .zssubList a {
+	background: #e5e5e5;
+	font-size: 16px;
+	color: #666;
+	display: block;
+	width: 100px;
+	height: 30px;
+	line-height: 30px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	text-align: center;
+}
+
+.xxzsTittle .zssubList li.xxzs-li a,.xxzsTittle .zssubList li a:hover {
+	background: #098fe8;
+	color: #fff;
+}
+
+/*网点查询二级页面*/
+.xxzsCont {
+	overflow: hidden;
+	margin: 20px 0;
+}
+
+.xxzsCont .zssubLists li {
+	float: left;
+	text-align: center;
+	padding: 18px;
+	width: 237px;
+}
+
+.zssubLists .zsareaList img {
+	border: 1px solid #bfc6cd;
+	padding: 3px;
+	width: 237px;
+	height: 197px;
+}
+
+.zssubLists .zsareaList p {
+	font-size: 12px;
+	color: #717171;
+	line-height: 30px;
+}
+
+.zssubLists .zsareaList .cangChu:hover p {
+	color: #4395ff;
+	text-decoration: underline;
+}
+/*公司动态*/
+.gsDongDai .gywm_Box {
+	overflow: hidden;
+	padding: 0 20px;
+}
+
+.dtSubList {
+	overflow: hidden;
+}
+
+.dtSubList li {
+	padding: 15px 0 15px 20px;
+	overflow: hidden;
+	background: url(../image/dongtai.png) no-repeat 0 center;
+	border-bottom: 1px dashed #eee;
+}
+
+.dtSubList li .dtL {
+	width: 500px;
+	display: block;
+	float: left;
+	text-overflow: ellipsis;
+	-o-text-overflow: ellipsis;
+	-webkit-text-overflow: ellipsis;
+	-moz-text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	font-size: 14px;
+	color: #999898;
+}
+
+.dtSubList li .dtL:hover {
+	text-decoration: underline;
+	color: #008be7;
+}
+
+.dtSubList li .dtR {
+	display: block;
+	float: right;
+	font-size: 14px;
+	color: #999898;
+}
+
+.xqBot {
+	font-size: 14px;
+	color: #454545;
+	line-height: 30px;
+}
+
+.dt_img {
+	background: url(../image/liulan.png) no-repeat 0 center;
+	padding-left: 28px;
+	background-size: 1.5rem;
+	margin-left: 20px;
+}
+
+/*公司动态详情*/
+.wdBanner {
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 10px;
+}
+
+.dtXiangQing {
+	overflow: hidden;
+	width: 1200px;
+	margin: 0 auto;
+}
+
+.dtXiangQing .xqCont {
+	background: #fff;
+	padding: 30px;
+	margin-top: 12px;
+}
+
+.xqTittle {
+	border-bottom: 1px solid #c4c4c4;
+	text-align: center;
+}
+
+.xqTittle h4 {
+	font-size: 18px;
+	color: #3e3e3e;
+	margin-bottom: 15px;
+	font-weight: bold;
+}
+
+.xqTittle p {
+	font-size: 14px;
+	color: #999;
+	margin-bottom: 10px;
+}
+
+.dtFont {
+	font-size: 14px;
+	color: #999;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.xqBot {
+	padding-top: 10px;
+}
+
+.xqBot p {
+	font-size: 16px;
+	color: #454545;
+	text-indent: 2em;
+	line-height: 30px;
+	font-size: 14px
+}
+
+.xqBot .p1 {
+	padding: 40px 0 100px;
+}
+
+.item-primary .dropChooseBoxCity {
+	width: 250px;
+}

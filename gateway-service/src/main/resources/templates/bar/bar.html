@@ -350,7 +350,7 @@
                             <span class="myFont">站点管理</span>
                         </a>
                         <ul>
-                            <li><a href="purApply.do?methoa=select" class="myFont">路线信息</a></li>
+                            <li><a url="http://localhost:9000/gateway/admin/siteManage/RouteShow" name="tab" href="javascript:;" id='route' class="myFont">路线信息</a></li>
                             <li><a href="purchaseOrder.do?method=select" class="myFont">站点信息</a></li>
                         </ul>
                     </li>
@@ -373,7 +373,7 @@
                         geoc.getLocation(r.point, function(rs){
                             //addressComponents：结构化的地址描述
                             var addComp = rs.addressComponents;
-                            document.getElementById("address").innerText=addComp.city + " " + addComp.district;
+                            document.getElementById("address").innerText=addComp.city + " " + addComp.district+" "+addComp.street;
                         });
                     }else {
                         alert('failed'+this.getStatus());

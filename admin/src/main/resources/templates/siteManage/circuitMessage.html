@@ -3,10 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="/assets/layui/css/layui.css" rel="stylesheet">
-
+    <link th:href="@{/gateway/admin/assets/layui/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/gateway/admin/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/gateway/admin/Content/css/datatables.min.css}" type="text/css"></link>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ERuIpcY6utL2GVFXGpQamaKKICP8Rueq"></script>
 </head>
+<style>
+    #TabRoute td{
+        text-align: center;
+    }
+    #TabRoute td{
+        align-content: center;
+    }
+    body {
+        padding: 0px;
+        margin: 0px
+    }
+    body, html {width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+    #allmap{
+        height: 810px;
+        width:100%;
+    }
+</style>
 <body>
+
+<div id="DiTu" style="display: none;position:relative">
+    <div id="allmap"></div>
+    <button class="btn btn-default" onclick="back()" style=" position:fixed; top:2%; right:2%;">返 回</button>
+</div>
+
+
+
 <!-- 主页内容-->
 <div th:align="center" id="showUser">
     <nav class="navbar navbar-default" style="border-radius: 10px">
@@ -21,7 +48,7 @@
                 <select class="form-control" id="ccity" name="ccityID" style="width: 130px">
                     <option value="0">请选择城市</option>
                 </select>
-                <select class="form-control" id="cdistrict" name="cdistrictID" style="width: 130px">
+                <select class="form-control" id="cdistrict" name="routeStartID" style="width: 130px">
                     <option value="0">请选择区县</option>
                 </select>
             </div>
@@ -35,7 +62,7 @@
                 <select class="form-control" id="dcity" name="dcity" style="width: 130px">
                     <option value="0">请选择城市</option>
                 </select>
-                <select class="form-control" id="ddistrict" name="ddistrict" style="width: 130px">
+                <select class="form-control" id="ddistrict" name="routeEndID" style="width: 130px">
                     <option value="0">请选择区县</option>
                 </select>
             </div>
@@ -43,7 +70,7 @@
             <button  class="btn btn-primary" type="button" onclick="add()">新增</button>
         </form>
     </nav>
-    <table class="table table-hover" id="TabEmployee">
+    <table class="table table-hover" id="TabRoute">
         <thead>
         <tr align="center">
             <th style="text-align:center;vertical-align: middle;"><b>编号</b></th>
@@ -61,13 +88,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" name="btn_close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">新增路线</h4>
                 </div>
                 <div class="modal-body">
 
-                    <form class="navbar-form" id="addform" role="search">
-
+                    <form class="navbar-form" id="addform" role="search" th:action="@{/gateway/admin/siteManage/addRoute}">
+                        <input type="hidden" id="routeID" name="RouteID">
                         <div class="form-group">
                             <label for="cprovince">出发地：</label>
                             <select class="form-control" id="addcprovince" name="addcprovinceID" style="width: 130px">
@@ -77,7 +104,7 @@
                             <select class="form-control" id="addccity" name="addccityID" style="width: 130px">
                                 <option value="0">请选择城市</option>
                             </select>
-                            <select class="form-control" id="addcdistrict" name="addcdistrictID" style="width: 130px">
+                            <select class="form-control" id="addcdistrict" name="routeStartID" style="width: 130px">
                                 <option value="0">请选择区县</option>
                             </select>
                         </div>
@@ -92,7 +119,7 @@
                             <select class="form-control" id="adddcity" name="adddcityID" style="width: 130px">
                                 <option value="0">请选择城市</option>
                             </select>
-                            <select class="form-control" id="addddistrict" name="addddistrictID" style="width: 130px">
+                            <select class="form-control" id="addddistrict" name="routeEndID" style="width: 130px">
                                 <option value="0">请选择区县</option>
                             </select>
                         </div>
@@ -119,154 +146,86 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
-                    <button type="button" id="btn_submit" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
+                    <button type="button" class="btn btn-default" name="btn_close"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+                    <button type="button" id="btn_submit" class="btn btn-primary" ><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-<script type="text/javascript" th:src="@{/Content/js/jquery-3.2.1.min.js}"></script>
-<script type="text/javascript" th:src="@{/Content/layer/layer.js}"></script>
-<script type="text/javascript" th:src="@{/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
-<link href="/assets/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<script type="text/javascript" th:src="@{/gateway/admin/Content/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/Content/js/jquery.form.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/Content/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/Content/js/datatables.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/assets/js/admin/route.js}"></script>
+
 <script>
-//查询下拉框事件------------------------------------------
-    //出发下拉框触发------------
-    //当省份的下拉框的值发生变化时
-    $("#cprovince").change(function () {
-        var proID=$("#cprovince").val();
-        //清空城市列表的选项，只保留标题
-        $("#ccity")[0].options.length=1;//只保留标题
-        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo("#ccity");
-            })
-        },"json")
-    })
+    var map;
+    function bdMap(val){
+        $("#DiTu").show();
+        $("#showUser").hide();
+        map = new BMap.Map("allmap");
+        initMap();//创建和初始化地图
+        var lj=val.split("=");
+        drivingRoute(lj[0],lj[1]);
+        layer.closeAll('loading');
+    }
 
-    //当城市的下拉框的值发生变化时
-    $("#ccity").change(function () {
-        var cityID=$("#ccity").val();
-        //清空城市列表的选项，只保留标题
-        $("#cdistrict")[0].options.length=1;//只保留标题
-        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo("#cdistrict");
-            })
-        },"json")
-    })
+    //返回
+    function back(){
+        $("#DiTu").hide();
+        $("#showUser").show();
+    }
+    // 创建和初始化地图函数：
+    function initMap() {
+        layer.load(1);
+        createMap();// 创建地图
+        setMapEvent();// 设置地图事件
+        addMapControl();// 向地图添加控件
+        //getlocation();
+    }
 
-//到达下拉框事件------------------------------------------
-    //当省份的下拉框的值发生变化时
-    $("#dprovince").change(function () {
-        var proID=$("#dprovince").val();
-        //清空城市列表的选项，只保留标题
-        $("#dcity")[0].options.length=1;//只保留标题
-        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo("#dcity");
-            })
-        },"json")
-    })
+    // 创建地图函数：
+    function createMap() {
+        var point = new BMap.Point(116.401137, 39.913807);// 定义一个中心点坐标
+        map.centerAndZoom(point, 7);// 设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;// 将map变量存储在全局
+    }
 
-    //当城市的下拉框的值发生变化时
-    $("#dcity").change(function () {
-        var cityID=$("#dcity").val();
-        //清空城市列表的选项，只保留标题
-        $("#ddistrict")[0].options.length=1;//只保留标题
-        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo("#ddistrict");
-            })
-        },"json")
-    })
+    // 地图控件添加函数：
+    function addMapControl() {
+        // 向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({
+            anchor : BMAP_ANCHOR_TOP_LEFT,
+            type : BMAP_NAVIGATION_CONTROL_LARGE
+        });
+        map.addControl(ctrl_nav);
+        // 向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({
+            anchor : BMAP_ANCHOR_BOTTOM_RIGHT,
+            isOpen : 1
+        });
+        map.addControl(ctrl_ove);
+        // 向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({
+            anchor : BMAP_ANCHOR_BOTTOM_LEFT
+        });
+        map.addControl(ctrl_sca);
+    }
+    // 地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();// 启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();// 启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();// 启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();// 启用键盘上下左右键移动地图
+    }
 
-//新增下拉框事件-----------------------------------------------------------------
-    //出发地下拉框触发----------------------
-    //当省份的下拉框的值发生变化时
-    $("#addcprovince").change(function () {
-        var proID=$("#addcprovince").val();
-        //清空城市列表的选项，只保留标题
-        $("#addccity")[0].options.length=1;//只保留标题
-        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo("#addccity");
-            })
-        },"json")
-    })
-
-    //当城市的下拉框的值发生变化时
-    $("#addccity").change(function () {
-        var cityID=$("#addccity").val();
-        //清空城市列表的选项，只保留标题
-        $("#addcdistrict")[0].options.length=1;//只保留标题
-        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo("#addcdistrict");
-            })
-        },"json")
-    })
-    //到达地下拉框触发----------------------
-    //当省份的下拉框的值发生变化时
-    $("#adddprovince").change(function () {
-        var proID=$("#adddprovince").val();
-        //清空城市列表的选项，只保留标题
-        $("#adddcity")[0].options.length=1;//只保留标题
-        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo("#adddcity");
-            })
-        },"json")
-    })
-
-    //当城市的下拉框的值发生变化时
-    $("#adddcity").change(function () {
-        var cityID=$("#adddcity").val();
-        //清空城市列表的选项，只保留标题
-        $("#addddistrict")[0].options.length=1;//只保留标题
-        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo("#addddistrict");
-            })
-        },"json")
-    })
-//---------------------------------------------------------------》
-//点击新增按钮弹出新增表单
-function add(){
-    //清空联系人列表的选项，只保留标题
-    $("#userName")[0].options.length=1;//只保留标题
-    //动态加载联系人下拉框
-    $.ajax({
-        url:"/gateway/admin/userManage/findByRoleID",
-        data:{"roleID":4},
-        type:"GET",
-        dataType:'json',
-        success:function (data) {
-            $(data).each(function () {
-                $("<option value='"+this.userID+"'>"+this.userName+"</option>").appendTo("#userName");
-            })
-        }
-    })
-    $('#myModal').modal({
-        backdrop: false
-    });
-}
-
-$("#btn_submit").click(function () {
-    var index = layer.load(1); //添加laoding,0-2两种方式
-    $("#addform").ajaxSubmit(function (data) {
-        if(data=='1'){
-            layer.close(index);
-            ayer.msg("新增成功", {
-                icon: 1,
-                time: 1000
-            })
-        }
-    })
-})
-
-
+    //线路路径
+    function drivingRoute(routeStart,routeEnd) {
+        var driving = new BMap.DrivingRoute(map, {renderOptions: {map: map}});
+        driving.search(routeStart,routeEnd);
+    }
 </script>
 </html>

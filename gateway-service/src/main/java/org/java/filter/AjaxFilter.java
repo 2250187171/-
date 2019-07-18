@@ -44,6 +44,7 @@ public class AjaxFilter extends ZuulFilter {
         RequestContext context = RequestContext.getCurrentContext();
         //获得请求httpservletrequest
         HttpServletRequest request = context.getRequest();
+
         String requestBody = null;
 //        try {
 //            requestBody = StreamUtils.copyToString(context.getRequest().getInputStream(), Charsets.UTF_8);

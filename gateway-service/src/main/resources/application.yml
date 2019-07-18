@@ -38,6 +38,7 @@ logging:
 zuul:
   routes:
     admin-service: /gateway/admin/**
+    attendance-service: /gateway/attend/**
   host:
     socket-timeout-millis: 10000
     connect-timeout-millis: 10000

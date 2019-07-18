@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.AttendMapper">
+
+    <!--根据用户编号查询今天是否打卡-->
+    <select id="findByUserID" resultType="map">
+        select * from d_attendance where userID=#{userID} and date(startWorkTime)=CURDATE()
+    </select>
+
+    <!--用户上班打卡-->
+    <insert id="addClock" parameterType="map">
+        insert d_attendance values(null,#{userID},#{carID}
+        ,#{startWorkTime},#{offWork},#{Mark},#{startMileage}
+        ,#{offMileage},#{startOilMass},#{offOilMass},#{startLocation},#{offLocation}
+        ,#{sstate},#{xstate})
+    </insert>
+
+    <!--用户下班打卡-->
+    <update id="updateClock" parameterType="map">
+        update d_attendance set offWork=#{offWork},Mark=#{Mark},offMileage=#{offMileage},
+        offOilMass=#{offOilMass},offLocation=#{offLocation},xstate=#{xstate}
+    </update>
+
+    <!--查询用户的打卡记录-->
+    <select id="findByUserIDAll" resultType="map">
+        select*from d_attendance where userID=#{userID}
+    </select>
+
+    <!--分页查询用户的打卡记录-->
+    <select id="findByUserIDPage" resultType="map" parameterType="map">
+         select a.*,userName from d_attendance a join a_user b on(a.userid=b.userid)  where a.userID=#{userID} limit #{start},#{length}
+    </select>
+
+    <!--查询总行数-->
+    <select id="count" resultType="int">
+        select count(*) from d_attendance  where userID=#{userID}
+    </select>
+</mapper>

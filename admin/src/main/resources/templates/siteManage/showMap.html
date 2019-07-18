@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style>
+</head>
+<body>
+<div id="allmap"></div>
+</body>
+</html>
+<script type="text/javascript">
+    //百度地图API功能
+    function loadJScript() {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://api.map.baidu.com/api?v=2.0&ak=http://api.map.baidu.com/api?v=2.0&ak=ERuIpcY6utL2GVFXGpQamaKKICP8Rueq&callback=init";
+        document.body.appendChild(script);
+    }
+    function init() {
+        var map = new BMap.Map("allmap");            // 创建Map实例
+        map.enableScrollWheelZoom();                 //启用滚轮放大缩小
+        //创建geolocation对象
+        var geolocation = new BMap.Geolocation();
+        //创建地址解析的实例
+        var geoc = new BMap.Geocoder();
+        //返回用户的当前位置信息
+        geolocation.getCurrentPosition(function(r){
+            var point = new BMap.Point(r); // 创建点坐标
+            map.centerAndZoom(point,15);
+            //返回完成后的状态码
+            if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                //创建一个图像标注实例。point参数指定了图像标注所在的地理位置
+                var mk = new BMap.Marker(r.point);
+                //设置文本标注坐标
+                map.addOverlay(mk);
+                // //将地图的中心点更改为给定的点
+                map.setCenter(r.point);
+                //对指定的坐标点进行反地址解析
+                geoc.getLocation(r.point, function(rs){
+                    //addressComponents：结构化的地址描述
+                    var addComp = rs.addressComponents;
+                    alert(addComp.province + ", " + addComp.city + ", " + addComp.district + ", " + addComp.street + ", " + addComp.streetNumber);
+                });
+            }
+            else {
+                alert('failed'+this.getStatus());
+            }
+        },{enableHighAccuracy: true})
+    }
+    window.onload = loadJScript;  //异步加载地图
+</script>

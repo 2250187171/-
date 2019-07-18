@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.H_RouteMapper">
+    <sql id="sqlWhere">
+        <if test="cprovinceID!='0' and cprovinceID!=0">
+            and startd.proID=#{cprovinceID}
+        </if>
+        <if test="ccityID!='0' and ccityID!=0">
+            and startc.cityID=#{ccityID}
+        </if>
+        <if test="cdistrictID!='0' and cdistrictID!=0">
+            and startb.disID=#{cdistrictID}
+        </if>
+        <if test="dprovinceID!='0' and dprovinceID!=0">
+            and endd.proID=#{dprovinceID}
+        </if>
+        <if test="dcityID!='0' and dcityID!=0">
+            and endc.cityID=#{dcityID}
+        </if>
+        <if test="ddistrictID!='0' and ddistrictID!=0">
+            and endb.disID=#{ddistrictID}
+        </if>
+    </sql>
+
+    <!--新增线路-->
+    <insert id="addRoute" parameterType="map">
+        insert h_route values(null,#{routeStartID},#{routeEndID},#{userID},#{Prescription},#{FreightRate},#{addccityID},#{adddcityID})
+    </insert>
+
+    <!--根据条件分页查询路线-->
+    <select id="findIFRoute" parameterType="map" resultType="map">
+        SELECT RouteID,Prescription,FreightRate,userName,phoneNumber,CONCAT(startd.proName,'-',startc.cityName,'-',IF(startb.disName IS NULL,'市辖区',startb.disName)) AS routeStart,CONCAT(endd.proName,'-'
+            ,endc.cityName,'-',IF(endb.disName IS NULL,'市辖区',endb.disName)) AS routeEnd FROM
+             h_route routea LEFT JOIN h_district startb ON(routea.routeStartID=startb.disID)
+             LEFT JOIN h_district endb ON(routea.routeendID=endb.disID)
+             LEFT JOIN h_city startc ON(startb.cityID=startc.cityID||startc.cityID=routea.startCityID)
+             LEFT JOIN h_city endc ON(endc.cityID=endb.cityID||endc.cityID=routea.endCityID)
+             LEFT JOIN h_province startd ON(startd.proID=startc.proID)
+             LEFT JOIN h_province endd ON(endd.proID=endc.proID)
+             LEFT JOIN a_user e ON(routea.userID=e.userID)
+             where 1=1
+              <include refid="sqlWhere"/>
+              limit #{start},#{length}
+    </select>
+
+    <!--根据条件查询数据数量-->
+    <select id="count" resultType="int" parameterType="map">
+        select count(*) FROM
+             h_route routea LEFT JOIN h_district startb ON(routea.routeStartID=startb.disID)
+             LEFT JOIN h_district endb ON(routea.routeendID=endb.disID)
+             LEFT JOIN h_city startc ON(startb.cityID=startc.cityID)
+             LEFT JOIN h_city endc ON(endc.cityID=endb.cityID)
+             LEFT JOIN h_province startd ON(startd.proID=startc.proID)
+             LEFT JOIN h_province endd ON(endd.proID=endc.proID)
+             LEFT JOIN a_user e ON(routea.userID=e.userID)
+             where 1=1
+             <include refid="sqlWhere"/>
+    </select>
+
+    <!--根据路线ID查询路线信息-->
+    <select id="findById" resultType="map">
+        SELECT routea.*,startc.cityID AS ccityID,startd.proID AS cproID,endc.cityID AS dcityID,endd.proID AS dproID FROM h_route routea LEFT JOIN h_district startb ON(routea.routeStartID=startb.disID)
+             LEFT JOIN h_district endb ON(routea.routeendID=endb.disID)
+              LEFT JOIN h_city startc ON(startb.cityID=startc.cityID||startc.cityID=routea.startCityID)
+             LEFT JOIN h_city endc ON(endc.cityID=endb.cityID||endc.cityID=routea.endCityID)
+             LEFT JOIN h_province startd ON(startd.proID=startc.proID)
+             LEFT JOIN h_province endd ON(endd.proID=endc.proID)
+             where routeID=#{RouteID}
+    </select>
+
+    <!--修改路线信息-->
+    <update id="updateRoute" parameterType="map">
+        update h_route set
+         routeStartID=#{routeStartID},routeEndID=#{routeEndID},
+         userID=#{userID},Prescription=#{Prescription},FreightRate=#{FreightRate}
+         where RouteID=#{RouteID}
+    </update>
+
+    <!--删除路线-->
+    <delete id="deleteRoute">
+        delete from h_route where routeID=#{RouteID}
+    </delete>
+</mapper>

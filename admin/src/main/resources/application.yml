@@ -14,7 +14,7 @@ spring:
     name: admin-service
   #配置数据源
   datasource:
-    url: jdbc:mysql://47.52.128.159:3306/logistics
+    url: jdbc:mysql://47.52.128.159:3306/logistics?useAffectedRows=true
     driver-class-name: com.mysql.jdbc.Driver
     username: xzj
     password: 123

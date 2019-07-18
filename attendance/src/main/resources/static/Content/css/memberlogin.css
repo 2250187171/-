@@ -1,0 +1,304 @@
+﻿@charset "utf-8";
+/* CSS Document */
+/*顶部*/
+.logo span {
+	font-size: 24px;
+	color: #5e5e5e;
+	font-family: "微软雅黑";
+	line-height: 50px;
+	padding-top: 5px;
+}
+
+.top_warpper {
+	margin-top: 30px;
+}
+
+.top_box {
+	width: 1000px;
+	margin: 0 auto;
+}
+
+.logo {
+	height: 50px;
+}
+
+.logo a {
+	margin-right: 15px;
+}
+
+.logo a {
+	display: inline-block;
+	float: left;
+}
+
+.logo_r {
+	margin-top: 35px;
+}
+
+.logo_r a {
+	font-family: "宋体";
+	font-size: 12px;
+	color: #6c6c6c;
+}
+
+.logo_r a:hover {
+	color: #0f93d5;
+}
+/*内容*/
+.content {
+	background: #c1e7fb;
+	margin-top: 10px;
+}
+
+.content_bj {
+	width: 1000px;
+	height: 500px;
+	margin: 0 auto;
+	background: url(../image/content_bj.png);
+}
+
+.login_mem {
+	margin-top: 46px;
+	width: 300px;
+	height: 355px;
+	background: #fff;
+	padding: 25px;
+	box-shadow: 3px 3px 8px #9cafb9;
+}
+
+.login_box {
+	font-size: 18px;
+	font-family: "微软雅黑";
+	color: #3c3c3c;
+	margin-top: 16px;
+}
+
+.extra_r {
+	background: url(../image/f_icon.png) no-repeat center left;
+	padding-left: 20px;
+	margin-top: 18px;
+}
+
+.extra_r a {
+	color: #0f93d5;
+}
+
+.extra_r a:hover {
+	color: #F83636;
+}
+
+.login_list01 {
+	height: 58px;
+}
+/*框*/
+.login_text,.login_text2 {
+	width: 220px;
+	height: 40px;
+	line-height: 40px;
+	border: solid 1px #cbcbcb;
+	padding-left: 50px;
+	color: #333;
+}
+
+.login_name {
+	background: url(../image/d_icon.png) no-repeat;
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	top: 1px;
+	*top: 2px;
+	left: 1px;
+}
+
+.login_namewar {
+	position: relative;
+}
+
+.login_pwd {
+	background: url(../image/d2_icon.png) no-repeat;
+	position: absolute;
+	width: 40px;
+	height: 40px;
+	top: 65px;
+	*top: 68px;
+	left: 1px;
+}
+
+.text_pge {
+	font-size: 14px;
+	font-family: "微软雅黑";
+	position: absolute;
+	left: 51px;
+	top: 11px;
+}
+
+.text_pwds {
+	font-size: 14px;
+	font-family: "微软雅黑";
+	position: absolute;
+	top: 75px;
+	left: 51px;
+}
+
+#pass_label {
+	position: absolute;
+	left: 50px;
+	top: 75px;
+	font-size: 14px;
+	font-family: "微软雅黑";
+	color: #999;
+	cursor: text;
+}
+
+#pass_labe {
+	position: absolute;
+	left: 50px;
+	top: 10px;
+	font-size: 14px;
+	font-family: "微软雅黑";
+	color: #999;
+	cursor: text;
+}
+
+/*.login_text{background:url(../images/d_icon.png) no-repeat;}
+.login_text2{background:url(../images/d2_icon.png) no-repeat;}*/
+.text_uid input {
+	font-size: 14px;
+	font-family: "微软雅黑";
+}
+
+.text_uid li {
+	margin-bottom: 22px;
+}
+
+.login_text3 {
+	margin-right: 10px;
+	width: 110px;
+	height: 38px;
+	line-height: 38px;
+	padding-left: 10px;
+	color: #999;
+	border: solid 1px #cbcbcb;
+}
+
+.login_btn input {
+	width: 300px;
+	height: 42px;
+	background: #0f93d5;
+	border-radius: 5px;
+	-moz-border-radius: 5px; /* Firefox */
+	-webkit-border-radius: 5px; /* Safari 和 Chrome */
+	border-radius: 5px; /* Opera 10.5+, 以及使用了IE-CSS3的IE浏览器 */
+	line-height: 42px;
+	color: #fff;
+	font-size: 18px;
+	border: 0;
+	margin-bottom: 15px;
+}
+
+.login_text4 {
+	width: 135px;
+	height: 38px;
+	line-height: 38px;
+	border: solid 1px #f0efef;
+	padding-right: 3px;
+}
+
+.login_text4 a {
+	color: #0f93d5;
+	font-size: 12px;
+	font-family: Arial, 宋体, Helvetica, sans-serif;
+}
+
+.login_text4 a:hover {
+	color: #F83636;
+}
+
+.service a {
+	color: #0f93d5;
+}
+
+.remember label {
+	font-size: 12px;
+	font-family: "微软雅黑";
+	color: #6c6c6c;
+}
+
+.remember input {
+	margin-bottom: 15px;
+}
+
+.rem_password {
+	height: 28px;
+}
+
+.jzmm {
+	margin-right: 5px;
+}
+
+.rememr a {
+	font-size: 12px;
+	font-family: "微软雅黑";
+	color: #0f93d5;
+}
+
+.rememr a:hover {
+	color: #F83636;
+}
+
+.btnnew {
+	cursor: pointer;
+}
+/*底部*/
+.foot_login {
+	width: 735px;
+	margin: 0 auto;
+	margin-top: 38px;
+}
+
+.foot_login a {
+	font-family: Arial, 宋体, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #1f1f1f;
+}
+
+.foot_login a:hover {
+	color: #F83636;
+}
+
+.foot_login3 {
+	width: 520px;
+	margin: 0 auto;
+}
+
+.foot_login3 span {
+	font-family: Arial, 宋体, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #999999;
+	margin: 15px 0px 38px 0px;
+	display: inline-block;
+}
+
+.wangyicheck {
+	width: 272px;
+	display: none;
+}
+
+.validation {
+	background: #eee url(../image/pic1.png) no-repeat center;
+	width: 272px;
+	height: 38px;
+	cursor: pointer;
+	border: 1px solid #e4e7eb
+}
+
+.validation:hover {
+	background: #eee url(../image/pic2.png) no-repeat center;
+	width: 272px;
+	height: 38px;
+	border: 1px solid #e4e7eb
+}
+
+.yidun_intellisense--light .yidun_intelli-control {
+	background: #eee !important;
+}

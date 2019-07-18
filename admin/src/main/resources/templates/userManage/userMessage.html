@@ -411,6 +411,7 @@
                 });
 
     });
+    //不现实错误提示框
     $.fn.dataTable.ext.errMode = 'none';
     function Change() {
         TabEmployee.ajax.reload();
@@ -493,7 +494,7 @@
             var picture2 = $("#FileName2").val();
             if(PANDUAN==1){
                 if ( LoginPassWord == null || LoginPassWord == "" || paymentPassword == null || paymentPassword == "" ) {
-                    layer.msg('请填写完整信息11', {
+                    layer.msg('请填写完整信息', {
                         icon: 2,
                         time: 1000
                     })
@@ -505,7 +506,7 @@
                     PhoneNumber == "" || address == null || address == "" || role == '0' || section == '0' ||
                     picture0 == null || picture0 == "" || picture1 == null || picture1 == "" ||
                     picture3 == null || picture3 == "" || picture2 == null || picture2 == "") {
-                    layer.msg('请填写完整信息22', {
+                    layer.msg('请填写完整信息', {
                         icon: 2,
                         time: 1000
                     })
@@ -515,7 +516,7 @@
                 if (userName == null || userName == "" || IDNumber == null || IDNumber == "" || PhoneNumber == null ||
                     PhoneNumber == "" || address == null || address == "" || role == "0" || section == "0" ||
                     picture0 == null || picture0 == "" || picture1 == null || picture1 == "") {
-                    layer.msg('请填写完整信息33', {
+                    layer.msg('请填写完整信息', {
                         icon: 2,
                         time: 1000
                     })
