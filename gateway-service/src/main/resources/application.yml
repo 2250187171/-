@@ -25,6 +25,16 @@ spring:
     cache: false
     encoding: UTF-8
     mode: LEGACYHTML5
+  #redis的配置
+  redis:
+    host: 192.168.136.128
+    port: 6379
+    jedis:
+      pool:
+        min-idle: 10
+        max-idle: 50
+        max-wait: 10000
+        max-active: 1000
 #mybatis的配置
 mybatis:
   mapper-locations: mapper/*Mapper.xml

@@ -20,19 +20,19 @@ public class A_AuthorityServiceImpl implements A_AuthorityService {
 
     //根据角色id和模块id查询
     @Override
-    public int findByRoleIDAndPermID(int roleID, int permID) {
-        return mapper.findByRoleIDAndPermID(roleID, permID);
+    public int findByRoleIDAndPermID(int roleID, int permID,int sectionID) {
+        return mapper.findByRoleIDAndPermID(roleID, permID,sectionID);
     }
 
     //删除角色权限
     @Override
-    public void deleteRole_Perm(int roleID) {
-        mapper.deleteRole_Perm(roleID);
+    public void deleteRole_Perm(int roleID,int sectionID) {
+        mapper.deleteRole_Perm(roleID,sectionID);
     }
 
     //新增角色权限
     @Override
-    public void addRole_Perm(int roleID, int permID) {
-        mapper.addRole_Perm(roleID, permID);
+    public void addRole_Perm(int roleID, int permID,int sectionID) {
+        mapper.addRole_Perm(roleID, permID,sectionID);
     }
 }

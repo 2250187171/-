@@ -18,7 +18,7 @@
     <!--用户下班打卡-->
     <update id="updateClock" parameterType="map">
         update d_attendance set offWork=#{offWork},Mark=#{Mark},offMileage=#{offMileage},
-        offOilMass=#{offOilMass},offLocation=#{offLocation},xstate=#{xstate}
+        offOilMass=#{offOilMass},offLocation=#{offLocation},xstate=#{xstate} where userID=#{userID} and date(startWorkTime)=CURDATE()
     </update>
 
     <!--查询用户的打卡记录-->
@@ -34,5 +34,10 @@
     <!--查询总行数-->
     <select id="count" resultType="int">
         select count(*) from d_attendance  where userID=#{userID}
+    </select>
+
+    <!--根据编号查询打卡详细信息-->
+    <select id="showClock" resultType="map">
+        select*From d_attendance where attendanceID=#{attendanceID}
     </select>
 </mapper>

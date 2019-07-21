@@ -24,4 +24,7 @@ public interface AttendMapper {
 
     //查询总行数
     public int count(@Param("userID")String userID);
+
+    //根据编号查询打卡信息
+    public Map showClock(@Param("attendanceID") int attendanceID);
 }

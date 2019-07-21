@@ -17,4 +17,11 @@ public class A_RoleServiceImpl implements A_RoleService {
     public List<Map> findRoleAll() {
         return mapper.findRoleAll();
     }
+
+
+    //根据部门查询角色
+    @Override
+    public List<Map> findRoleBySectionID(int sectionID) {
+        return mapper.findRoleBySectionID(sectionID);
+    }
 }

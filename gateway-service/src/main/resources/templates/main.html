@@ -215,7 +215,7 @@
 				</ul>
 				<div class="layui-tab-content">
 					<div class="layui-tab-item layui-show" lay-allowClose="false">
-						<iframe data-frameid="main" scrolling="yes" frameborder="0" src="http://localhost:9000/gateway/attend/clock" style="width:99%;height:1000px"></iframe>
+						<iframe data-frameid="main" scrolling="yes" frameborder="0" th:src="@{http://localhost:9000/gateway/attend/clock(token=${token})}" style="width:99%;height:1000px"></iframe>
 					</div>
 				</div>
 			</div>

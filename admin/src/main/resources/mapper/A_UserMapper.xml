@@ -19,7 +19,7 @@
     <select id="findByRoleID" resultType="map">
         select userID,userName from
         <include refid="userFrom"/>
-        where c.roleID=#{roleID}
+        where c.roleID=#{roleID} and a.sectionID=#{sectionID}
     </select>
     <!--根据手机号码查询用户-->
     <select id="findByPhoneNumber" resultType="map">
@@ -58,7 +58,7 @@
         insert a_user values
         (#{sectionID},0,#{username},#{phoneNumber},#{loginPassword},
         #{paymentpassword},#{IDNumber},#{IDPhoto},#{photo},#{sex},
-        #{drivingLicencePhoto},#{manCarPhoto},'1',0,now(),null,#{address},1,null,uuid())
+        #{drivingLicencePhoto},#{manCarPhoto},'1',0,now(),null,#{address},1,null,#{userID})
     </insert>
 
     <!--新增关联表-->

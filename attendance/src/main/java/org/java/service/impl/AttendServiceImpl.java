@@ -49,4 +49,11 @@ public class AttendServiceImpl implements AttendService {
     public int count(String userID) {
         return mapper.count(userID);
     }
+
+
+    //根据编号查询打卡详细信息
+    @Override
+    public Map showClock(int attendanceID) {
+        return mapper.showClock(attendanceID);
+    }
 }

@@ -23,11 +23,23 @@ spring:
       max-wait: 50
       max-active: 10000
       max-idle: 100
+
+  #配置工作流
+  activiti:
+    #自动生成数据库
+    database-schema-update: true
+    #不要检测当前项目是否包含bpmn文件
+    check-process-definitions: false
   #设置thymeleaf的配置
   thymeleaf:
     cache: false
     encoding: UTF-8
     mode: LEGACYHTML5
+  #配置文件上传
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 50MB
 #mybatis的配置
 mybatis:
   mapper-locations: mapper/*Mapper.xml
@@ -36,5 +48,6 @@ mybatis:
 logging:
   level:
     org.java.dao: debug
+
 
 

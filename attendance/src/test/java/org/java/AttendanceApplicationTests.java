@@ -1,26 +1,27 @@
 package org.java;
 
+import org.activiti.engine.RepositoryService;
+import org.activiti.engine.RuntimeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class AttendanceApplicationTests {
 
+    @Autowired
+    RepositoryService repositoryService;
+    @Autowired
+    RuntimeService runtimeService;
     @Test
-    public void contextLoads() throws ParseException {
-        Date date=new Date();
-        String x="12:00:00";
-        SimpleDateFormat format=new SimpleDateFormat("HH:mm:ss");
+    public void contextLoads() {
 
-        Date parse = format.parse(x);
-        System.out.println(parse.getHours()+parse.getMinutes()+parse.getSeconds()+"--------------------------------");
+        runtimeService.deleteProcessInstance("20001", "失败原因");
     }
+
+
 
 }

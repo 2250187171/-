@@ -10,11 +10,9 @@
     <link rel="stylesheet" th:href="@{/assets/layui/css/layui.css}">
 
     <style>
-        #TabEmployee td {
+        td,th {
+            vertical-align: middle;
             text-align: center;
-        }
-        #TabEmployee td{
-            align-content: center;
         }
     </style>
 </head>
@@ -96,7 +94,8 @@
                 <label for="role"
                        class="col-lg-3 col-md-3 col-sm-3 col-xs-3  control-label text-right text-primary lb">员工角色：</label>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 interval">
-                    <select class="form-control" id="roleID" name="roleID"  onchange="rolechange(this.value)">
+                    <input type="hidden" name="roleName" id="roleName">
+                    <select class="form-control" id="roleID" name="roleID"  onchange="rolechange(this)">
                         <option value="0">---请选择---</option>
                         <option th:each="role:${roles}" th:value="${role.roleID}" th:text="${role.roleName}"></option>
                     </select>
@@ -363,7 +362,6 @@
                     "columns" : [
                         {
                             "data" : null,
-                            "width" : "60px",
                             render:function(data,type,row,meta) {
                                 return meta.row + 1 +
                                     meta.settings._iDisplayStart;
@@ -371,32 +369,25 @@
                         },
                         {
                             "data" : "userName",
-                            "width" : "50px"
                         },
                         {
                             "data" : "phoneNumber",
-                            "width" : "50px"
                         },{
                             "data" : "IDNumber",
-                            "width" : "50px"
                         },
                         {
                             "data" : "sex",
-                            "width" : "50px"
                         },
                         {
                             "data" : "address",
-                            "width" : "40px"
                         },
                         {
 
                             "data" : "sectionName",
-                            "width" : "50px"
 
                         },
                         {
                             "data" : "roleName",
-                            "width" : "50px"
                         },
                         {
                             "data" : function(obj) {
@@ -404,8 +395,6 @@
                                     + obj.phoneNumber
                                     + '"  onclick="updateUser(this.value)" id="update">修改</button> '
                             },
-                            "width" : "80px"
-
                         } ]
 
                 });
@@ -538,7 +527,7 @@
                     return false;
                 }
             }
-                    var index = layer.load(1); //添加laoding,0-2两种方式
+                    var index = layer.load(2); //添加laoding,0-2两种方式
                     $("#enterEmployeeFrom").ajaxSubmit(function (data) {
                         if (data == "1") {
                             layer.close(index);
@@ -590,8 +579,9 @@
         var section;
         var role;
 
-        function rolechange(ID) {
-            role = ID;
+        function rolechange(r) {
+            role = r.val();
+            $("#roleName").val(r.text());
             if (ID == '1' && section == '2') {
                 $(".driver").show();
             } else {
@@ -657,8 +647,8 @@
             $("#FileName1").val(data.IDPhoto)
             $("#FileName0").val(data.photo)
             $("#UserID").val(data.userID);
-
-            if(data.manCarPhoto==null||data.manCarPhoto==""){
+            $("#roleName").val(data.roleName)
+            if(section!='2'||role!="1"){
                 $("#imgContent3").attr("src", "/gateway/admin/assets/images/IDPhoto/3.jpeg");
                 $("#imgContent2").attr("src", "/gateway/admin/assets/images/IDPhoto/manCarPhoto.jpg");
             }else
@@ -667,6 +657,7 @@
                 $("#imgContent2").attr("src","/gateway/admin/images/"+data.manCarPhoto);
                 $("#FileName3").val(data.drivingLicencePhoto)
                 $("#FileName2").val(data.manCarPhoto)
+                $(".driver").show();
             }
 
             $("#enterEmployeeFrom").attr("action","/gateway/admin/userManage/updateUser");

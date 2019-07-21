@@ -17,9 +17,6 @@
 
         * {
             font-family: "华文中宋";
-            overflow: scroll;
-            overflow-x: hidden;
-            overflow-y: hidden;
         }
 
         label {
@@ -68,10 +65,22 @@
         #TabAttendance th{
             font-size: 16px;
         }
+
+        body, html {width: 100%;height: 100%;overflow: hidden; margin:0;font-family:"微软雅黑";}
+        #allmap{
+            height: 770px;
+            width:100%;
+        }
     </style>
 </head>
 <body>
-<div class="container-fluid">
+
+<div id="DiTu" style="display: none;position:relative">
+    <div id="allmap"></div>
+    <button class="btn btn-default" onclick="back()" style=" position:fixed; top:2%; right:2%;">返 回</button>
+</div>
+
+<div class="container-fluid" id="cont">
     <div id="PingChang">
         <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3">
             <div class="top flex flex-align-end flex-pack-center flex-warp"
@@ -188,41 +197,35 @@
             </table>
         </div>
     </div>
-    <div id="TuFaShiJian" style="margin-top: 30px;display: none;">
-        <form class="form-horizontal" id="Form" onsubmit="return false">
-            <div class="form-group">
-                <div class="col-lg-2 col-sm-2 col-md-2"></div>
-                <div class="col-lg-10 col-sm-10 col-sm-10">
-                    <label class="control-label col-lg-3 col-sm-3 col-md-3">请假理由：</label>
-                    <div class="col-lg-6 col-sm-6 col-md-6" style="padding-left: 0px">
-                        <input class="form-control" id="Reason" name="Reason"
-                               placeholder="请输入请假的理由（50个字以内）" maxlength="100" /> <input
-                            class="form-control hidden" id="AttendanceID" name="AttendanceID" />
-                    </div>
+    <div class="modal fade" id="leaveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" name="btn_close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">申请请假</h4>
                 </div>
-
-            </div>
-            <div class="form-group">
-                <div class="col-lg-2 col-sm-2 col-md-2"></div>
-                <div class="col-lg-10 col-sm-10 col-sm-10">
-
-                    <label class="control-label col-lg-3 col-sm-3 col-md-3">请假天数：</label>
-                    <div class="col-lg-6 col-sm-6 col-md-6" style="padding-left: 0px">
-                        <input class="form-control" id="LeaveDay" name="LeaveDay"
-                               placeholder="请输入请输入请假的天数（10个字以内）" maxlength="100" />
-                    </div>
+                <div class="modal-body" align="center">
+                    <form class="navbar-form" id="leaveForm" role="search" th:action="@{/gateway/attend/addLeave}">
+                        <input type="hidden" id="attendanceID" name="attendanceID">
+                        <input type="hidden" id="userID" name="userID">
+                        <div class="form-group">
+                            <span for="leaveCause">请假原因：</span>
+                            <textarea class="form-control" name="leaveCause" id="leaveCause" rows="3" style="width: 398px"></textarea>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group" style="margin-left: 23px">
+                            <span for="leaveDay">请假天数：</span>
+                            <input type="number" min="1" name="leaveDay" class="form-control" id="leaveDay" style="width: 398px;">
+                        </div>
+                    </form>
                 </div>
-
-            </div>
-            <div class="form-group">
-                <div class="col-lg-8 col-sm-8 col-md-8"></div>
-                <div class="col-lg-2 col-sm-2 col-md-2">
-                    <button class="btn" onclick="QueDing()">确定</button>
-                    <button class="btn" onclick="GuanBi()">关闭</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" name="btn_close">关闭</button>
+                    <button type="button" id="btn_submit" class="btn btn-primary" >申请</button>
                 </div>
             </div>
-        </form>
-
+        </div>
     </div>
 
     <div class="modal fade" id="modalone">
@@ -259,11 +262,12 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" id="FormCar" onsubmit="return false">
+                        <input type="hidden" name="userID" th:value="${user.userID}">
                         <div class="form-group">
                             <div class="col-lg-6 col-sm-6 col-sm-6">
                                 <label class="control-label col-lg-4 col-sm-4 col-md-4">油量：</label>
                                 <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="oilmass" name="oilmass"
+                                    <input class="form-control" id="oilmass" name="startOilMass"
                                            placeholder="请输入车辆剩余油量" maxlength="4"
                                            onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
                                            onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
@@ -272,7 +276,7 @@
                             <div class="col-lg-6 col-sm-6 col-sm-6">
                                 <label class="control-label col-lg-4 col-sm-4 col-md-4">里程：</label>
                                 <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="mileage" name="mileage"
+                                    <input class="form-control" id="mileage" name="startMileage"
                                            placeholder="请输入车辆里程" maxlength="4"
                                            onkeyup="this.value=this.value.replace(/[^\d.]/g,'')"
                                            onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" />
@@ -285,7 +289,7 @@
                             <div class="col-lg-12 col-sm-12 col-sm-12">
                                 <label class="control-label col-lg-2 col-sm-2 col-md-2">位置：</label>
                                 <div class="col-lg-10 col-sm-10 col-md-10" style="padding-left: 0px">
-                                    <input class="form-control" id="location" name="location"
+                                    <input class="form-control" id="location" name="startLocation"
                                            placeholder="请保持网络通畅" maxlength="100" readonly="readonly" />
                                 </div>
                             </div>
@@ -296,7 +300,7 @@
                 </div>
                 <div class="modal-footer">
                     <p style="display: inline-block;"></p>
-                    <button class="btn btn-info" onclick="ReFresh()">刷新位置</button>
+                    <button class="btn btn-info" onclick="DINGWEI()">刷新位置</button>
                     <button class="btn btn-info" onclick="uploadCar()">确定</button>
                 </div>
             </div>
@@ -336,6 +340,23 @@
                             </div>
 
 
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班签到评定：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="sstate" name="sstate"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班签到评定：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="xstate" name="xstate"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group driver" style="display: none;">
                             <div class="col-lg-6 col-sm-6 col-sm-6">
@@ -405,7 +426,7 @@
                             <div class="col-lg-6 col-sm-6 col-sm-6">
                                 <label class="control-label col-lg-4 col-sm-4 col-md-4">请假天数：</label>
                                 <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="leaveday" name="leaveday"
+                                    <input class="form-control" id="leaveday1" name="leaveday1"
                                            readonly="readonly" />
                                 </div>
                             </div>
@@ -473,8 +494,14 @@
 <script type="text/javascript" th:src="@{/gateway/attend/Content/js/datatables.min.js}"></script>
 <script type="text/javascript" th:src="@{/gateway/attend/Content/js/rili.js}"></script>
 <script type="text/javascript" th:src="@{/gateway/attend/Content/js/mycustom.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/baiduMap.js}"></script>
 <script th:inline="javascript">
-
+    //获得用户角色id
+    var role=[[${user.roleID}]];
+    //获得用户ID
+    var userID=[[${user.userID}]]
+    //获得部门ID
+    var sectionID=[[${user.sectionID}]]
     //获得打卡的日期
     var List = [[${sty}]];
     var TabAttendance;
@@ -514,6 +541,7 @@
                         "dataSrc" : "aaData",
                         "data" : function(d) {
                             var Auditing = $("#Auditing").val();
+                            d.userID=userID;
                             d.Auditing = Auditing;
                         }
                     },
@@ -544,24 +572,45 @@
                         },
                         {
                             "data" : function(obj) {
+                                if(obj.offWork==null||obj.offWork==''){
+                                    return "";
+                                }
                                 return dateToStr(new Date(obj.offWork));
                             }
                         },
                         {
                             "data" : function(obj) {
-                                return '<button class="btn" id="'
-                                    + obj.attendanceID
-                                    + '" onclick="detail(this.id)" >详情</button>   <button class="btn" id="'
-                                    + obj.attendanceID
-                                    + '" onclick="TuFa(this.id,value)" value="'
-                                    + obj.startWorkTime
-                                    + '" class="suddenly" >请假</button>';
+                                var d=new Date();
+                                var Time=currDate(d);
+                                var date=new Date(obj.startWorkTime);
+                                var Time2=currDate(date);
+                                if(Time==Time2){
+                                    return '<button class="btn" id="'
+                                        + obj.attendanceID
+                                        + '" onclick="detail(this.id)" >详情</button>   <button class="btn" id="'
+                                        + obj.attendanceID
+                                        + '" onclick="leave(this.id,value)" value="'
+                                        + obj.startWorkTime
+                                        + '" class="suddenly" >请假</button>';
+                                }else{
+                                    return '<button class="btn" id="'
+                                        + obj.attendanceID
+                                        + '" onclick="detail(this.id)" >详情</button>'
+                                }
+
                             }
                         } ]
                 });
         //不现实错误提示框
         $.fn.dataTable.ext.errMode = 'none';
     })
+
+    function currDate(d){
+        var years = d.getFullYear();
+        var month = add_zero(d.getMonth() + 1);
+        var days = add_zero(d.getDate());
+        return years + "-" + month + "-" + days;
+    }
 
     var Mark;
     //打卡
@@ -575,13 +624,17 @@
             })
             return;
         }else if(Mark=='上班签到'){
+            $("#oilmass").attr("name","offOilMass");
+            $("#mileage").attr("name","offMileage");
+            $("#location").attr("name","offLocation");
             $.post("/gateway/attend/pl",{},function (data) {
                 if(data==1){
                     //配置一个透明的询问框
-                    layer.msg('您确定要早退吗？', {
+                    var ss=layer.msg('您确定要早退吗？', {
                         time: 40000, //20s后自动关闭
                         btn: ['确定', '取消'],
                         yes:function(){
+                            layer.close(ss);
                             clock();
                         },
                         cancel: function()
@@ -590,59 +643,65 @@
                         }
                     })
                 }else{//正常下班打卡
+
                     clock();
                 }
             },"json")
         }else{
+            $("#oilmass").attr("name","startOilMass");
+            $("#mileage").attr("name","startMileage");
+            $("#location").attr("name","startLocation");
             clock();
         }
     }
+    var layerIndex;
     //异步打卡
     function clock(){
-        var role="";
-        if(role=="司机"){
-
+        if(role=='1'&&sectionID=='2'){
+            DINGWEI();
+            $('#modaltwo').modal();
         }else
         {
-            $.post("/gateway/attend/addClock/"+Mark,{},function (data) {
+            layerIndex=layer.load(1);
+            $.post("/gateway/attend/addClock/"+Mark,{"userID":userID},function (data) {
                 if(data==1){
+                    layer.close(layerIndex);
                     layer.msg("迟到超过2小时,已算旷工！", {
                         icon: 0,
                         offset: '100px'
-                    }, function(layerIndex) {
-                        layer.close(layerIndex);
+                    }, function() {
                         location.reload();
                     });
                 }else if(data==2){
+                    layer.close(layerIndex);
                     layer.msg("迟到了！", {
                         icon: 0,
                         offset: '100px'
-                    }, function(layerIndex) {
-                        layer.close(layerIndex);
+                    }, function() {
                         location.reload();
                     });
                 }else if(data==3){
+                    layer.close(layerIndex);
                     layer.msg("早退超过2小时,已算旷工！", {
                         icon: 0,
                         offset: '100px'
-                    }, function(layerIndex) {
-                        layer.close(layerIndex);
+                    }, function() {
                         location.reload();
                     });
                 }else if(data==4){
+                    layer.close(layerIndex);
                     layer.msg("早退了！", {
                         icon: 0,
                         offset: '100px'
-                    }, function(layerIndex) {
-                        layer.close(layerIndex);
+                    }, function() {
                         location.reload();
                     });
                 }else{
+                    layer.close(layerIndex);
                     layer.msg("打卡成功", {
                         icon: 1,
                         offset: '100px'
-                    }, function(layerIndex) {
-                        layer.close(layerIndex);
+                    }, function() {
                         location.reload();
                     });
                 }
@@ -713,6 +772,192 @@
 // alert(time);
         return time;
     }
+
+    //司机打卡
+    function uploadCar(){
+        //获得里程
+        var oilmass=$("#oilmass").val();
+        //获得油量
+        var mileage=$("#mileage").val();
+        //获得车辆位置
+        var location1=$("#location").val();
+        if(oilmass==null||oilmass==""||mileage==null||mileage==""||location1==null||location1==""){
+            layer.msg("请填写完整信息！", {
+                icon: 0,
+                offset: '100px'
+            })
+        }else{
+            //获得司机打卡表单的序列化后的集合
+            var formCar=$("#FormCar").serializeArray();
+            var layerIndex=layer.load(1);
+            $.post("/gateway/attend/addClock/"+Mark,formCar,function (data) {
+                if(data==1){
+                    $('#modaltwo').modal('hide');
+                    layer.close(layerIndex);
+                    layer.msg("迟到超过2小时,已算旷工！", {
+                        icon: 0,
+                        offset: '100px'
+                    }, function() {
+                        location.reload();
+                    });
+                }else if(data==2){
+                    $('#modaltwo').modal('hide');
+                    layer.close(layerIndex);
+                    layer.msg("迟到了！", {
+                        icon: 0,
+                        offset: '100px'
+                    }, function() {
+                        location.reload();
+                    });
+                }else if(data==3){
+                    $('#modaltwo').modal('hide');
+                    layer.close(layerIndex);
+                    layer.msg("早退超过2小时,已算旷工！", {
+                        icon: 0,
+                        offset: '100px'
+                    }, function() {
+                        location.reload();
+                    });
+                }else if(data==4){
+                    $('#modaltwo').modal('hide');
+                    layer.close(layerIndex);
+                    layer.msg("早退了！", {
+                        icon: 0,
+                        offset: '100px'
+                    }, function() {
+                        location.reload();
+                    });
+                }else{
+                    $('#modaltwo').modal('hide');
+                    layer.close(layerIndex);
+                    layer.msg("打卡成功", {
+                        icon: 1,
+                        offset: '100px'
+                    }, function() {
+                        location.reload();
+                    });
+                }
+            },"json")
+        }
+
+    }
+
+    //显示详情
+    function detail(ID) {
+        if(role=="1"&&sectionID=='2'){
+            $(".driver").show();
+        }else{
+            $(".driver").hide();
+        }
+        $.post("/gateway/attend/showClock",{"attendanceID":ID}, function(data) {
+                    $("#title").text("上下班详情");
+                    $("#startworktime").val(dateToStr(new Date(data.startWorkTime)));
+                    if(data.offWork==null||data.offWork==""){
+                        $("#offwork").val("");
+                    }else{
+                        $("#offwork").val(dateToStr(new Date(data.offWork)));
+                    }
+
+                    $("#sstate").val(data.sstate);
+                    $("#xstate").val(data.xstate);
+                    $("#startoilmass").val(data.startOilMass);
+                    $("#offoilmass").val(data.offOilMass);
+                    $("#startlocation").val(data.startLocation);
+                    $("#offlocation").val(data.offLocation);
+                    $("#startmileage").val(data.startMileage);
+                    $("#offmileage").val(data.offMileage);
+                    $("#KaiShi").val(data.startLocation);
+                    $("#JieShu").val(data.offLocation);
+                },"json");
+        $("#modalthree").modal("toggle");
+    }
+
+
+    //查看上车位置
+    function ChaKan(ID){
+        if (ID == "start") {
+            if ($("#KaiShi").val() != null && $("#KaiShi").val() != '') {
+                mapAddress($("#KaiShi").val(),'上班位置');
+                $("#DiTu").show();
+                $("#modalthree").modal("toggle");
+                $("#cont").hide();
+            } else {
+                layer.msg("上班车辆位置为空！！！");
+            }
+
+        } else {
+            if ($("#JieShu").val() != null && $("#JieShu").val() != '') {
+                mapAddress($("#JieShu").val(),'下班位置');
+                $("#DiTu").show();
+                $("#modalthree").modal("toggle");
+                $("#cont").hide();
+            } else {
+                layer.msg("下班车辆位置为空！！！");
+            }
+        }
+
+    }
+    //地图返回
+    function back() {
+        $("#DiTu").hide();
+        $("#cont").show();
+    }
+    //请假
+    function leave(id) {
+        $("#leaveModal").modal();
+        $("#attendanceID").val(id)
+        $("#userID").val(userID)
+    }
+
+    //关闭弹出框
+    $("[name=btn_close]").click(function () {
+        $('#leaveModal').modal('hide');
+        $("#leaveForm input").val("");
+        $("#leaveCause").val("");
+    })
+
+
+    //申请请假
+    $("#btn_submit").click(function () {
+        //请假原因
+        var leaveCause=$("#leaveCause").val();
+        //请假天数
+        var leaveDay=$("#leaveDay").val();
+        if(leaveCause==null||leaveCause==""||leaveDay==null||leaveDay==""){
+            layer.msg("请填写完整信息！", {
+                icon: 0,
+                offset: '100px'
+            })
+        }else {
+            layer.load(1);
+            //异步申请请假
+            $("#leaveForm").ajaxSubmit(function (data) {
+                layer.closeAll("loading");
+                if(data=='1'||data==1){
+                    layer.msg("创建成功！", {
+                        icon: 1,
+                        offset: '100px'
+                    })
+                }else {
+                    layer.msg("创建失败！", {
+                        icon: 0,
+                        offset: '100px'
+                    })
+                }
+            })
+        }
+    })
+
+
+
+    function add_zero(temp) {
+        if (temp < 10)
+            return "0" + temp;
+        else
+            return temp;
+    }
+
+
 
 </script>
 

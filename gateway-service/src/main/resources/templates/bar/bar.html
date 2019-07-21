@@ -247,10 +247,11 @@
                             <span class="myFont">考勤管理</span>
                         </a>
                         <ul>
-                            <li><a href="purchaseOrder.do?method=caiShowAccept" class="myFont">打卡信息</a></li>
-                            <li><a href="purchaseOrder.do?method=caiShowStock" class="myFont">申请请假</a></li>
-                            <li><a href="stock.do?method=caiShowManage" class="myFont">审批请假</a></li>
-                            <li><a href="stock.do?method=caiShowSend" class="myFont">请假记录</a></li>
+
+                            <li><a th:url="@{http://localhost:9000/gateway/attend/clockMessage(token=${token})}" name="tab" href="javascript:;" id='clockMessage' class="myFont">打卡信息</a></li>
+                            <li><a th:url="@{http://localhost:9000/gateway/attend/leaveManage/backlogLeave(token=${token})}" name="tab" href="javascript:;" id='backlogLeave' class="myFont">待拾请假</a></li>
+                            <li><a th:url="@{http://localhost:9000/gateway/attend/leaveManage/transactionLeave(token=${token})}" name="tab" href="javascript:;" id='transactionLeave' class="myFont">办理请假</a></li>
+                            <li><a th:url="@{http://localhost:9000/gateway/attend/leaveManage/leaveRecord(token=${token})}" name="tab" href="javascript:;" id='leaveRecord' class="myFont">请假记录</a></li>
                         </ul>
                     </li>
 
@@ -330,8 +331,8 @@
                             <span class="myFont">用户管理</span>
                         </a>
                         <ul>
-                            <li><a url="http://localhost:9000/gateway/admin/userManage/authorityShow" name="tab" href="javascript:;" id='permission' class="myFont" >权限分配</a></li>
-                            <li><a class="myFont" url="http://localhost:9000/gateway/admin/userManage/userMessage" name="tab" href="javascript:;" id='tabUser'>用户信息</a></li>
+                            <li><a th:url="@{http://localhost:9000/gateway/admin/userManage/authorityShow(token=${token})}" name="tab" href="javascript:;" id='permission' class="myFont" >权限分配</a></li>
+                            <li><a class="myFont" th:url="@{http://localhost:9000/gateway/admin/userManage/userMessage(token=${token})}" name="tab" href="javascript:;" id='tabUser'>用户信息</a></li>
                         </ul>
                     </li>
                     <li>
@@ -350,7 +351,7 @@
                             <span class="myFont">站点管理</span>
                         </a>
                         <ul>
-                            <li><a url="http://localhost:9000/gateway/admin/siteManage/RouteShow" name="tab" href="javascript:;" id='route' class="myFont">路线信息</a></li>
+                            <li><a th:url="@{http://localhost:9000/gateway/admin/siteManage/RouteShow(token=${token})}" name="tab" href="javascript:;" id='route' class="myFont">路线信息</a></li>
                             <li><a href="purchaseOrder.do?method=select" class="myFont">站点信息</a></li>
                         </ul>
                     </li>
@@ -367,13 +368,14 @@
                 var geoc = new BMap.Geocoder();
                 //返回用户的当前位置信息
                 geolocation.getCurrentPosition(function(r){
+                    var point=new BMap.Point(r.point.lng+0.0364319,r.point.lat+0.01371587);
                     //返回完成后的状态码
                     if(this.getStatus() == BMAP_STATUS_SUCCESS){
                         //对指定的坐标点进行反地址解析
-                        geoc.getLocation(r.point, function(rs){
+                        geoc.getLocation(point, function(rs){
                             //addressComponents：结构化的地址描述
                             var addComp = rs.addressComponents;
-                            document.getElementById("address").innerText=addComp.city + " " + addComp.district+" "+addComp.street;
+                            document.getElementById("address").innerText=addComp.city + " " + addComp.district;
                         });
                     }else {
                         alert('failed'+this.getStatus());

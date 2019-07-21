@@ -104,7 +104,7 @@ function ajaxUser(){
     //动态加载联系人下拉框
     $.ajax({
         url:"/gateway/admin/userManage/findByRoleID",
-        data:{"roleID":4},
+        data:{"roleID":2,"sectionID":2},
         type:"GET",
         dataType:'json',
         success:function (data) {

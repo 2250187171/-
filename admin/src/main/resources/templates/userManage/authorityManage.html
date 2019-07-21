@@ -11,10 +11,17 @@
     <nav class="navbar navbar-default" style="border-radius: 10px" th:align="center">
     <form class="navbar-form navbar-default" role="search">
         <div class="form-group">
+            <label for="section">部门：</label>
+            <select class="form-control" id="section" name="sectionID" onchange="sectionChange(this.value)">
+                <option value="0">请选择</option>
+                <option th:each="section:${sections}" th:value="${section.sectionID}" th:text="${section.sectionName}"></option>
+            </select>
+        </div>
+        <div class="form-group">
             <label for="role">角色：</label>
             <select class="form-control" id="role" name="roleID">
                 <option value="0">请选择</option>
-                <option th:each="role:${roles}" th:value="${role.roleID}" th:text="${role.roleName}"></option>
+                <!--<option th:each="role:${roles}" th:value="${role.roleID}" th:text="${role.roleName}"></option>-->
             </select>
         </div>
     </form>
@@ -75,19 +82,25 @@
                         },
                         {
                             field: 'cz', align: 'center', templet: function (d) {
+                                //获得角色ID
                                 var role_id=$("#role").val();
+                                //获得部门ID
+                                var sectionID=$("#section").val();
+                                //获得操作ID
                                 var perm_id=d.perID;
+                                //表示未选择角色
                                 if (role_id == 0) {
                                     return '<input type="checkbox" name="perm" lay-filter="filter" lay-skin="switch" lay-text="开启|关闭" disabled>';
                                 }
-                                else
+                                else//选择角色
                                 {
                                     var count;
+                                    //根据部门角色异步查询权限
                                     $.ajax({
                                         url : "/gateway/admin/userManage/findByRoleIDAndPermID",
                                         async : false, // 注意此处需要同步，因为返回完数据后，下面才能让结果的第一条selected
                                         type : "POST",
-                                        data:{"roleID":role_id,"permID":perm_id},
+                                        data:{"roleID":role_id,"sectionID":sectionID,"permID":perm_id},
                                         dataType : "json",
                                         success : function(fields) {
                                             count=fields;
@@ -126,6 +139,7 @@
                 renderTable();
             });
             $('#btn-update').click(function () {
+                layer.load(2);
                 var arr=new Array();
                 //获取checkbox[class='sw']为选中状态的值
                 $("input:checkbox[class='sw']:checked").each(function(i){
@@ -133,9 +147,13 @@
                 })
                 //将数组转换为字符串
                 var perm=arr.join(",");
+                //角色ID
                 var role_id=$("#role").val();
-                alert(role_id+"---"+perm)
-                $.post("/gateway/admin/userManage/updateRole_Perm",{"roleID":role_id,"perm":perm},function(data){
+                //部门ID
+                var sectionID=$("#section").val();
+                //异步根据部门角色修改权限
+                $.post("/gateway/admin/userManage/updateRole_Perm",{"roleID":role_id,"sectionID":sectionID,"perm":perm},function(data){
+                    layer.closeAll('loading');
                     if(data==1)
                     {
                         layer.msg('修改成功,重新登录后生效');
@@ -144,6 +162,7 @@
                     {
                         layer.msg('修改失败');
                     }
+
                 },"json")
             });
             $("#role").change(function(){
@@ -187,6 +206,23 @@
                 /* 			  },"json") */
             });
         })
+    //当部门下拉框发生变化时
+    function sectionChange(ID) {
+            //异步请求角色
+            $.ajax({
+                url:"/gateway/admin/userManage/findRoleBySectionID",
+                data: {"sectionID":ID},
+                dataType: "JSON",
+                type:"GET",
+                success:function (data) {
+                    //清空角色下拉框只保留标题
+                    $("#role")[0].options.length=1;
+                    $(data).each(function () {
+                        $("<option value='"+this.roleID+"'>"+this.roleName+"</option>").appendTo("#role");
+                    })
 
+                }
+            })
+    }
 </script>
 </html>

@@ -44,6 +44,6 @@ public interface A_UserService
     public void update_user_role(Map map);
 
 
-    //查询角色为货运经理的所有用户
-    public List<Map> findByRoleID(int roleID);
+    //查询角色为运输部的部门经理的所有用户
+    public List<Map> findByRoleID(int roleID,int sectionID);
 }

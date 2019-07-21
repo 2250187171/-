@@ -163,6 +163,7 @@ public class UserController {
     @RequestMapping("/userManage/updateUser")
     @ResponseBody
     public String updateUser(@RequestParam Map map, HttpServletRequest request)throws Exception{
+        System.out.println(map+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         //获得不是该手机号码的数量
         int phoneCount = service.findNotPhoneNumber(map.get("phoneNumber").toString(),map.get("userid").toString());
         //获得不是该身份证的数量
@@ -275,7 +276,7 @@ public class UserController {
     //根据角色查询用户
     @RequestMapping("/userManage/findByRoleID")
     @ResponseBody
-    public List<Map> findByRoleID(int roleID){
-       return service.findByRoleID(roleID);
+    public List<Map> findByRoleID(int roleID,int sectionID){
+       return service.findByRoleID(roleID,sectionID);
     }
 }

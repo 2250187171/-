@@ -24,4 +24,8 @@ public interface AttendService {
 
     //查询总行数
     public int count(String userID);
+
+
+    //根据编号查询打卡信息
+    public Map showClock(int attendanceID);
 }

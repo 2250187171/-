@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.LeaveMapper">
+
+    <!--申请请假-->
+    <insert id="addLeave" parameterType="map">
+        insert d_leave values(#{leaveID},#{leaveDay},#{leaveCause},#{createTime},null,#{userID},#{attendanceID},#{processinstance_ID});
+    </insert>
+
+    <!--根据流程实例ID查询请假单-->
+    <select id="findByProcessInstanceID" resultType="map">
+        SELECT a.*,userName FROM d_leave a JOIN a_user b ON(a.userID=b.userID) where processinstance_ID=#{instanceID}
+    </select>
+</mapper>

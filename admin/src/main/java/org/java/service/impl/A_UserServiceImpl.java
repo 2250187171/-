@@ -1,5 +1,8 @@
 package org.java.service.impl;
 
+import org.activiti.engine.IdentityService;
+import org.activiti.engine.impl.persistence.entity.GroupEntity;
+import org.activiti.engine.impl.persistence.entity.UserEntity;
 import org.java.dao.A_UserMapper;
 import org.java.service.A_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,12 +10,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class A_UserServiceImpl implements A_UserService {
 
     @Autowired
     private A_UserMapper a_userMapper;
+
+    @Autowired
+    private IdentityService identityService;
 
     //根据手机号码查询用户
     public Map findByPhoneNumber(String phoneNumber){
@@ -21,10 +28,40 @@ public class A_UserServiceImpl implements A_UserService {
     }
 
     //新增用户
+    //添加activiti的用户表和候选组表的关联
     @Override
     public void addUser(Map map) {
+        //生成用户id作为唯一标识
+        String userID = UUID.randomUUID().toString();
+        map.put("userID", userID);
         a_userMapper.addUser(map);
         addUser_Role(map);
+        //判断activiti中的用户表是否存在该用户
+        if(identityService.createUserQuery().userId(userID).singleResult()==null){
+            //不存在创建一个新的用户
+            UserEntity userEntity=new UserEntity();
+            userEntity.setId(userID);
+            userEntity.setFirstName(map.get("username").toString());
+            //往用户表添加用户
+            identityService.saveUser(userEntity);
+            //获得候选组ID
+            String groupID=map.get("roleID").toString();
+            //判断候选组是否存在，不存在就创建
+            if(identityService.createGroupQuery().groupId(groupID).singleResult()==null){
+                //创建候选组
+                GroupEntity groupEntity=new GroupEntity();
+                groupEntity.setId(groupID);
+                groupEntity.setName(map.get("roleName").toString());
+                //添加候选组
+                identityService.saveGroup(groupEntity);
+            }
+            //配置用户和候选组的关联
+            //如果存在就删除
+            identityService.deleteMembership(userID, groupID);
+            //创建关联
+            identityService.createMembership(userID, groupID);
+        }
+
     }
 
     //根据身份证号码查询用户
@@ -68,6 +105,34 @@ public class A_UserServiceImpl implements A_UserService {
     public void updateUser(Map map) {
         a_userMapper.updateUser(map);
         update_user_role(map);
+        //获得用户ID
+        String userID=map.get("userid").toString();
+        //判断activiti中的用户表是否存在该用户
+        if(identityService.createUserQuery().userId(userID).singleResult()==null){
+            //不存在创建一个新的用户
+            UserEntity userEntity=new UserEntity();
+            userEntity.setId(userID);
+            userEntity.setFirstName(map.get("username").toString());
+            //往用户表添加用户
+            identityService.saveUser(userEntity);
+            //获得候选组ID
+            String groupID=map.get("roleID").toString();
+            //判断候选组是否存在，不存在就创建
+            if(identityService.createGroupQuery().groupId(groupID).singleResult()==null){
+                //创建候选组
+                GroupEntity groupEntity=new GroupEntity();
+                groupEntity.setId(groupID);
+                groupEntity.setName(map.get("roleName").toString());
+                //添加候选组
+                identityService.saveGroup(groupEntity);
+            }
+            //配置用户和候选组的关联
+            //如果存在就删除
+            identityService.deleteMembership(userID, groupID);
+            //创建关联
+            identityService.createMembership(userID, groupID);
+        }
+        System.out.println(map+"aaaaaaaaaaaaaaaaaaaaa");
     }
 
     //查询不是该手机号的数量
@@ -90,7 +155,7 @@ public class A_UserServiceImpl implements A_UserService {
 
     //根据角色查询用户
     @Override
-    public List<Map> findByRoleID(int roleID) {
-        return a_userMapper.findByRoleID(roleID);
+    public List<Map> findByRoleID(int roleID,int sectionID) {
+        return a_userMapper.findByRoleID(roleID,sectionID);
     }
 }

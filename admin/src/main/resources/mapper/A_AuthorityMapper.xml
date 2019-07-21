@@ -6,16 +6,16 @@
     <select id="findAll" resultType="map">
         select*from a_permission;
     </select>
-    <!--根据角色ID和模块id查询-->
+    <!--根据部门ID，角色ID和模块id查询-->
     <select id="findByRoleIDAndPermID" resultType="int">
-        select count(*) from a_role_per where roleID=#{roleID} and perID=#{permID}
+        select count(*) from a_role_per where roleID=#{roleID} and perID=#{permID} and sectionID=#{sectionID}
     </select>
-    <!--删除该角色的所有权限-->
+    <!--删除该部门角色的所有权限-->
     <select id="deleteRole_Perm">
-        delete from a_role_per where roleID=#{roleID}
+        delete from a_role_per where roleID=#{roleID} and sectionID=#{sectionID}
     </select>
     <!--新增角色权限-->
     <insert id="addRole_Perm">
-        insert a_role_per values(null,#{roleID},#{permID})
+        insert a_role_per values(null,#{roleID},#{permID},#{sectionID})
     </insert>
 </mapper>
