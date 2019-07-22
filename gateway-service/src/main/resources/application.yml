@@ -27,7 +27,7 @@ spring:
     mode: LEGACYHTML5
   #redis的配置
   redis:
-    host: 192.168.136.128
+    host: 192.168.109.128
     port: 6379
     jedis:
       pool:
@@ -49,6 +49,7 @@ zuul:
   routes:
     admin-service: /gateway/admin/**
     attendance-service: /gateway/attend/**
+    zjclient-service: /gateway/zjclient/**
   host:
     socket-timeout-millis: 10000
     connect-timeout-millis: 10000

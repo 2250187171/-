@@ -4,12 +4,16 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
 
 import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.PRE_TYPE;
 import static org.springframework.cloud.netflix.zuul.filters.support.FilterConstants.SERVLET_DETECTION_FILTER_ORDER;
-//@Component
+@Component
 public class AjaxFilter extends ZuulFilter {
     //执行类型,之前执行还是之后
     @Override
@@ -31,7 +35,7 @@ public class AjaxFilter extends ZuulFilter {
         HttpServletRequest request = context.getRequest();
         //获得请求的路径
         String uri = request.getRequestURI();
-        if (uri.startsWith("/gateway/admin")) {
+        if (uri.startsWith("/gateway/zjclient/personalCenter") || uri.startsWith("/gateway/zjclient/online")) {
             return true;
         }
         return false;
@@ -45,22 +49,14 @@ public class AjaxFilter extends ZuulFilter {
         //获得请求httpservletrequest
         HttpServletRequest request = context.getRequest();
 
-        String requestBody = null;
-//        try {
-//            requestBody = StreamUtils.copyToString(context.getRequest().getInputStream(), Charsets.UTF_8);
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
-        context.addOriginResponseHeader("content-type", "application/json;charset=utf-8");
-        //设置可以跨域访问
-        context.addZuulResponseHeader("Access-Control-Allow-Headers", "content-type,x-requested-with");
-        context.addZuulResponseHeader("Access-Control-Allow-Origin", "*");
-        context.addZuulResponseHeader("content-type", "application/json;charset=utf-8");
-        // 如果为options请求则一定要返回200状态码
-        if ("options".equals(context.getRequest().getMethod().toLowerCase())) {
-            context.setSendZuulResponse(false);
-            context.setResponseStatusCode(HttpStatus.OK.value());
+        HttpServletResponse response = context.getResponse();
+
+        try {      //跳转得到登录页面进行登录
+            response.sendRedirect("http://localhost:9000/gateway/zjclient/customlogin");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
         return null;
     }
 }
