@@ -1,0 +1,219 @@
+/* CSS Document */
+.wdBanner {
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 10px;
+	background: url(../image/smallBanner.jpg) no-repeat center top;
+	height: 192px;
+}
+
+.huoYuan {
+	padding: 30px;
+	overflow: hidden;
+	background: #fff;
+	width: 1140px;
+	margin: 0 auto;
+}
+
+.hyTitle {
+	border-bottom: 1px solid #bfc6cd;
+	line-height: 33px;
+}
+
+.hyTitle h4 {
+	font-size: 20px;
+	color: #333;
+	height: 32px;
+}
+
+.hyTitle .hyLeft span {
+	color: #888888;
+	font-size: 14px;
+	padding-right: 10px;
+}
+
+.hyTitle .hyLeft i {
+	color: #f15a22;
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.hyTop {
+	overflow: hidden;
+	padding: 30px 0px 30px 80px;
+	text-align: left;
+}
+
+.hyTop .chuFaDi,.hyTop .daoDaDi {
+	border: 1px solid #bfc6cd;
+	padding: 8px;
+	width: 200px;
+	background: url(../image/xia1.png) no-repeat 192px center;
+}
+
+.hyTop .souCompany {
+	background: #008be7;
+	color: #fff;
+	border: none;
+	width: 93px;
+	height: 33px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-left: 10px;
+	*width: 97px;
+	*height: 37px;
+	cursor: pointer;
+}
+
+.hyTop .souStation {
+	background: #0078d4;
+	color: #fff;
+	border: none;
+	width: 93px;
+	height: 33px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	margin-left: 10px;
+	*width: 97px;
+	*height: 37px;
+	cursor: pointer;
+}
+
+.hyTop .jianTou1 img {
+	padding: 9px 10px;
+}
+
+.huoYuan .SupplyInfor_th {
+	padding: 0px 10px;
+	height: 35px;
+	line-height: 35px;
+	background: #eaeaea;
+	color: #666666;
+	border-top: 1px solid #bfc6cd;
+	font-size: 14px;
+}
+
+.huoYuan .SupplyInfor_th li {
+	text-align: left;
+	overflow: hidden;
+}
+
+.huoYuan .SupplyInfor_source {
+	padding: 0 10px 0 10px;
+	height: 60px;
+	line-height: 60px;
+	border-bottom: 1px #eeeeee dashed;
+	font-size: 14px;
+}
+
+.huoYuan .SupplyInfor_source:hover {
+	background: #f4f9fd
+}
+
+.huoYuan .SupplyInfor_source li,.SupplyInfor_source li a {
+	color: #333;
+}
+
+.huoYuan .SupplyInfor_source li em {
+	color: #ff7300
+}
+
+.huoYuan .SupplyInfor_source li span {
+	color: #e35118;
+}
+
+.huoYuan .Sup1 {
+	width: 140px;
+}
+
+.huoYuan .Sup2 {
+	width: 180px;
+}
+
+.huoYuan .Sup3 {
+	width: 140px;
+}
+
+.huoYuan .Sup4 {
+	width: 120px;
+}
+
+.huoYuan .Sup5 {
+	width: 120px;
+}
+
+.huoYuan .Sup6 {
+	width: 120px;
+}
+
+.huoYuan .Sup7 {
+	width: 160px;
+}
+
+.huoYuan .SupList1 {
+	width: 320px;
+	overflow: hidden;
+}
+
+.huoYuan .SupList2 {
+	width: 30px;
+}
+
+.huoYuan .SupList3 {
+	width: 180px;
+	overflow: hidden;
+}
+
+.huoYuan .SupList4 {
+	width: 140px;
+}
+
+.huoYuan .SupList5 {
+	width: 120px;
+}
+
+.huoYuan .SupList6 {
+	width: 120px;
+}
+
+.huoYuan .SupList7 {
+	width: 120px;
+}
+
+.huoYuan .SupList8 {
+	width: 160px;
+}
+
+.huoYuan .SupList9 {
+	margin: 14px 0 0 32px;
+}
+
+.huoYuan .SupList9 a {
+	background: #098fe8;
+	color: #fff;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	display: block;
+	width: 86px;
+	height: 33px;
+	line-height: 33px;
+	text-align: center;
+}
+
+.huoYuan .SupList9 a:hover {
+	color: #fff;
+	background: #0078d4;
+}
+
+.SupList1 {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.Sup3,.SupList4 {
+	padding-left: 20px;
+}

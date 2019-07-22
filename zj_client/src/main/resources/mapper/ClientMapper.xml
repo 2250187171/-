@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.ClientMapper">
+
+    <!--客户登录-->
+    <select id="clientLogin" resultType="map">
+        select * from b_custom where phoneNumber = #{phoneNumber} and customPassword = #{customPassword}
+    </select>
+
+    <!--判断客户注册的手机号,是否已经存在-->
+    <select id="checkPhone" resultType="map">
+        select * from b_custom where phoneNumber = #{phone}
+    </select>
+
+    <!--客户注册-->
+    <insert id="insertClient" parameterType="map">
+        insert into b_custom values(UUID(),#{customerTypeID},#{customName},#{phoneNumber},#{customPassword},
+                    #{sex},#{customIDNumber},null,#{customNickName},#{qq},#{mailBox},#{registerDate},
+                    #{telePhoneNumber},null,null,#{corporate},#{companyAddress})
+    </insert>
+
+    <!--找回密码,按照客户的手机号修改(重置)密码-->
+    <update id="setNewPassword">
+        update b_custom set customPassword = #{newPwd} where phoneNumber = #{phone}
+    </update>
+
+    <!--//验证要修改的身份证号码是否存在-->
+    <select id="checkCustomIDNumber" resultType="int">
+        select count(*) from b_custom where customID !=#{customID} and customIDNumber = #{customIDNumber}
+    </select>
+
+    <!--验证要修改的手机号码是否存在-->
+    <select id="checkPhoneUpdate" resultType="int">
+        select count(*) from b_custom where customID !=#{customID} and phoneNumber = #{phoneNumber}
+    </select>
+
+    <!--按照客户的主键修改个体客户的基本信息-->
+    <update id="updateClientIndividual" parameterType="map">
+        update b_custom set customName = #{customname},customIDNumber = #{customidnumber},
+                            customNickName = #{customerusername},sex = #{sex},
+                            qq = #{qq}, mailBox = #{mailbox} ,phoneNumber = #{customphonenumber},
+                            customIDPhoto = #{fileName}
+                       where  customID = #{customID}
+    </update>
+
+    <!--按照客户的主键修改客户的密码-->
+    <update id="updateClientPwd" parameterType="map">
+        update  b_custom  set customPassword = #{confirmpassword} where  customID = #{customID}
+    </update>
+
+    <!--验证客户要修改的电话号码是否存在-->
+    <select id="checkTelePhoneNumber" resultType="int">
+         select count(*) from b_custom where customID !=#{customID} and telePhoneNumber = #{telePhoneNumber}
+    </select>
+
+    <!--验证注册号是否已经存在-->
+    <select id="checkRegisterCard" resultType="int">
+        select count(*) from b_custom where customID !=#{customID} and registerCard = #{businesslicensenumber}
+    </select>
+
+    <!--按照客户的主键修改企业客户的基本信息-->
+    <insert id="updateClientEnterprise" parameterType="map">
+        update  b_custom set customName = #{customname},registerCard = #{businesslicensenumber},
+                             corporate = #{corporaterepresentative},companyAddress = #{companyadress},
+                             qq = #{qq}, mailBox = #{mailbox}, phoneNumber = #{customphonenumber},
+                             telePhoneNumber = #{telePhoneNumber}, businessLicense = #{fileName}
+                             where customID = #{customID}
+    </insert>
+</mapper>
