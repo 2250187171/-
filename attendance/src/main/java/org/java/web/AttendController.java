@@ -174,4 +174,19 @@ public class AttendController {
         model.addAttribute("userID", user.get("userID"));
         return "/clockMessage";
     }
+
+    @RequestMapping("/findIFClock")
+    @ResponseBody
+    public Map findIFClock(@RequestParam Map map){
+        map.put("start",Integer.parseInt(map.get("start").toString()));
+        map.put("length", Integer.parseInt(map.get("length").toString()));
+        List cs = service.findIFClock(map);
+        int count=service.findIFCount(map);
+        Map m=new HashMap();
+        m.put("draw",0);
+        m.put("recordsTotal",count );
+        m.put("recordsFiltered",count);
+        m.put("aaData", cs);
+        return m;
+    }
 }

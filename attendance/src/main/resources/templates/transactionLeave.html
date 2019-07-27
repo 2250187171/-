@@ -6,6 +6,8 @@
     <link th:href="@{/gateway/attend/assets/layui/css/layui.css}" rel="stylesheet">
     <link th:href="@{/gateway/attend/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/gateway/attend/Content/css/datatables.min.css}" type="text/css"></link>
+    <link th:href="@{/gateway/attend/Content/css/style.css}" rel="stylesheet" type="text/css">
+
     <style>
         td,th {
             vertical-align: middle;
@@ -15,38 +17,216 @@
 </head>
 <body>
 <div>
+    <button type="button" class="btn btn-primary" onclick="leave()" th:if="${user.roleID!=3}">申请请假</button>
     <table class="table table-hover" id="TabLeave">
         <thead>
         <tr>
             <th style="text-align: center;">编号</th>
             <th style="text-align: center;">任务名称</th>
             <th style="vertical-align: middle">请假原因</th>
+            <th style="vertical-align: middle">开始时间</th>
+            <th style="vertical-align: middle">结束时间</th>
             <th style="vertical-align: middle">请假天数</th>
-            <th style="vertical-align: middle">任务办理人</th>
+            <th style="vertical-align: middle">请假人</th>
             <th style="vertical-align: middle">任务开始时间</th>
             <th style="vertical-align: middle">操作</th>
         </tr>
         </thead>
     </table>
 </div>
+<div class="modal fade wui-content" id="leaveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" name="btn_close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="title">申请请假</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <form class="navbar-form" id="applyForm" role="search" th:action="@{/gateway/attend/addLeave}">
+                    <input type="hidden" id="attendanceID" name="attendanceID">
+                    <input type="hidden" id="user_ID" name="userID">
+                    <input type="hidden" id="leave_ID" name="leaveID">
+                    <div class="form-group">
+                        <span for="leaveCause">请假原因：</span>
+                        <textarea class="form-control" name="leaveCause" id="s_leaveCause" rows="3" style="width: 398px"></textarea>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group">
+                        <span for="startDate">开始时间：</span>
+                        <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="startDate" name="startDate" style="width: 398px" placeholder="请选择开始时间">
+                        </div>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group" style="margin-left: -5px">
+                        <span for="endDate">结束时间：</span>
+                        <div class="layui-input-inline">
+                        <input type="text" class="layui-input" id="endDate" name="endDate" style="width: 398px" placeholder="请选择结束时间">
+                        </div>
+                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" name="btn_close">关闭</button>
+                <button type="button" id="apply" class="btn btn-primary" >确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="auditLeave" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" name="btn_close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">审批请假</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <form class="navbar-form" id="leaveForm" role="search" th:action="@{/gateway/attend/leaveManage/auditLeave}">
+                    <input type="hidden" id="leaveID" name="business_id">
+                    <input type="hidden" id="taskId" name="taskId">
+                    <input type="hidden" id="taskDefKey" name="audit_type">
+                    <input type="hidden" id="userID" name="user_id">
+                    <div class="form-group">
+                        <span for="leaveCause">请假原因：</span>
+                        <textarea class="form-control" name="leaveCause" id="leaveCause" rows="3" style="width: 398px" disabled></textarea>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group">
+                        <span for="s_startDate">开始时间：</span>
+                        <input type="text" name="startDate" class="form-control" id="s_startDate" style="width: 398px;" disabled>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group">
+                        <span for="s_endDate">结束时间：</span>
+                        <input type="text" name="endDate" class="form-control" id="s_endDate" style="width: 398px;" disabled>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group">
+                        <span for="leaveDay">请假天数：</span>
+                        <input type="number" min="1" name="leaveDay" class="form-control" id="leaveDay" style="width: 398px;" disabled>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group" style="margin-left: 15px">
+                        <span for="leaveDay">申请人：</span>
+                        <input type="text" min="1" name="userName" class="form-control" id="userName" style="width: 398px;" disabled>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group">
+                        <span for="leaveDay">创建时间：</span>
+                        <input type="text"  name="createTime" class="form-control" id="createTime" style="width: 398px;" disabled>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group">
+                        <span for="leaveCause">审核意见：</span>
+                        <textarea class="form-control" name="audit_info" id="audit_info" rows="3" style="width: 398px"></textarea>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="form-group">
+                        <span for="leaveCause">审核状态：</span>
+                        <input type="radio" name="status" value="1" checked>同意
+                        <input type="radio" name="status" value="2">不同意
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" name="btn_close">关闭</button>
+                <button type="button" id="btn_submit" class="btn btn-primary" >提交</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery-3.2.1.min.js}"></script>
 <script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery.form.js}"></script>
 <script type="text/javascript" th:src="@{/gateway/attend/Content/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/assets/layui/layui.js}"></script>
 <script type="text/javascript" th:src="@{/gateway/attend/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/gateway/attend/Content/js/datatables.min.js}"></script>
-
 <script>
-    var userID='[[${userID}]]'
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#startDate' //指定元素
+            ,done: function(value, date){
+                var nowTime = formatTime(new Date(), "yyyy-MM-dd");
+                var d1=new Date(nowTime);
+                var d2=new Date(value);
+                //获得结束时间
+                var d3=new Date($("#endDate").val());
+                if(d2<d1){
+                    layer.msg("开始时间不正确", {
+                        icon: 2,
+                        time: 1000,
+                        offset: '100px'
+                    })
+                    $("#startDate").val("");
+                }else if(d3.getTime()!=null&&d3.getTime()!=""&&d3.getTime()<d2.getTime()){
+                    layer.msg("结束时间不正确", {
+                        icon: 2,
+                        time: 1000,
+                        offset: '100px'
+                    })
+                    $("#endDate").val("");
+                }
+            }
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endDate' //指定元素
+            ,done: function(value, date){
+                var d1=new Date($("#startDate").val());
+                var d2=new Date(value);
+                if(d2.getTime()<d1.getTime()){
+                    layer.msg("结束时间不正确", {
+                        icon: 2,
+                        time: 1000,
+                        offset: '100px'
+                    })
+                    $("#endDate").val("");
+                }
+                }
+        });
+
+
+    });
+
+    //时间戳转为时间字符串
+    function formatTime(date, fmt) {
+        var o = {
+            "M+": date.getMonth() + 1, // 月份
+            "d+": date.getDate(), // 日
+            "h+": date.getHours(), // 小时
+            "m+": date.getMinutes(), // 分
+            "s+": date.getSeconds(), // 秒
+            "q+": Math.floor((date.getMonth() + 3) / 3), // 季度
+            "S": date.getMilliseconds() // 毫秒
+        };
+        if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for(var k in o)
+            if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+    var userID='[[${user.userID}]]';
+    var roleID='[[${user.roleID}]]'
     var TabLeave;
     $(function () {
         TabLeave = $('#TabLeave')
             .DataTable(
                 {
-                    responsive: false,
                     "pagingType" : "simple_numbers",//设置分页控件的模式
                     searching : false,//屏蔽datatales的查询框
-                    // aLengthMenu : [ count ],//设置一页展示10条记录
+                    aLengthMenu : [ 5 ],//设置一页展示10条记录
                     "bSort" : false,// 是否排序功能
                     "bLengthChange" : false,//屏蔽tables的一页展示多少条记录的下拉列表
                     "bAutoWidth" : false,// 是否非自动宽度  设置为false
@@ -67,7 +247,7 @@
 
                         }
                     },
-                    "lengthMenu" : [ 2, 5, 10, 20, 50 ],
+                    // "lengthMenu" : [ 2, 5, 10, 20, 50 ],
                     "processing" : true, //打开数据加载时的等待效果
                     "serverSide" : true,//打开后台分页
                     "ajax" : {
@@ -94,6 +274,10 @@
                         {
                             "data" : "leaveCause",
                         },{
+                            "data" : "startDate",
+                        },{
+                            "data" : "endDate",
+                        },{
                             "data" : "leaveDay",
                         },
                         {
@@ -107,15 +291,17 @@
                         {
                             "data" : function(obj){
                                 if(obj.taskDefKey=='createLeave'){
-                                    return '<button id="'+obj.taskId+'" value="'+obj.roleID+'" class="btn btn-success"  onclick="submitLeave(this.id,value)">提交申请</button>'
-                                            +'  <button id="'+obj.leaveID+'" class="btn btn-success" onclick="deleteLeave(this.id)">删除申请</button>'
-                                            +'  <button id="'+obj.leaveID+'" class="btn btn-success" onclick="updateLeave(this.id)">修改申请</button>'
+                                    return '<button id="'+obj.taskId+'" class="btn btn-info"  onclick="submitLeave(this.id)">提交申请</button>'
+                                        +'  <button id="'+obj.leaveID+'" class="btn btn-warning" onclick="updateLeave(this.id)">修改申请</button>'
+                                            +'  <button id="'+obj.processinstance_ID+'" class="btn btn-danger" onclick="deleteLeave(this.id)">删除申请</button>'
+
                                 }else if(obj.taskDefKey=='branchAudit'){
-                                    return '<button id="'+obj.leaveID+'" class="btn btn-success" onclick="udit(this.id)">部门经理审核</button>'
+                                    return '<button id="'+obj.leaveID+'" value="'+obj.taskId+'" name="'+obj.taskDefKey+'" class="btn btn-info" onclick="udit(this.id,this.name,value)">部门经理审核</button>'
+                                            +'  <button id="'+obj.taskId+'" value="'+obj.userID+'" class="btn btn-secondary" onclick="returnLeave(this.id)">归还任务</button>'
                                 }else if(obj.taskDefKey=='generalAudit'){
-                                    return '<button id="'+obj.leaveID+'" class="btn btn-success" onclick="udit(this.id)">总经理审核</button>'
+                                    return '<button id="'+obj.leaveID+'" value="'+obj.taskId+'" name="'+obj.taskDefKey+'" class="btn btn-info" onclick="udit(this.id,this.name,value)">总经理审核</button>'
                                 }else{
-                                    return '<button id="'+obj.leaveID+'" class="btn btn-success" onclick="udit(this.id)">确认消假</button>'
+                                    return '<button id="'+obj.taskId+'" value="'+obj.endDate+'" name="'+obj.leaveID+'" class="btn btn-danger" onclick="rem(this.id,value,this.name)">确认消假</button>'
                                 }
 
                             }
@@ -132,6 +318,63 @@
         TabLeave.ajax.reload();
     }
 
+    //修改
+    function updateLeave(ID){
+        $("#title").text("修改请假");
+        $("#user_ID").val(userID)
+        $("#leave_ID").val(ID)
+        $("#applyForm").attr("action","/gateway/attend/leaveManage/updateLeave")
+        $.ajax({
+            url:"/gateway/attend/leaveManage/findByLeaveID",
+            data:{"leaveID":ID},
+            dataType:"json",
+            type:"post",
+            success:function (data) {
+                $("#s_leaveCause").val(data.leaveCause)
+                $("#startDate").val(data.startDate)
+                $("#endDate").val(data.endDate);
+                $('#leaveModal').modal('show');
+            }
+        })
+    }
+
+
+    //删除任务
+    function deleteLeave(ID){
+        //配置一个透明的询问框
+        var ss=layer.msg('您确定要删除吗？', {
+            time: 40000, //20s后自动关闭
+            btn: ['确定', '取消'],
+            yes:function(){
+                layer.close(ss);
+                layer.load(2);
+                $.ajax({
+                    url:"/gateway/attend/leaveManage/deleteLeave",
+                    data:{"procInsId":ID},
+                    dataType:"json",
+                    type:"post",
+                    success:function (data) {
+                        layer.closeAll("loading");
+                        if(data==1||data=="1"){
+                            layer.msg("删除成功", {
+                                icon: 1,
+                                time: 1000,
+                                offset: '100px'
+                            },function () {
+                                tabLeaveChange();
+                            })
+                        }else{
+                            layer.msg("删除失败", {
+                                icon: 0,
+                                time: 1000,
+                                offset: '100px'
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
 
     //转换时间格式
     function dateToStr(datetime){
@@ -166,18 +409,189 @@
 
 
     //提交申请
-    function submitLeave(taskId,roleID){
+    function submitLeave(taskId){
+        layer.load(2);
         $.ajax({
             url:"/gateway/attend/leaveManage/submitLeave",
             data:{"taskId":taskId,"roleID":roleID},
             type:"post",
             dataType:"json",
             success:function (data) {
+                layer.closeAll("loading");
                 layer.msg("提交成功", {
                     icon: 1,
+                    time: 1000,
                     offset: '100px'
                 },function () {
                     tabLeaveChange();
+                })
+            }
+        })
+    }
+
+    //审核请假任务
+    function udit(leaveID,name,value){
+        $("#leaveID").val(leaveID);
+        $("#taskId").val(value);
+        $("#taskDefKey").val(name);
+        $.ajax({
+            url:"/gateway/attend/leaveManage/findByLeaveID",
+            data:{"leaveID":leaveID},
+            dataType: "json",
+            type:"post",
+            success:function (data) {
+                $("#s_startDate").val(data.startDate);
+                $("#s_endDate").val(data.endDate);
+                $("#userID").val(data.userID);
+                $("#userName").val(data.userName);
+                $("#leaveCause").val(data.leaveCause);
+                $("#leaveDay").val(data.leaveDay);
+                $("#createTime").val(dateToStr(new Date(data.createTime)));
+                $("#auditLeave").modal();
+
+            }
+        })
+    }
+
+    //关闭审核表单
+    function close(){
+        $('#auditLeave').modal('hide');
+        $("#leaveModal").modal('hide');
+        $("#s_leaveCause").val("");
+        $("#applyForm input").val("");
+        $("#leaveForm input").val("");
+        $("#audit_info").val("");
+    }
+
+    //关闭弹出框
+    $("[name=btn_close]").click(function () {
+        close();
+    })
+    
+    
+    //提交审核单
+    $("#btn_submit").click(function () {
+        layer.load(2);
+        $("#leaveForm").ajaxSubmit(function (data) {
+            layer.closeAll("loading");
+            if(data==1||data=='1'){
+                layer.msg("审核成功！", {
+                    icon: 1,
+                    time: 1000,
+                    offset: '100px'
+                },function(){
+                    tabLeaveChange();
+                })
+            }
+            $('#auditLeave').modal('hide');
+        })
+    })
+
+    //消假
+    function rem(ID,value,name){
+        //配置一个透明的询问框
+        var ss=layer.msg('您确定要消假吗？', {
+            time: 40000, //20s后自动关闭
+            btn: ['确定', '取消'],
+            yes: function () {
+                layer.close(ss);
+                layer.load(2);
+                $.ajax({
+                    url: "/gateway/attend/leaveManage/eliminate",
+                    data: {"taskId": ID,"endDate":value,"leaveID":name},
+                    dataType: "json",
+                    type: "post",
+                    success: function (data) {
+                        layer.closeAll("loading");
+                        if(data==0){
+                            layer.msg("您超假了！", {
+                                icon: 0,
+                                time: 1000,
+                                offset: '100px'
+                            }, function () {
+                                tabLeaveChange();
+                            })
+                        }else{
+                            layer.msg("消假成功！", {
+                                icon: 1,
+                                time: 1000,
+                                offset: '100px'
+                            }, function () {
+                                tabLeaveChange();
+                            })
+                        }
+
+                    }
+                })
+            }
+        })
+    }
+
+    //请假
+    function leave() {
+        $("#title").text("申请请假");
+        $("#applyForm").attr("action","/gateway/attend/addLeave")
+        $("#leaveModal").modal();
+        $("#user_ID").val(userID)
+    }
+
+
+    //申请请假
+    $("#apply").click(function () {
+        //请假原因
+        var leaveCause=$("#s_leaveCause").val();
+         //开始时间
+         var startDate=$("#startDate").val()
+        //结束时间
+        var endDate=$("#endDate").val();
+
+        if(leaveCause==null||leaveCause==""||startDate==null||startDate==""||endDate==null||endDate==""){
+            layer.msg("请填写完整信息！", {
+                icon: 0,
+                time: 1000,
+                offset: '100px'
+            })
+        }else {
+            layer.load(2);
+            //异步申请请假
+            $("#applyForm").ajaxSubmit(function (data) {
+                layer.closeAll("loading");
+                    layer.msg(data, {
+                        icon: 1,
+                        time: 1000,
+                        offset: '100px'
+                    },function () {
+                        close();
+                        tabLeaveChange();
+                    })
+            })
+        }
+    })
+
+    //归还任务
+    function returnLeave(ID){
+        //配置一个透明的询问框
+        var ss=layer.msg('您确定要归还任务吗？', {
+            time: 40000, //20s后自动关闭
+            btn: ['确定', '取消'],
+            yes: function () {
+                layer.close(ss);
+                layer.load(2);
+                $.ajax({
+                    url:"/gateway/attend/leaveManage/returnLeave",
+                    data:{"taskId":ID,"userID":userID},
+                    dataType:"json",
+                    type:"post",
+                    success:function(data){
+                        layer.closeAll("loading");
+                        layer.msg("归还任务成功！", {
+                            icon: 1,
+                            time: 1000,
+                            offset: '100px'
+                        },function(){
+                            tabLeaveChange();
+                        })
+                    }
                 })
             }
         })

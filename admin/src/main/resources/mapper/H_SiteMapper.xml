@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.java.dao.H_SiteMapper">
+    <sql id="sqlWhere">
+        <if test="cprovinceID!='0' and cprovinceID!=0">
+            and startd.proID=#{cprovinceID}
+        </if>
+        <if test="ccityID!='0' and ccityID!=0">
+            and startc.cityID=#{ccityID}
+        </if>
+        <if test="cdistrictID!='0' and cdistrictID!=0">
+            and startb.disID=#{cdistrictID}
+        </if>
+    </sql>
+    <!--新增站点-->
+    <insert id="addSite" parameterType="map">
+        insert h_site values(null,#{siteName},#{userID},#{address},#{routeID})
+    </insert>
+
+    <!--条件查询站点信息-->
+    <select id="findIFSite" resultType="map" parameterType="map">
+        SELECT site_a.*,userName,phoneNumber,CONCAT(startd.proName,'-',startc.cityName,'-',IF(startb.disName IS NULL,'市辖区',startb.disName)) AS routeStart FROM h_site site_a JOIN h_route routea ON(site_a.routeID=routea.RouteID) JOIN h_district startb ON(routea.routeStartID=startb.disID)
+        LEFT JOIN h_district endb ON(routea.routeendID=endb.disID)
+        LEFT JOIN h_city startc ON(startb.cityID=startc.cityID||startc.cityID=routea.startCityID)
+        LEFT JOIN h_city endc ON(endc.cityID=endb.cityID||endc.cityID=routea.endCityID)
+        LEFT JOIN h_province startd ON(startd.proID=startc.proID)
+        LEFT JOIN h_province endd ON(endd.proID=endc.proID)
+        LEFT JOIN a_user e ON(site_a.userID=e.userID)
+        WHERE 1=1
+        <include refid="sqlWhere"/>
+        limit #{start},#{length}
+    </select>
+
+    <!--条件查询站点数量-->
+    <select id="findIFCount" resultType="int" parameterType="map">
+        SELECT count(*) FROM h_site site_a JOIN h_route routea ON(site_a.routeID=routea.RouteID) JOIN h_district startb ON(routea.routeStartID=startb.disID)
+        LEFT JOIN h_district endb ON(routea.routeendID=endb.disID)
+        LEFT JOIN h_city startc ON(startb.cityID=startc.cityID||startc.cityID=routea.startCityID)
+        LEFT JOIN h_city endc ON(endc.cityID=endb.cityID||endc.cityID=routea.endCityID)
+        LEFT JOIN h_province startd ON(startd.proID=startc.proID)
+        LEFT JOIN h_province endd ON(endd.proID=endc.proID)
+        LEFT JOIN a_user e ON(site_a.userID=e.userID)
+        WHERE 1=1
+        <include refid="sqlWhere"/>
+    </select>
+
+
+    <!--根据站点ID查询站点信息-->
+    <select id="findBySiteID" resultType="map">
+        select*From h_site where siteID=#{siteID}
+    </select>
+
+    <!--修改站点-->
+    <update id="updateSite" parameterType="map">
+        update h_site set siteName=#{siteName},userID=#{userID},address=#{address},routeID=#{routeID} where siteID=#{siteID}
+    </update>
+
+    <!--删除站点-->
+    <delete id="deleteSite">
+        delete from h_site where siteID=#{siteID}
+    </delete>
+</mapper>

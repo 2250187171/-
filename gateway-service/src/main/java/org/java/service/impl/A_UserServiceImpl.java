@@ -5,6 +5,7 @@ import org.java.service.A_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -23,6 +24,11 @@ public class A_UserServiceImpl implements A_UserService {
     @Override
     public String findByPassword(String phoneNumber) {
         return a_userMapper.findByPassword(phoneNumber);
+    }
+
+    @Override
+    public List findPer(String phoneNumber) {
+        return a_userMapper.findPer(phoneNumber);
     }
 
 }

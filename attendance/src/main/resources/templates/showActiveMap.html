@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/gateway/attend/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+    <style th:inline="css">
+        #d{
+            border-radius:12px;
+            position:absolute;
+            border:3px solid red;
+            left:[[${x+55}]]px;
+            top:[[${y}]]px;
+            width:[[${width}]]px;
+            height:[[${height}]]px;
+        }
+    </style>
+</head>
+<body>
+<button class="btn btn-success" id="return">返回</button>
+<img style="position: absolute;" th:src="@{'/gateway/attend/leaveManage/showResource/'+${name}+'/'+${definitionId}}">
+<div id="d"></div>
+</body>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery-3.2.1.min.js}"></script>
+<script>
+    $("#return").click(function(){
+        location='/gateway/attend/leaveManage/LeavePlan?token=[[${userID}]]';
+    })
+</script>
+</html>

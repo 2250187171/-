@@ -40,4 +40,34 @@
     <select id="showClock" resultType="map">
         select*From d_attendance where attendanceID=#{attendanceID}
     </select>
+
+
+    <!--多条件查询打卡记录-->
+    <select id="findIFClock" resultType="map" parameterType="map">
+        SELECT a.*,userName,roleID,sectionID FROM d_attendance a JOIN a_user b ON(a.userID=b.userID) JOIN a_user_role c ON(b.phoneNumber=c.phoneNumber) where 1=1
+        <if test="userName!=null and userName!=''">
+            and b.userName like '%${userName}%'
+        </if>
+        <if test="startDate!=null and startDate!=''">
+            and DATE(startWorkTime)&gt;=#{startDate}
+        </if>
+        <if test="endDate!=null and endDate!=''">
+            and DATE(offTime) &lt;=#{endDate}
+        </if>
+        limit #{start},#{length}
+    </select>
+
+    <!--多条件查询打卡记录的数量-->
+    <select id="findIFCount" resultType="int" parameterType="map">
+        select count(*) from d_attendance a join a_user b on(a.userID=b.userID) where 1=1
+        <if test="userName!=null and userName!=''">
+            and b.userName like '%${userName}%'
+        </if>
+        <if test="startDate!=null and startDate!=''">
+            and DATE(startWorkTime)&gt;=startDate
+        </if>
+        <if test="endDate!=null and endDate!=''">
+            and DATE(offTime) &lt;=endDate
+        </if>
+    </select>
 </mapper>

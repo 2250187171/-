@@ -86,4 +86,15 @@
     <update id="update_user_role" parameterType="map">
         update a_user_role set phoneNumber=#{phoneNumber},roleID=#{roleID} where phoneNumber=#{key}
     </update>
+
+    <!--根据部门和角色查询该部门的部门经理userID-->
+    <select id="findUserID" resultType="String" parameterType="map">
+         SELECT userID FROM a_user a JOIN a_user_role b ON(a.phoneNumber=b.phoneNumber) WHERE sectionID=
+        (SELECT sectionID FROM a_user WHERE userID=#{userID}) AND b.roleID=#{roleID}
+    </select>
+
+    <!--根据userID查询用户名-->
+    <select id="findByUserID" resultType="String">
+        select userName From a_user where userID=#{userID}
+    </select>
 </mapper>

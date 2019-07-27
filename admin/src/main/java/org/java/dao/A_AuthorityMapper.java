@@ -19,4 +19,5 @@ public interface A_AuthorityMapper {
 
     //新增角色权限
     public void addRole_Perm(@Param("roleID")int roleID,@Param("permID")int permID,@Param("sectionID")int sectionID);
+
 }

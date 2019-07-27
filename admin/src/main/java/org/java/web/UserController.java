@@ -64,8 +64,6 @@ public class UserController {
         System.out.println(map);
         if(service.findByPassword(map.get("phoneNumber").toString())!=null){
             return "该手机号已被注册";
-        }else if(service.findByIDNumber(map.get("IDNumber").toString())!=0){
-            return "该身份证已被注册";
         }
         //获得项目根路径
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/images";
@@ -81,6 +79,10 @@ public class UserController {
 
         //解析身份证图片获得图片的身份证信息
         Map IDNumber = card.idCard(IDNumberpath);
+        //获得身份证上的姓名
+        map.put("username", IDNumber.get("name"));
+        //获得身份证号码
+        map.put("IDNumber", IDNumber.get("ID"));
 
         //获得部门id
         int sectionID=Integer.parseInt(map.get("sectionID").toString());
@@ -89,10 +91,8 @@ public class UserController {
         System.out.println(map);
         System.out.println(IDNumber.get("name")+"-----"+map.get("username"));
         //判断身份证
-        if(!IDNumber.get("ID").equals(map.get("IDNumber"))){
-            return "身份证号码和输入号码不一致";
-        }else if(!IDNumber.get("name").equals(map.get("username"))){
-            return "身份证姓名和输入姓名不一致";
+        if(service.findByIDNumber(map.get("IDNumber").toString())!=0){
+            return "该身份证已被注册";
         }else if(sectionID==2&&roleID==1){//判断该用户是不是司机
             byte[] drivingLicence=list.get(3).getBytes();
             //解析驾驶证图片获得驾驶证信息
@@ -104,7 +104,7 @@ public class UserController {
             long time1 = format.parse(Licence.get("endDate").toString()).getTime();
             //获得当前时间
             if(!map.get("username").equals(Licence.get("name"))){
-                return "驾驶证姓名和输入姓名不一致";
+                return "驾驶证姓名和身份证姓名不一致";
             }else if(time1<time){
                 return "您的驾驶证已过期";
             }
@@ -166,12 +166,9 @@ public class UserController {
         System.out.println(map+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         //获得不是该手机号码的数量
         int phoneCount = service.findNotPhoneNumber(map.get("phoneNumber").toString(),map.get("userid").toString());
-        //获得不是该身份证的数量
-        int idCount = service.findNotIDNumber(map.get("IDNumber").toString(),map.get("userid").toString());
+
         if(phoneCount>=1){
             return "该手机号码已被注册";
-        }else if(idCount>=1){
-            return "该身份证号已被注册";
         }
         //获得项目根路径
         String path = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"static/images";
@@ -194,11 +191,15 @@ public class UserController {
                     //解析身份证图片获得图片的身份证信息
                     Map IDNumber = card.idCard(IDNumberpath);
                     //判断身份证
-                    if (!IDNumber.get("ID").equals(map.get("IDNumber"))) {
-                        return "身份证号码和输入号码不一致";
-                    } else if (!IDNumber.get("name").equals(map.get("username"))) {
-                        return "身份证姓名和输入姓名不一致";
+
+                    map.put("IDNumber", IDNumber.get("ID"));
+                    //获得不是该身份证的数量
+                    int idCount = service.findNotIDNumber(map.get("IDNumber").toString(),map.get("userid").toString());
+                    if(idCount==1){
+                        return "该身份证已被注册";
                     }
+                    map.put("username", IDNumber.get("name"));
+                    System.out.println(map.get("username")+"-----------"+IDNumber.get("name"));
                     map.put("IDPhoto", map.get("phoneNumber").toString() + map.get("IDPhoto"));
                 }
                 if (sectionID == 2 && roleID == 1) {//判断该用户是不是司机
@@ -213,7 +214,7 @@ public class UserController {
                         long time1 = format.parse(Licence.get("endDate").toString()).getTime();
                         //获得当前时间
                         if (!map.get("username").equals(Licence.get("name"))) {
-                            return "驾驶证姓名和输入姓名不一致";
+                            return "驾驶证姓名和身份证姓名不一致";
                         } else if (time1 < time) {
                             return "您的驾驶证已过期";
                         }
@@ -242,16 +243,17 @@ public class UserController {
                 f.transferTo(newfile);
             }
         }else {
-            System.out.println(path+"/"+map.get("IDNumber").toString());
             //根据身份证图片路径解析
             Map IDNumber = card.idCard2(path+"/"+map.get("IDPhoto").toString());
 
             System.out.println("身份证解析："+IDNumber);
+            map.put("IDNumber", IDNumber.get("ID"));
+            map.put("username", IDNumber.get("name"));
             //判断身份证
-            if (!IDNumber.get("ID").equals(map.get("IDNumber"))) {
-                return "身份证号码和输入号码不一致";
-            } else if (!IDNumber.get("name").equals(map.get("username"))) {
-                return "身份证姓名和输入姓名不一致";
+            //获得不是该身份证的数量
+            int idCount = service.findNotIDNumber(map.get("IDNumber").toString(),map.get("userid").toString());
+            if(idCount==1){
+                return "该身份证已被注册";
             }else if (sectionID == 2 && roleID == 1) {//判断该用户是不是司机
                 Map Licence = card.idCard2(path+"/"+map.get("drivingLicencePhoto").toString());
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
@@ -261,13 +263,13 @@ public class UserController {
                 long time1 = format.parse(Licence.get("endDate").toString()).getTime();
                 //获得当前时间
                 if (!map.get("username").equals(Licence.get("name"))) {
-                    return "驾驶证姓名和输入姓名不一致";
+                    return "驾驶证姓名和身份证姓名不一致";
                 } else if (time1 < time) {
                     return "您的驾驶证已过期";
                 }
             }
         }
-
+        System.out.println(map+"################################");
         //修改用户
         service.updateUser(map);
         return "1";
@@ -279,4 +281,22 @@ public class UserController {
     public List<Map> findByRoleID(int roleID,int sectionID){
        return service.findByRoleID(roleID,sectionID);
     }
+
+
+    @RequestMapping("/userManage/findUserID")
+    @ResponseBody
+    public List<String> findUserID(@RequestParam Map map){
+        System.out.println(map);
+        return service.findUserID(map);
+    }
+
+
+    @RequestMapping("/userManage/findByUserID")
+    @ResponseBody
+    public String findUserID(@RequestParam("userID") String userID){
+        return service.findByUserID(userID);
+    }
+
+
+
 }

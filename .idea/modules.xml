@@ -9,8 +9,10 @@
       <module fileurl="file://$PROJECT_DIR$/eureka-service/myproject.iml" filepath="$PROJECT_DIR$/eureka-service/myproject.iml" />
       <module fileurl="file://$PROJECT_DIR$/financial/financial.iml" filepath="$PROJECT_DIR$/financial/financial.iml" />
       <module fileurl="file://$PROJECT_DIR$/gateway-service/gateway-service.iml" filepath="$PROJECT_DIR$/gateway-service/gateway-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/order/order.iml" filepath="$PROJECT_DIR$/order/order.iml" />
       <module fileurl="file://$PROJECT_DIR$/personalcenter/personalcenter.iml" filepath="$PROJECT_DIR$/personalcenter/personalcenter.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/project.iml" filepath="$PROJECT_DIR$/.idea/project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zj_client/zj_client.iml" filepath="$PROJECT_DIR$/zj_client/zj_client.iml" />
     </modules>
   </component>
 </project>

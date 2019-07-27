@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/gateway/admin/assets/layui/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/gateway/admin/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/gateway/admin/Content/css/datatables.min.css}" type="text/css"></link>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ERuIpcY6utL2GVFXGpQamaKKICP8Rueq"></script>
+    <style>
+        #TabSite td{
+            text-align: center;
+        }
+        #TabSite td{
+            align-content: center;
+        }
+        body {
+            padding: 0px;
+            margin: 0px
+        }
+        body, html {width: 100%;height: 100%; margin:0;font-family:"微软雅黑";}
+        #allmap{
+            height: 870px;
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+<div id="DiTu" style="display: none;position:relative">
+    <div id="allmap"></div>
+    <button class="btn btn-default" onclick="back()" style=" position:fixed; top:2%; right:2%;">返 回</button>
+</div>
+<!-- 主页内容-->
+<div th:align="center" id="showSite">
+    <nav class="navbar navbar-default" style="border-radius: 10px">
+        <form class="navbar-form navbar-default" role="search">
+
+            <div class="form-group">
+                <label for="cprovince">站点地址：</label>
+                <select class="form-control" id="cprovince" name="cprovinceID" style="width: 130px">
+                    <option value="0">请选择省份</option>
+                    <option th:each="p:${ps}" th:value="${p.proID}" th:text="${p.proName}"></option>
+                </select>
+                <select class="form-control" id="ccity" name="ccityID" style="width: 130px">
+                    <option value="0">请选择城市</option>
+                </select>
+                <select class="form-control" id="cdistrict" name="routeStartID" style="width: 130px">
+                    <option value="0">请选择区县</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-info" onclick="Change()">查询</button>
+            <button  class="btn btn-primary" type="button" onclick="add()">新增</button>
+        </form>
+    </nav>
+    <table class="table table-hover" id="TabSite">
+        <thead>
+        <tr align="center">
+            <th style="text-align:center;vertical-align: middle;"><b>编号</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>站点名称</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>站点地址</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>详细地址</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>联系人</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>联系人号码</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>操作</b></th>
+        </tr>
+        </thead>
+    </table>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" name="btn_close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新增站点</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class="navbar-form" id="addform" role="search" th:action="@{/gateway/admin/siteManage/addsite}">
+                        <input type="hidden" id="siteID" name="siteID">
+                        <div class="form-group">
+                            <label for="routeID">站点地址：</label>
+                            <select class="form-control" id="routeID" name="routeID" style="width: 398px">
+                                <option value="0">请选择地址</option>
+                            </select>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group">
+                            <label for="cprovince">站点名称：</label>
+                            <input type="text" name="siteName" class="form-control" id="siteName" style="width: 398px;">
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group">
+                            <label for="cprovince">详细地址：</label>
+                            <input type="text" name="address" class="form-control" id="address" style="width: 398px;">
+                        </div>
+                        <br/>
+                        <br/>
+                        <div class="form-group" style="margin-left: 10px">
+                            <label for="userName">联系人：</label>
+                            <select class="form-control" id="userName" name="userID" style="width: 398px">
+                                <option value="0">请选择联系人</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" name="btn_close">关闭</button>
+                    <button type="button" id="btn_submit" class="btn btn-primary" >保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:src="@{/gateway/admin/Content/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/Content/js/jquery.form.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/Content/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/Content/js/datatables.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/admin/Content/js/baiduMap.js}"></script>
+</body>
+
+<script>
+    var TabSite;
+    $(function() {
+        TabSite = $('#TabSite')
+            .DataTable(
+                {
+                    responsive: true,
+                    "pagingType" : "simple_numbers",//设置分页控件的模式
+                    searching : false,//屏蔽datatales的查询框
+                    // aLengthMenu : [ count ],//设置一页展示10条记录
+                    "bSort" : false,// 是否排序功能
+                    "bLengthChange" : true,//屏蔽tables的一页展示多少条记录的下拉列表
+                    "bAutoWidth" : false,// 是否非自动宽度  设置为false
+                    "oLanguage" : { //对表格国际化
+                        "sLengthMenu" : "每页显示 _MENU_条",
+                        "sZeroRecords" : "没有找到符合条件的数据",
+                        //  "sProcessing": "&lt;img src=’./loading.gif’ /&gt;",
+                        "sInfo" : "当前第 _START_ - _END_ 条　共计 _TOTAL_ 条",
+                        "sInfoEmpty" : "木有记录",
+                        "sInfoFiltered" : "(从 _MAX_ 条记录中过滤)",
+                        "sSearch" : "搜索：",
+                        "sProcessing" : "正在加载中......",
+                        "oPaginate" : {
+                            "sFirst" : "首页",
+                            "sPrevious" : "前一页",
+                            "sNext" : "后一页",
+                            "sLast" : "尾页"
+
+                        }
+                    },
+                    "lengthMenu" : [ 2, 5, 10, 20, 50 ],
+                    "processing" : true, //打开数据加载时的等待效果
+                    "serverSide" : true,//打开后台分页
+                    "ajax" : {
+                        "url" : "/gateway/admin/siteManage/findSite",
+                        "dataSrc" : "aaData",
+                        "data" : function(d) {
+                            d.ccityID=$("#ccity").val();
+                            d.cprovinceID=$("#cprovince").val();
+                            d.cdistrictID= $("#cdistrict").val();
+                        }
+                    },
+                    "columns" : [
+                        {
+                            "data" : null,
+                            "width" : "60px",
+                            render:function(data,type,row,meta) {
+                                return meta.row + 1 +
+                                    meta.settings._iDisplayStart;
+                            }
+                        },
+                        {
+                            "data" : "siteName",
+                            "width" : "50px"
+                        },{
+                            "data" : "routeStart",
+                            "width" : "50px"
+                        },
+                        {
+                            "data" : "address",
+                            "width" : "50px"
+                        },
+                        {
+                            "data" : "userName",
+                            "width" : "40px"
+                        },
+                        {
+
+                            "data" : "phoneNumber",
+                            "width" : "50px"
+
+                        },
+                        {
+                            "data" : function(obj) {
+                                return '<button class="btn btn-info AuditRecord" value="'+obj.routeStart+'-'+obj.address+'" name="'+obj.siteName+'" onclick="bdMap(this.value,this.name)" id="ditu"><i class="layui-icon">&#xe715;</i> 查看地图</button>&nbsp;&nbsp;'
+                                    +'<button class="btn btn-warning" value="'+obj.siteID+'" onclick="updateSite(this.value)" id="update">修改</button>&nbsp;&nbsp;'
+                                    +'<button class="btn btn-danger" value="'+obj.siteID+'" onclick="deleteSite(this.value)" id="update">删除</button>'
+                            },
+                            "width" : "80px"
+
+                        } ]
+
+                });
+        ajaxUser();
+        startSite();
+
+    });
+    //不现实错误提示框
+    $.fn.dataTable.ext.errMode = 'none';
+    function Change() {
+        TabSite.ajax.reload();
+    }
+
+
+    //当省份的下拉框的值发生变化时
+    $("#cprovince").change(function () {
+        var proID=$("#cprovince").val();
+        //清空城市列表的选项，只保留标题
+        $("#ccity")[0].options.length=1;//只保留标题
+        $("#cdistrict")[0].options.length=1;//只保留标题
+        ajaxCity("#ccity",proID,0);
+    })
+
+    //当城市的下拉框的值发生变化时
+    $("#ccity").change(function () {
+        var cityID=$("#ccity").val();
+        //清空城市列表的选项，只保留标题
+        $("#cdistrict")[0].options.length=1;//只保留标题
+        ajaxDistrict("#cdistrict",cityID,0);
+    })
+
+
+    var PANDUAN;
+    //点击新增按钮弹出新增表单
+    function add(){
+        PANDUAN=1;
+        document.getElementById("myModalLabel").innerText="新增站点";
+        $("#addform").attr("action","/gateway/admin/siteManage/addSite");
+        $('#myModal').modal({
+            backdrop: false
+        });
+    }
+
+
+    //动态添加开始线路
+    function startSite(){
+        $("#routeID")[0].options.length=1;
+        //动态加载下拉框
+        $.ajax({
+            url:"/gateway/admin/siteManage/findByRouteStart",
+            data:{},
+            type:"post",
+            dataType: "json",
+            success:function(data){
+                $(data).each(function () {
+                    $("<option value='"+this.RouteID+"'>"+this.routeStart+"</option>").appendTo("#routeID");
+                })
+            }
+        })
+    }
+
+
+    //动态加载联系人下拉框
+    function ajaxUser(){
+        //清空联系人列表的选项，只保留标题
+        $("#userName")[0].options.length=1;//只保留标题
+        //动态加载联系人下拉框
+        $.ajax({
+            url:"/gateway/admin/userManage/findByRoleID",
+            data:{"roleID":1,"sectionID":3},
+            type:"post",
+            dataType:'json',
+            success:function (data) {
+                $(data).each(function () {
+                    $("<option value='"+this.userID+"'>"+this.userName+"</option>").appendTo("#userName");
+                })
+            }
+        })
+    }
+
+
+    //关闭弹出框
+    $("[name=btn_close]").click(function () {
+        $('#myModal').modal('hide');
+        $("#addform input").val("");
+        $("#routeID").val(0);
+        $("#userName").val(0);
+    })
+
+
+    //加载区县
+    function ajaxDistrict(Id,cityID,ddisID){
+        $.post("/gateway/admin/siteManage/findByCityID",{"cityID":cityID},function (data) {
+            $(data).each(function () {
+                if(this.disID==ddisID){
+                    $("<option value='"+this.disID+"' selected>"+this.disName+"</option>").appendTo(Id);
+                }else
+                {
+                    $("<option value='"+this.disID+"'>"+this.disName+"</option>").appendTo(Id);
+                }
+            })
+        },"json")
+    }
+
+    //加载市
+    function ajaxCity(Id,proID,ccityID){
+        $.post("/gateway/admin/siteManage/findByProID",{"proID":proID},function (data) {
+            $(data).each(function () {
+                if(this.cityID==ccityID){
+                    $("<option value='"+this.cityID+"' selected>"+this.cityName+"</option>").appendTo(Id);
+                }else
+                {
+                    $("<option value='"+this.cityID+"'>"+this.cityName+"</option>").appendTo(Id);
+                }
+            })
+        },"json")
+    }
+
+    //新增路线
+    $("#btn_submit").click(function () {
+        //获得获得站点线路
+        var routeID=$("#routeID").val();
+        //获得站点名称
+        var siteName=$("#siteName").val();
+        //获得联系人
+        var userName=$("#userName").val();
+        //获得详细地址
+        var address=$("#address").val();
+        if(routeID=='0'||userName=='0'||siteName==null||siteName==''||address==null||address==''){
+            layer.msg('请填写完整信息', {
+                icon: 2,
+                time: 1000
+            })
+        }else {
+            var index = layer.load(2); //添加laoding,0-2两种方式
+            //提交表单
+            $("#addform").ajaxSubmit(function (data) {
+                layer.close(index);
+                if (PANDUAN==1){
+                    if(data=='1'||data==1){
+                        layer.msg("新增成功", {
+                            icon: 1,
+                            time: 1000
+                        },function () {
+                            $('#myModal').modal('hide');
+                            $("#addform input").val("");
+                            $("#addform select").val(0);
+                            Change();
+                        })
+                    }else {
+                        layer.msg("新增失败", {
+                            icon: 2,
+                            time: 1000
+                        })
+                    }
+                } else {
+                    if(data=='1'||data==1){
+                        layer.msg("修改成功", {
+                            icon: 1,
+                            time: 1000
+                        },function () {
+                            $('#myModal').modal('hide');
+                            $("#addform input").val("");
+                            $("#addform select").val(0);
+                            Change();
+                        })
+                    }else {
+                        layer.msg("修改失败", {
+                            icon: 2,
+                            time: 1000
+                        })
+                    }
+                }
+            })
+        }
+
+    })
+
+    //查看地图
+    function bdMap(value,name){
+        $("#DiTu").show();
+        $("#showSite").hide();
+        siteAddress(value,name);
+    }
+
+    //修改站点
+    function updateSite(value){
+        PANDUAN=2;
+        $("#siteID").val(value);
+        //请求获得路线的信息
+        $.ajax({
+            url:"/gateway/admin/siteManage/findBySiteID",
+            type: "post",
+            dataType: "json",
+            data:{"siteID":value},
+            success:function (data) {
+                $("#routeID").val(data.routeID);
+                $("#siteName").val(data.siteName);
+                $("#userName").val(data.userID);
+                $("#address").val(data.address);
+            }
+        })
+        document.getElementById("myModalLabel").innerText="修改站点";
+        $("#addform").attr("action","/gateway/admin/siteManage/updateSite");
+        $('#myModal').modal({
+            backdrop: false
+        });
+    }
+
+
+
+    //删除站点
+    function deleteSite(value){
+        //配置一个透明的询问框
+        layer.msg('确定要删除吗？', {
+            time: 40000, //20s后自动关闭
+            btn: ['确定', '取消'],
+            yes: function(index, layero){
+                layer.close(index); //如果设定了yes回调，需进行手工关闭
+                $.ajax({
+                    url:"/gateway/admin/siteManage/deleteSite",
+                    data:{"siteID":value},
+                    type:"get",
+                    dataType:"json",
+                    success:function (data) {
+                        if(data=='1'||data==1){
+                            layer.msg("删除成功", {
+                                icon: 1,
+                                time: 1000
+                            },function () {
+                                Change();
+                            })
+                        }else
+                        {
+                            layer.msg("删除失败", {
+                                icon: 2,
+                                time: 1000
+                            })
+                        }
+                    }
+                })
+
+            }
+        });
+    }
+
+    //返回
+    function back(){
+        $("#DiTu").hide();
+        $("#showSite").show();
+    }
+</script>
+</html>

@@ -71,50 +71,9 @@
           id="enterEmployeeFrom" enctype="multipart/form-data"
           th:action="@{/gateway/admin/userManage/addUser}"
           method="post">
+        <input type="hidden" id="UserID" name="userid">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
              style="padding:0px;margin-top:10px;">
-
-            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12"
-                 style="padding: 0px;margin-left: 0px;">
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
-                <label for="userName"
-                       class="col-lg-3 col-md-3 col-sm-3 col-xs-3  control-label text-right text-primary lb">员工名称：</label>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 interval">
-
-                    <input class="form-control" id="userName" name="username" maxlength="20"
-                           placeholder="请输入员工的名称"/> <input class="hidden" id="UserID"
-                                                           name="userid"/> <input class="hidden" name="usertypedetailid" id="usertypedetailid"/>
-                </div>
-            </div>
-
-
-            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12"
-                 style="padding: 0px;margin-left: 0px;">
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
-                <label for="role"
-                       class="col-lg-3 col-md-3 col-sm-3 col-xs-3  control-label text-right text-primary lb">员工角色：</label>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 interval">
-                    <input type="hidden" name="roleName" id="roleName">
-                    <select class="form-control" id="roleID" name="roleID"  onchange="rolechange(this)">
-                        <option value="0">---请选择---</option>
-                        <option th:each="role:${roles}" th:value="${role.roleID}" th:text="${role.roleName}"></option>
-                    </select>
-
-                </div>
-            </div>
-            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12"
-                 style="padding: 0px;margin-left: 0px;">
-                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
-                <label for="IDNumber"
-                       class="col-lg-3 col-md-3 col-sm-3 col-xs-3  control-label text-right text-primary lb">身份证号码：</label>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 interval">
-                    <input class="form-control" id="IDNumber" name="IDNumber" maxlength="18"
-                           onkeyup="value=value.replace(/[^\w\.\/]/ig,'');judgeID(this.id,value)"
-                           placeholder="请输入身份证号码" onchange="YanZhengShenFenZheng(this.id,value)"/>
-                    <input class="hidden" id="YongHuID" name="YongHuID"/>
-
-                </div>
-            </div>
             <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12"
                  style="padding: 0px;margin-left: 0px;">
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
@@ -129,7 +88,19 @@
 
                 </div>
             </div>
+            <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12"
+                 style="padding: 0px;margin-left: 0px;">
+                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                <label for="role"
+                       class="col-lg-3 col-md-3 col-sm-3 col-xs-3  control-label text-right text-primary lb">员工角色：</label>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 interval">
+                    <input type="hidden" name="roleName" id="roleName">
+                    <select class="form-control" id="roleID" name="roleID"  onchange="rolechange(this.value)">
+                        <option value="0">---请选择---</option>
+                    </select>
 
+                </div>
+            </div>
             <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12"
                  style="padding: 0px;margin-left: 0px;">
                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
@@ -137,7 +108,7 @@
                        class="col-lg-3 col-md-3 col-sm-3 col-xs-3  control-label text-right text-primary lb">手机号码：</label>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 interval">
                     <input type="hidden" id="key" name="key">
-                    <input class="form-control" id="PhoneNumber" name="phoneNumber"
+                    <input class="form-control" id="addPhoneNumber" name="phoneNumber"
                            maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')"
                            onafterpaste="this.value=this.value.replace(/\D/g,'')"
                            placeholder="请输入手机号码" onchange="YanZheng(this.id,value)"/>
@@ -453,12 +424,7 @@
         //---------------------------------------------------------------------------
         //信息非空验证-----------------------------------------------------------------
         function inputemployee() {
-            //获得客户名称
-            var userName = $("#userName").val();
-            //获得身份证号码
-            var IDNumber = $("#IDNumber").val();
-            //获得手机号码
-            var PhoneNumber = $("#PhoneNumber").val();
+            var PhoneNumber = $("#addPhoneNumber").val();
             //获得居住地址
             var address = $("#address").val();
             //获得登录密码
@@ -491,8 +457,7 @@
                 }
             }
             if (role == 1 && section == 2) {
-                if (userName == null || userName == "" || IDNumber == null || IDNumber == "" || PhoneNumber == null ||
-                    PhoneNumber == "" || address == null || address == "" || role == '0' || section == '0' ||
+                if (PhoneNumber == null || PhoneNumber == "" || address == null || address == "" || role == '0' || section == '0' ||
                     picture0 == null || picture0 == "" || picture1 == null || picture1 == "" ||
                     picture3 == null || picture3 == "" || picture2 == null || picture2 == "") {
                     layer.msg('请填写完整信息', {
@@ -502,8 +467,7 @@
                     return false;
                 }
             } else {
-                if (userName == null || userName == "" || IDNumber == null || IDNumber == "" || PhoneNumber == null ||
-                    PhoneNumber == "" || address == null || address == "" || role == "0" || section == "0" ||
+                if (PhoneNumber == null || PhoneNumber == "" || address == null || address == "" || role == "0" || section == "0" ||
                     picture0 == null || picture0 == "" || picture1 == null || picture1 == "") {
                     layer.msg('请填写完整信息', {
                         icon: 2,
@@ -547,7 +511,7 @@
                             layer.close(index);
                             layer.msg(data, {
                                 icon: 2,
-                                time: 1000
+                                time: 10000
                             })
                         }
                     })
@@ -577,19 +541,41 @@
         //--------------------------------------------------------------
         //判断是否是司机--------------------------------------------------
         var section;
-        var role;
+        var role=0;
 
-        function rolechange(r) {
-            role = r.val();
-            $("#roleName").val(r.text());
-            if (ID == '1' && section == '2') {
+        function rolechange(roleID) {
+
+            role = roleID;
+            if (role == '1' && section == '2') {
                 $(".driver").show();
             } else {
                 $(".driver").hide();
             }
         }
 
+        function ajaxRole(ID,value,roleID){
+            //根据部门ID生成角色下拉框
+            $.ajax({
+                url:"/gateway/admin/userManage/findRoleBySectionID",
+                data:{"sectionID":ID},
+                dataType:"json",
+                type:"post",
+                success:function(data){
+                    //清空角色下拉框只保留标题
+                    $(value)[0].options.length=1;
+                    $(data).each(function () {
+                        if(this.roleID==roleID){
+                            $("<option value='" + this.roleID + "' selected>" + this.roleName + "</option>").appendTo(value);
+                        }else {
+                            $("<option value='" + this.roleID + "'>" + this.roleName + "</option>").appendTo(value);
+                        }
+                    })
+                }
+            })
+        }
+
         function sectionchange(ID) {
+            ajaxRole(ID,"#roleID",0)
             section = ID;
             if (ID == '2' && role == '1') {
                 $(".driver").show();
@@ -634,9 +620,8 @@
         $.post("/gateway/admin/userManage/findByPhoneNumber/"+phoneNumber,{},function (data) {
             section=data.sectionID;
             role=data.roleID;
-            $("#userName").val(data.userName);
-            $("#IDNumber").val(data.IDNumber);
-            $("#PhoneNumber").val(data.phoneNumber);
+            ajaxRole(section,"#roleID",role)
+            $("#addPhoneNumber").val(data.phoneNumber);
             $("#key").val(data.phoneNumber);
             $("#address").val(data.address);
             $("#sectionID").val(data.sectionID);
@@ -665,6 +650,7 @@
         })
 
     }
+
 </script>
 </body>
 </html>

@@ -28,4 +28,10 @@ public interface AttendService {
 
     //根据编号查询打卡信息
     public Map showClock(int attendanceID);
+
+    //多条件查询打卡记录
+    public List findIFClock(Map map);
+
+    //多条件查询打卡数量
+    public int findIFCount(Map map);
 }

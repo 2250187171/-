@@ -197,36 +197,7 @@
             </table>
         </div>
     </div>
-    <div class="modal fade" id="leaveModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" name="btn_close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">申请请假</h4>
-                </div>
-                <div class="modal-body" align="center">
-                    <form class="navbar-form" id="leaveForm" role="search" th:action="@{/gateway/attend/addLeave}">
-                        <input type="hidden" id="attendanceID" name="attendanceID">
-                        <input type="hidden" id="userID" name="userID">
-                        <div class="form-group">
-                            <span for="leaveCause">请假原因：</span>
-                            <textarea class="form-control" name="leaveCause" id="leaveCause" rows="3" style="width: 398px"></textarea>
-                        </div>
-                        <br/>
-                        <br/>
-                        <div class="form-group" style="margin-left: 23px">
-                            <span for="leaveDay">请假天数：</span>
-                            <input type="number" min="1" name="leaveDay" class="form-control" id="leaveDay" style="width: 398px;">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" name="btn_close">关闭</button>
-                    <button type="button" id="btn_submit" class="btn btn-primary" >申请</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <div class="modal fade" id="modalone">
         <div class="modal-dialog">
@@ -412,64 +383,6 @@
                             </div>
 
                         </div>
-
-
-
-                        <div class="form-group">
-                            <div class="col-lg-6 col-sm-6 col-sm-6">
-                                <label class="control-label col-lg-4 col-sm-4 col-md-4">请假理由：</label>
-                                <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="reason" name="reason"
-                                           readonly="readonly" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-sm-6">
-                                <label class="control-label col-lg-4 col-sm-4 col-md-4">请假天数：</label>
-                                <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="leaveday1" name="leaveday1"
-                                           readonly="readonly" />
-                                </div>
-                            </div>
-
-                        </div>
-
-
-
-                        <div class="form-group">
-                            <div class="col-lg-6 col-sm-6 col-sm-6">
-                                <label class="control-label col-lg-4 col-sm-4 col-md-4">申请时间：</label>
-                                <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="applicationtime"
-                                           name="applicationtime" readonly="readonly" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-sm-6">
-                                <label class="control-label col-lg-4 col-sm-4 col-md-4">审核时间：</label>
-                                <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="audittime" name="audittime"
-                                           readonly="readonly" />
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group">
-                            <div class="col-lg-6 col-sm-6 col-sm-6">
-                                <label class="control-label col-lg-4 col-sm-4 col-md-4">批准否：</label>
-                                <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="isratification" name="isratification"
-                                           readonly="readonly" />
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-sm-6 col-sm-6">
-                                <label class="control-label col-lg-4 col-sm-4 col-md-4">备注：</label>
-                                <div class="col-lg-8 col-sm-8 col-md-8">
-                                    <input class="form-control" id="remark" name="remark"
-                                           readonly="readonly" />
-                                </div>
-                            </div>
-
-                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -580,24 +493,9 @@
                         },
                         {
                             "data" : function(obj) {
-                                var d=new Date();
-                                var Time=currDate(d);
-                                var date=new Date(obj.startWorkTime);
-                                var Time2=currDate(date);
-                                if(Time==Time2){
-                                    return '<button class="btn" id="'
-                                        + obj.attendanceID
-                                        + '" onclick="detail(this.id)" >详情</button>   <button class="btn" id="'
-                                        + obj.attendanceID
-                                        + '" onclick="leave(this.id,value)" value="'
-                                        + obj.startWorkTime
-                                        + '" class="suddenly" >请假</button>';
-                                }else{
                                     return '<button class="btn" id="'
                                         + obj.attendanceID
                                         + '" onclick="detail(this.id)" >详情</button>'
-                                }
-
                             }
                         } ]
                 });
@@ -662,7 +560,7 @@
             $('#modaltwo').modal();
         }else
         {
-            layerIndex=layer.load(1);
+            layerIndex=layer.load(2);
             $.post("/gateway/attend/addClock/"+Mark,{"userID":userID},function (data) {
                 if(data==1){
                     layer.close(layerIndex);
@@ -784,12 +682,13 @@
         if(oilmass==null||oilmass==""||mileage==null||mileage==""||location1==null||location1==""){
             layer.msg("请填写完整信息！", {
                 icon: 0,
+                time: 1000,
                 offset: '100px'
             })
         }else{
             //获得司机打卡表单的序列化后的集合
             var formCar=$("#FormCar").serializeArray();
-            var layerIndex=layer.load(1);
+            var layerIndex=layer.load(2);
             $.post("/gateway/attend/addClock/"+Mark,formCar,function (data) {
                 if(data==1){
                     $('#modaltwo').modal('hide');
@@ -911,42 +810,14 @@
 
     //关闭弹出框
     $("[name=btn_close]").click(function () {
+       close();
+    })
+
+    function close(){
         $('#leaveModal').modal('hide');
         $("#leaveForm input").val("");
         $("#leaveCause").val("");
-    })
-
-
-    //申请请假
-    $("#btn_submit").click(function () {
-        //请假原因
-        var leaveCause=$("#leaveCause").val();
-        //请假天数
-        var leaveDay=$("#leaveDay").val();
-        if(leaveCause==null||leaveCause==""||leaveDay==null||leaveDay==""){
-            layer.msg("请填写完整信息！", {
-                icon: 0,
-                offset: '100px'
-            })
-        }else {
-            layer.load(1);
-            //异步申请请假
-            $("#leaveForm").ajaxSubmit(function (data) {
-                layer.closeAll("loading");
-                if(data=='1'||data==1){
-                    layer.msg("创建成功！", {
-                        icon: 1,
-                        offset: '100px'
-                    })
-                }else {
-                    layer.msg("创建失败！", {
-                        icon: 0,
-                        offset: '100px'
-                    })
-                }
-            })
-        }
-    })
+    }
 
 
 

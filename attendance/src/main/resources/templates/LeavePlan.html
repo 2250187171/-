@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/gateway/attend/assets/layui/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/gateway/attend/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/gateway/attend/Content/css/datatables.min.css}" type="text/css"></link>
+    <style>
+        td,th {
+            vertical-align: middle;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <table class="table table-hover" id="TabLeave">
+        <thead>
+        <tr>
+            <th style="text-align: center;">编号</th>
+            <th style="vertical-align: middle">请假原因</th>
+            <th style="vertical-align: middle">开始时间</th>
+            <th style="vertical-align: middle">结束时间</th>
+            <th style="vertical-align: middle">请假天数</th>
+            <th style="vertical-align: middle">申请人</th>
+            <th style="vertical-align: middle">任务创建时间</th>
+            <th style="vertical-align: middle">当前阶段</th>
+            <th style="vertical-align: middle">操作</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+</body>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery.form.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/assets/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/datatables.min.js}"></script>
+</html>
+
+<script>
+    var userID='[[${userID}]]'
+    var TabLeave;
+    $(function () {
+        TabLeave = $('#TabLeave')
+            .DataTable(
+                {
+                    "paging": false, // 禁止分页
+                    "pagingType" : "simple_numbers",//设置分页控件的模式
+                    searching : false,//屏蔽datatales的查询框
+                    // aLengthMenu : [ 5 ],//设置一页展示10条记录
+                    "bSort" : false,// 是否排序功能
+                    "bLengthChange" : false,//屏蔽tables的一页展示多少条记录的下拉列表
+                    "bAutoWidth" : false,// 是否非自动宽度  设置为false
+                    "oLanguage" : { //对表格国际化
+                        "sLengthMenu" : "每页显示 _MENU_条",
+                        "sZeroRecords" : "没有找到符合条件的数据",
+                        //  "sProcessing": "&lt;img src=’./loading.gif’ /&gt;",
+                        "sInfo" : "当前第 _START_ - _END_ 条　共计 _TOTAL_ 条",
+                        "sInfoEmpty" : "木有记录",
+                        "sInfoFiltered" : "(从 _MAX_ 条记录中过滤)",
+                        "sSearch" : "搜索：",
+                        "sProcessing" : "正在加载中......",
+                        "oPaginate" : {
+                            "sFirst" : "首页",
+                            "sPrevious" : "前一页",
+                            "sNext" : "后一页",
+                            "sLast" : "尾页"
+
+                        }
+                    },
+                    // "lengthMenu" : [ 2, 5, 10, 20, 50 ],
+                    "processing" : true, //打开数据加载时的等待效果
+                    "serverSide" : true,//打开后台分页
+                    "ajax" : {
+                        "url" : "/gateway/attend/leaveManage/leavePlan",
+                        "dataSrc" : "aaData",
+                        "data" : function(d) {
+                            d.userID = userID;
+                            // d.sectionID=$("#section").val();
+                            // d.roleID=$("#role").val();
+                        }
+                    },
+                    "columns" : [
+                        {
+                            "data" : null,
+                            "width" : "60px",
+                            render:function(data,type,row,meta) {
+                                return meta.row + 1 +
+                                    meta.settings._iDisplayStart;
+                            }
+                        },
+                        {
+                            "data" : "leaveCause",
+                        },{
+                            "data" : "startDate",
+                        },{
+                            "data" : "endDate",
+                        },{
+                            "data" : "leaveDay",
+                        },
+                        {
+                            "data" : "userName",
+                        },{
+                            "data" :function (obj) {
+                                return dateToStr(new Date(obj.createTime))
+                            },
+                        },{
+                            "data" :
+                            function (obj) {
+                                if(obj.activityId=='createLeave'){
+                                    return '申请请假'
+                                }else if(obj.activityId=='branchAudit'){
+                                    return '部门经理审核'
+                                }else if(obj.activityId=='generalAudit'){
+                                    return '总经理审核'
+                                }else{
+                                    return '确认消假'
+                                }
+                            }
+                        },
+                        {
+                            "data" : function(obj) {
+                                return '<button id="' + obj.instanceId + '" class="btn btn-info"  onclick="showSatgePng(this.id)">查看阶段图</button>'
+                                    + '  <button id="' + obj.instanceId + '" class="btn btn-info" onclick="showSatge(this.id)">查看阶段</button>'
+                            }
+                        }]
+
+                });
+
+        //不现实错误提示框
+        $.fn.dataTable.ext.errMode = 'none';
+    })
+
+    function tabLeaveChange(){
+        TabLeave.ajax.reload();
+    }
+
+    function showSatgePng(ID){
+        location='/gateway/attend/leaveManage/showSatgePng/'+ID+'/'+userID;
+    }
+
+    function showSatge(ID){
+        location='/gateway/attend/leaveManage/showLeaveStage/'+ID+'/'+userID+"/stage";
+    }
+
+    //转换时间格式
+    function dateToStr(datetime){
+
+        var year = datetime.getFullYear();
+        var month = datetime.getMonth()+1;//js从0开始取
+        var date = datetime.getDate();
+        var hour = datetime.getHours();
+        var minutes = datetime.getMinutes();
+        var second = datetime.getSeconds();
+
+        if(month<10){
+            month = "0" + month;
+        }
+        if(date<10){
+            date = "0" + date;
+        }
+        if(hour <10){
+            hour = "0" + hour;
+        }
+        if(minutes <10){
+            minutes = "0" + minutes;
+        }
+        if(second <10){
+            second = "0" + second ;
+        }
+
+        var time = year+"-"+month+"-"+date+" "+hour+":"+minutes+":"+second; //2009-06-12 17:18:05
+// alert(time);
+        return time;
+    }
+</script>

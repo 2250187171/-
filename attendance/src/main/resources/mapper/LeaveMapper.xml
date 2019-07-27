@@ -4,11 +4,61 @@
 
     <!--申请请假-->
     <insert id="addLeave" parameterType="map">
-        insert d_leave values(#{leaveID},#{leaveDay},#{leaveCause},#{createTime},null,#{userID},#{attendanceID},#{processinstance_ID});
+        insert d_leave values(#{leaveID},#{leaveDay},#{leaveCause},#{createTime},null,#{userID},0,#{processinstance_ID},#{startDate},#{endDate},#{evaluate});
     </insert>
 
     <!--根据流程实例ID查询请假单-->
     <select id="findByProcessInstanceID" resultType="map">
         SELECT a.*,userName FROM d_leave a JOIN a_user b ON(a.userID=b.userID) where processinstance_ID=#{instanceID}
+    </select>
+
+    <!--根据请假ID查询请假任务-->
+    <select id="findByLeaveID" resultType="map">
+        SELECT a.*,userName FROM d_leave a JOIN a_user b ON(a.userID=b.userID) where leaveID=#{leaveID}
+    </select>
+
+    <!--新增审核-->
+    <insert id="addAudit" parameterType="map">
+        insert ACT_audit values(#{id},#{user_id},#{business_id},#{audit_info},#{audit_type},#{status},#{createtime});
+    </insert>
+
+    <!--根据流程实例删除请假-->
+    <delete id="deleteLeave">
+        delete from d_leave where processinstance_ID=#{procInsId}
+    </delete>
+
+    <!--修改请假任务-->
+    <update id="updateLeave" parameterType="map">
+        update d_leave set leaveCause=#{leaveCause},leaveDay=#{leaveDay},startDate=#{startDate},endDate=#{endDate} where leaveID=#{leaveID}
+    </update>
+
+    <!--根据流程实例ID和用户ID查询任务-->
+    <select id="findByProcessInstanceIDandUserID" parameterType="map" resultType="map">
+        SELECT a.*,userName FROM d_leave a JOIN a_user b ON(a.userID=b.userID) where processinstance_ID=#{instanceID} and a.userID=#{userID}
+    </select>
+
+    <!--消假-->
+    <update id="eliminateLeave" parameterType="map">
+        update d_leave set endTime=#{endTime},evaluate=#{evaluate} where leaveID=#{leaveID}
+    </update>
+
+    <!--根据用户ID查询已经结束的请假任务-->
+    <select id="userEndLeave" parameterType="map" resultType="map">
+        SELECT a.*,userName FROM d_leave a JOIN a_user b ON(a.userID=b.userID) WHERE endTime!='' and a.userID=#{userID} limit #{start},#{length}
+    </select>
+
+    <!--根据用户ID查询已经结束的请假任务的数量-->
+    <select id="userEndLeaveCount" parameterType="map" resultType="int">
+        SELECT count(*) FROM d_leave WHERE endTime!='' and userID=#{userID}
+    </select>
+
+    <!--查询所有已经结束的请假任务-->
+    <select id="endLeaveAll" parameterType="map" resultType="map">
+        SELECT a.*,userName FROM d_leave a JOIN a_user b ON(a.userID=b.userID) WHERE endTime!='' limit #{start},#{length}
+    </select>
+
+    <!--所有历史请假任务的数量-->
+    <select id="endLeaveCount" parameterType="map" resultType="int">
+        SELECT count(*) FROM d_leave WHERE endTime!=''
     </select>
 </mapper>

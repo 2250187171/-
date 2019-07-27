@@ -1,7 +1,5 @@
 package org.java.service;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
 
@@ -13,5 +11,8 @@ public interface A_UserService
 
     //根据手机号码查询用户获得密码
     public String findByPassword(String phoneNumber);
+
+    //根据用户查询权限
+    public List findPer(String phoneNumber);
 
 }

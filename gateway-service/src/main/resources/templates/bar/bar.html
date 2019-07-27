@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -7,7 +7,7 @@
 
 <body>
 <!--头部-->
-<div class="navbar navbar-inverse navbar-fixed-top" id="top">
+<div class="navbar navbar-inverse navbar-fixed-top" id="top" style="background: black">
     <div class="navbar-header">
         <a class="navbar-brand">
             <img th:src="@{/assets/images/logo_light.png}" alt="">
@@ -27,6 +27,11 @@
                 </a>
             </li>
         </ul>
+        <ul class="nav navbar-nav" style="margin-left: 400px;">
+            <li class="str1 str_wrap" style="color: #fff9ec;width: 400px;height: 50px;">
+                记得上下班打卡！
+            </li>
+        </ul>
 
         <!--<p class="navbar-text"><span class="label bg-success-400">Online</span></p>-->
 
@@ -34,7 +39,7 @@
 
             <li class="dropdown dropdown-user" >
                 <a class="dropdown-toggle" data-toggle="dropdown">
-                    <img th:src="@{/assets/images/placeholder.jpg}" alt="">
+                    <img th:src="@{'/images/'+${session.user.photo}}" alt="">
                     <span>[[${session.user.userName}]]</span>
                     <i class="caret"></i>
                 </a>
@@ -81,7 +86,7 @@
 
     <div class="page-header-content">
         <div class="page-title">
-            <h4><span class="text-semibold">欢迎使用广达物流系统</span><span id="div_time" style="padding-left: 100px"></span></h4>
+            <h4><span class="text-semibold">欢迎使用广达物流系统</span><span id="div_time" style="padding-left: 125px"></span></h4>
         </div>
         <div class="heading-elements">
             <div class="heading-btn-group">
@@ -153,8 +158,8 @@
             var ss=s<10?"0"+s:s;
             var time=y+"年"+ms+"月"+ds+"日  "+hs+":"+mis+":"+ss+"  星期"+weeks[w];
             document.getElementById("div_time").innerText=time;
-            document.getElementById("div_time").style.color="blue";
-            document.getElementById("div_time").style.fontSize="17px";
+            document.getElementById("div_time").style.color="black";
+            document.getElementById("div_time").style.fontSize="15px";
             document.getElementById("div_time").style.lineHeight="10px";
             document.getElementById("div_time").style.marginLeft="20px";
             setTimeout("showTime()",1000);
@@ -178,9 +183,12 @@
 
             <div class="category-content sidebar-user">
                 <div class="media">
-                    <a href="#" class="media-left"><img th:src="@{/assets/images/placeholder.jpg}" class="img-circle img-sm" alt=""></a>
+                    <a href="#" class="media-left"><img th:src="@{'/images/'+${session.user.photo}}" class="img-circle img-sm" alt=""></a>
                     <div class="media-body">
                         <span class="media-heading text-semibold">用户名：[[${session.user.userName}]]</span>
+                        <p th:if="${session.user.sectionID==1}">部门：公司</p>
+                        <p th:if="${session.user.sectionID==2}">部门：运输部</p>
+                        <p th:if="${session.user.sectionID==3}">部门：客服部</p>
                         <p>角色：[[${session.user.roleName}]]</p>
                         <div class="text-size-mini text-muted">
                             <i class="icon-pin text-size-small"></i> &nbsp;当前位置：<sapn id="address"></sapn>
@@ -249,6 +257,7 @@
                         <ul>
 
                             <li><a th:url="@{http://localhost:9000/gateway/attend/clockMessage(token=${token})}" name="tab" href="javascript:;" id='clockMessage' class="myFont">打卡信息</a></li>
+                            <li><a th:url="@{http://localhost:9000/gateway/attend/leaveManage/LeavePlan(token=${token})}" name="tab" href="javascript:;" id='LeavePlan' class="myFont">请假进度</a></li>
                             <li><a th:url="@{http://localhost:9000/gateway/attend/leaveManage/backlogLeave(token=${token})}" name="tab" href="javascript:;" id='backlogLeave' class="myFont">待拾请假</a></li>
                             <li><a th:url="@{http://localhost:9000/gateway/attend/leaveManage/transactionLeave(token=${token})}" name="tab" href="javascript:;" id='transactionLeave' class="myFont">办理请假</a></li>
                             <li><a th:url="@{http://localhost:9000/gateway/attend/leaveManage/leaveRecord(token=${token})}" name="tab" href="javascript:;" id='leaveRecord' class="myFont">请假记录</a></li>
@@ -325,14 +334,14 @@
                             <li><a href="purchaseOrder.do?method=select" class="myFont">财务记录</a></li>
                         </ul>
                     </li>
-                    <li>
+                    <li shiro:hasPermission="main:user">
                         <a>
                             <i class="icon-users"></i>
                             <span class="myFont">用户管理</span>
                         </a>
                         <ul>
-                            <li><a th:url="@{http://localhost:9000/gateway/admin/userManage/authorityShow(token=${token})}" name="tab" href="javascript:;" id='permission' class="myFont" >权限分配</a></li>
-                            <li><a class="myFont" th:url="@{http://localhost:9000/gateway/admin/userManage/userMessage(token=${token})}" name="tab" href="javascript:;" id='tabUser'>用户信息</a></li>
+                            <li shiro:hasPermission="user:qx"><a th:url="@{http://localhost:9000/gateway/admin/userManage/authorityShow(token=${token})}" name="tab" href="javascript:;" id='permission' class="myFont" >权限分配</a></li>
+                            <li shiro:hasPermission="user:yh"><a class="myFont" th:url="@{http://localhost:9000/gateway/admin/userManage/userMessage(token=${token})}" name="tab" href="javascript:;" id='tabUser'>用户信息</a></li>
                         </ul>
                     </li>
                     <li>
@@ -352,7 +361,7 @@
                         </a>
                         <ul>
                             <li><a th:url="@{http://localhost:9000/gateway/admin/siteManage/RouteShow(token=${token})}" name="tab" href="javascript:;" id='route' class="myFont">路线信息</a></li>
-                            <li><a href="purchaseOrder.do?method=select" class="myFont">站点信息</a></li>
+                            <li><a th:url="@{http://localhost:9000/gateway/admin/siteManage/siteShow(token=${token})}" name="tab" href="javascript:;" id='site' class="myFont">站点信息</a></li>
                         </ul>
                     </li>
 

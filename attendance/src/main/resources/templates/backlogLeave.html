@@ -21,8 +21,10 @@
             <th style="text-align: center;">编号</th>
             <th style="text-align: center;">任务名称</th>
             <th style="vertical-align: middle">请假原因</th>
+            <th style="vertical-align: middle">开始时间</th>
+            <th style="vertical-align: middle">结束时间</th>
             <th style="vertical-align: middle">请假天数</th>
-            <th style="vertical-align: middle">任务办理人</th>
+            <th style="vertical-align: middle">申请人</th>
             <th style="vertical-align: middle">任务开始时间</th>
             <th style="vertical-align: middle">操作</th>
         </tr>
@@ -35,3 +37,155 @@
 <script type="text/javascript" th:src="@{/gateway/attend/Content/layer/layer.js}"></script>
 <script type="text/javascript" th:src="@{/gateway/attend/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
 <script type="text/javascript" th:src="@{/gateway/attend/Content/js/datatables.min.js}"></script>
+<script>
+    var userID='[[${userID}]]'
+    var roleID='[[${roleID}]]'
+    var TabLeave;
+    $(function () {
+        TabLeave = $('#TabLeave')
+            .DataTable(
+                {
+                    responsive: false,
+                    "pagingType" : "simple_numbers",//设置分页控件的模式
+                    searching : false,//屏蔽datatales的查询框
+                    // aLengthMenu : [ count ],//设置一页展示10条记录
+                    "bSort" : false,// 是否排序功能
+                    "bLengthChange" : false,//屏蔽tables的一页展示多少条记录的下拉列表
+                    "bAutoWidth" : false,// 是否非自动宽度  设置为false
+                    "oLanguage" : { //对表格国际化
+                        "sLengthMenu" : "每页显示 _MENU_条",
+                        "sZeroRecords" : "没有找到符合条件的数据",
+                        //  "sProcessing": "&lt;img src=’./loading.gif’ /&gt;",
+                        "sInfo" : "当前第 _START_ - _END_ 条　共计 _TOTAL_ 条",
+                        "sInfoEmpty" : "木有记录",
+                        "sInfoFiltered" : "(从 _MAX_ 条记录中过滤)",
+                        "sSearch" : "搜索：",
+                        "sProcessing" : "正在加载中......",
+                        "oPaginate" : {
+                            "sFirst" : "首页",
+                            "sPrevious" : "前一页",
+                            "sNext" : "后一页",
+                            "sLast" : "尾页"
+
+                        }
+                    },
+                    "lengthMenu" : [ 2, 5, 10, 20, 50 ],
+                    "processing" : true, //打开数据加载时的等待效果
+                    "serverSide" : true,//打开后台分页
+                    "ajax" : {
+                        "url" : "/gateway/attend/leaveManage/showGroupTask",
+                        "dataSrc" : "aaData",
+                        "data" : function(d) {
+                            d.userID = userID;
+                            // d.sectionID=$("#section").val();
+                            // d.roleID=$("#role").val();
+                        }
+                    },
+                    "columns" : [
+                        {
+                            "data" : null,
+                            "width" : "60px",
+                            render:function(data,type,row,meta) {
+                                return meta.row + 1 +
+                                    meta.settings._iDisplayStart;
+                            }
+                        },
+                        {
+                            "data" : "taskName",
+                        },
+                        {
+                            "data" : "leaveCause",
+                        },{
+                            "data" : "startDate",
+                        },{
+                            "data" : "endDate",
+                        },{
+                            "data" : "leaveDay",
+                        },
+                        {
+                            "data" : "userName",
+                        },
+                        {
+                            "data" : function (obj) {
+                                return dateToStr(new Date(obj.createTime))
+                            }
+                        },
+                        {
+                            "data" : function(obj){
+                                return '<button id="'+obj.taskId+'" class="btn btn-info"  onclick="pickupLeave(this.id)">拾取任务</button>'
+                            }
+
+                        }]
+
+                });
+
+        //不现实错误提示框
+        $.fn.dataTable.ext.errMode = 'none';
+    })
+
+    function tabLeaveChange(){
+        TabLeave.ajax.reload();
+    }
+
+
+    //转换时间格式
+    function dateToStr(datetime){
+
+        var year = datetime.getFullYear();
+        var month = datetime.getMonth()+1;//js从0开始取
+        var date = datetime.getDate();
+        var hour = datetime.getHours();
+        var minutes = datetime.getMinutes();
+        var second = datetime.getSeconds();
+
+        if(month<10){
+            month = "0" + month;
+        }
+        if(date<10){
+            date = "0" + date;
+        }
+        if(hour <10){
+            hour = "0" + hour;
+        }
+        if(minutes <10){
+            minutes = "0" + minutes;
+        }
+        if(second <10){
+            second = "0" + second ;
+        }
+
+        var time = year+"-"+month+"-"+date+" "+hour+":"+minutes+":"+second; //2009-06-12 17:18:05
+// alert(time);
+        return time;
+    }
+
+    //拾取任务
+    function pickupLeave(taskId){
+        layer.load(2);
+        $.ajax({
+            url:"/gateway/attend/leaveManage/pickupTask",
+            data:{"taskID":taskId,"userID":userID},
+            type:"post",
+            dataType:"json",
+            success:function (data) {
+                layer.closeAll("loading");
+                if(data==1||data=="1"){
+                    layer.msg("拾取成功", {
+                        icon: 1,
+                        time: 1000,
+                        offset: '100px'
+                    },function () {
+                        tabLeaveChange();
+                    })
+                }else{
+                    layer.msg("拾取失败", {
+                        icon: 2,
+                        time: 1000,
+                        offset: '100px'
+                    })
+                }
+            }
+        })
+    }
+
+</script>

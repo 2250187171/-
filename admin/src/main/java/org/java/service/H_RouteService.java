@@ -1,7 +1,5 @@
 package org.java.service;
 
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
 import java.util.Map;
 
@@ -24,4 +22,7 @@ public interface H_RouteService {
 
     //删除路线
     public int deleteRoute(int RouteID);
+
+    //查询路线ID和路线
+    public List findByRouteStart();
 }

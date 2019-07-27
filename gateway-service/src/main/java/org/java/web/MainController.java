@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 登录成功后进入该类
@@ -33,10 +32,9 @@ public class MainController {
         session.setAttribute("user", user);
         model.addAttribute("activeUrl", "main");
         //设置一个token
-        String token= UUID.randomUUID().toString();
-        model.addAttribute("token", token);
+        model.addAttribute("token", user.get("userID"));
         //将用户和token存储到redis中用于单点登录
-        redisTemplate.opsForHash().put("user", token, user);
+        redisTemplate.opsForHash().put("user", user.get("userID"), user);
         return "/main";
 
     }

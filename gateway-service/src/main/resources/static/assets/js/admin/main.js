@@ -7,7 +7,7 @@ layui.use('element', function() {
             //新增一个Tab项
             element.tabAdd('demo', {
                 title: name,
-                content: '<iframe data-frameid="' + id + '" scrolling="yes" frameborder="0" src="' + url + '" style="width:99%;height:1000px"></iframe>',
+                content: '<iframe data-frameid="' + id + '" scrolling="yes" frameborder="0" src="' + url + '" height="875px" width="100%"></iframe>',
                 id: id //规定好的id
             })
         }

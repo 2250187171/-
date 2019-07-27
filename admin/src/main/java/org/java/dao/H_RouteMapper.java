@@ -24,4 +24,7 @@ public interface H_RouteMapper {
 
     //删除路线
     public int deleteRoute(@Param("RouteID")int RouteID);
+
+    //查询路线ID和路线
+    public List findByRouteStart();
 }

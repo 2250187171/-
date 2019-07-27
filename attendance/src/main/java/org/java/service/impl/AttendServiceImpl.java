@@ -4,6 +4,7 @@ import org.java.dao.AttendMapper;
 import org.java.service.AttendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -21,12 +22,15 @@ public class AttendServiceImpl implements AttendService {
     }
 
     //用户上班打卡
+    @Transactional
     @Override
     public int addClock(Map map) {
         return mapper.addClock(map);
     }
 
+
     //用户下班打卡
+    @Transactional
     @Override
     public int updateClock(Map map) {
         return mapper.updateClock(map);
@@ -56,4 +60,16 @@ public class AttendServiceImpl implements AttendService {
     public Map showClock(int attendanceID) {
         return mapper.showClock(attendanceID);
     }
+
+    @Override
+    public List findIFClock(Map map) {
+        return mapper.findIFClock(map);
+    }
+
+    @Override
+    public int findIFCount(Map map) {
+        return mapper.findIFCount(map);
+    }
+
+
 }

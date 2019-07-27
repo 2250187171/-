@@ -12,7 +12,9 @@
     <file type="web" url="file://$PROJECT_DIR$/financial" />
     <file type="web" url="file://$PROJECT_DIR$/gateway-service" />
     <file type="web" url="file://$PROJECT_DIR$/my_project" />
+    <file type="web" url="file://$PROJECT_DIR$/order" />
     <file type="web" url="file://$PROJECT_DIR$/personalcenter" />
+    <file type="web" url="file://$PROJECT_DIR$/zj_client" />
   </component>
   <component name="JavaScriptSettings">
     <option name="languageLevel" value="ES6" />
@@ -30,6 +32,8 @@
         <option value="$PROJECT_DIR$/eureka-service/pom.xml" />
         <option value="$PROJECT_DIR$/config-service/pom.xml" />
         <option value="$PROJECT_DIR$/attendance/pom.xml" />
+        <option value="$PROJECT_DIR$/order/pom.xml" />
+        <option value="$PROJECT_DIR$/zj_client/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

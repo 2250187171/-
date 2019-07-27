@@ -47,4 +47,9 @@ public class H_RouteServiceImpl implements H_RouteService {
     public int deleteRoute(int RouteID) {
         return mapper.deleteRoute(RouteID);
     }
+
+    @Override
+    public List findByRouteStart() {
+        return mapper.findByRouteStart();
+    }
 }

@@ -67,4 +67,10 @@ public class RouteController {
         return "/siteManage/ditu";
     }
 
+    @RequestMapping("/siteManage/findByRouteStart")
+    @ResponseBody
+    public List findByRouteStart(){
+        return service.findByRouteStart();
+    }
+
 }

@@ -38,8 +38,8 @@ spring:
   #配置文件上传
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 50MB
+      max-file-size: 2000MB
+      max-request-size: 2000MB
 #mybatis的配置
 mybatis:
   mapper-locations: mapper/*Mapper.xml

@@ -50,4 +50,9 @@ public interface A_UserMapper {
 
     //查询角色为运输部的部门经理的所有用户
     public List<Map> findByRoleID(@Param("roleID")int roleID,@Param("sectionID")int sectionID);
+
+    public List<String> findUserID(Map map);
+
+    //根据用户ID查询用户名称
+    public String findByUserID(@Param("userID")String userID);
 }

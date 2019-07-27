@@ -13,7 +13,9 @@
         <module name="eureka-service" />
         <module name="financial" />
         <module name="gateway-service" />
+        <module name="order" />
         <module name="personalcenter" />
+        <module name="zj_client" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -27,7 +29,9 @@
       <module name="gateway-service" target="1.8" />
       <module name="linemodule" target="1.8" />
       <module name="my_project" target="1.8" />
+      <module name="order" target="1.8" />
       <module name="personalcenter" target="1.8" />
+      <module name="zj_client" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

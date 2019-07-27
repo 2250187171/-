@@ -9,4 +9,11 @@
     <select id="findByPassword" resultType="String">
         select loginPassword from a_user where phoneNumber=#{phoneNumber}
     </select>
+
+    <!--查询用户权限-->
+    <select id="findPer" resultType="String">
+        SELECT perCode FROM a_user a JOIN a_user_role b ON(a.phoneNumber=b.phoneNumber)
+        JOIN a_role_per c ON(b.roleID=c.roleID AND a.sectionID=c.sectionID)
+        JOIN a_permission d ON(c.perID=d.perID) WHERE a.phoneNumber=#{phoneNumber}
+    </select>
 </mapper>

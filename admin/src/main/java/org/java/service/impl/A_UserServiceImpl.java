@@ -158,4 +158,14 @@ public class A_UserServiceImpl implements A_UserService {
     public List<Map> findByRoleID(int roleID,int sectionID) {
         return a_userMapper.findByRoleID(roleID,sectionID);
     }
+
+    @Override
+    public List<String> findUserID(Map map) {
+        return a_userMapper.findUserID(map);
+    }
+
+    @Override
+    public String findByUserID(String userID) {
+        return a_userMapper.findByUserID(userID);
+    }
 }

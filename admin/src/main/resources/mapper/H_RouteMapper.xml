@@ -80,4 +80,16 @@
     <delete id="deleteRoute">
         delete from h_route where routeID=#{RouteID}
     </delete>
+
+    <!--查询线路ID和线路-->
+    <select id="findByRouteStart" resultType="map">
+        SELECT RouteID,CONCAT(startd.proName,'-',startc.cityName,'-',IF(startb.disName IS NULL,'市辖区',startb.disName)) AS routeStart FROM
+             h_route routea LEFT JOIN h_district startb ON(routea.routeStartID=startb.disID)
+             LEFT JOIN h_district endb ON(routea.routeendID=endb.disID)
+             LEFT JOIN h_city startc ON(startb.cityID=startc.cityID||startc.cityID=routea.startCityID)
+             LEFT JOIN h_city endc ON(endc.cityID=endb.cityID||endc.cityID=routea.endCityID)
+             LEFT JOIN h_province startd ON(startd.proID=startc.proID)
+             LEFT JOIN h_province endd ON(endd.proID=endc.proID)
+             LEFT JOIN a_user e ON(routea.userID=e.userID)
+    </select>
 </mapper>

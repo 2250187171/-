@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/gateway/attend/assets/layui/css/layui.css}" rel="stylesheet">
+    <link th:href="@{/gateway/attend/assets/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/gateway/attend/Content/css/datatables.min.css}" type="text/css"></link>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=ERuIpcY6utL2GVFXGpQamaKKICP8Rueq"></script>
+
+    <style>
+        td,th {
+            vertical-align: middle;
+            text-align: center;
+        }
+        body, html {width: 100%;height: 100%;overflow: hidden; margin:0;font-family:"微软雅黑";}
+        #allmap{
+            height: 770px;
+            width:100%;
+        }
+    </style>
+</head>
+<body>
+<div id="DiTu" style="display: none;position:relative">
+    <div id="allmap"></div>
+    <button class="btn btn-default" onclick="back()" style=" position:fixed; top:2%; right:2%;">返 回</button>
+</div>
+<!-- 主页内容-->
+<div th:align="center" id="showUser">
+    <nav class="navbar navbar-default" style="border-radius: 10px">
+        <form class="navbar-form navbar-default" role="search">
+
+            <div class="form-group">
+                <label for="userName">员工名称：</label>
+                <input type="text" class="form-control" id="userName" name="userName" placeholder="请输入姓名">
+            </div>
+            <div class="form-group">
+                <label for="startDate">开始时间：</label>
+                <input type="text" name="startDate" class="form-control" id="startDate" placeholder="请选择时间">
+            </div>
+            <div class="form-group">
+                <label for="endDate">结束时间：</label>
+                <input type="text" name="endDate" class="form-control" id="endDate" placeholder="请选择时间">
+            </div>
+            <button type="button" class="btn btn-info" onclick="Change()">查询</button>
+        </form>
+    </nav>
+    <table class="table table-hover" id="TabClock">
+        <thead>
+        <tr align="center">
+            <th style="text-align:center;vertical-align: middle;"><b>编号</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>姓名</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>上班打卡时间</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>上班打卡评定</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>下班打卡时间</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>下班打卡评定</b></th>
+            <th style="text-align:center;vertical-align: middle;"><b>操作</b></th>
+        </tr>
+        </thead>
+    </table>
+    <div class="modal fade" id="modalthree">
+        <div class="modal-dialog" style="width: 1000px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="FormInfor" onsubmit="return false">
+
+                        <div class="form-group">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班签到时间：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="startworktime" name="startworktime"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班签到时间：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="offwork" name="offwork"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班签到评定：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="sstate" name="sstate"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班签到评定：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="xstate" name="xstate"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group driver" style="display: none;">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班车辆油量：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="startoilmass" name="startoilmass"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6 ">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班车辆油量：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="offoilmass" name="offoilmass"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group driver" style="display: none;">
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班车辆位置：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="startlocation" name="startlocation"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班车辆位置：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="offlocation" name="offlocation"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group driver" style="display: none;">
+
+
+                            <div class="col-lg-6 col-sm-6 col-sm-6">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">上班车辆里程：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="startmileage" name="startmileage"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-sm-6 ">
+                                <label class="control-label col-lg-4 col-sm-4 col-md-4">下班车辆里程：</label>
+                                <div class="col-lg-8 col-sm-8 col-md-8">
+                                    <input class="form-control" id="offmileage" name="offmileage"
+                                           readonly="readonly" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p style="display: inline-block;"></p>
+                    <div class="driver" style="display: none;">
+                        <input class="hidden" id="KaiShi" /><input id="JieShu" class="hidden" /><input
+                            type="button" value="查看车辆上班位置" class="btn" id="start"
+                            onclick="ChaKan(this.id)" /> <input type="button" value="查看车辆下班位置"
+                                                                class="btn" id="end" onclick="ChaKan(this.id)" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/jquery.form.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/layer/layer.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/assets/layui/layui.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/assets/bootstrap/3.3.5/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/datatables.min.js}"></script>
+<script type="text/javascript" th:src="@{/gateway/attend/Content/js/baiduMap.js}"></script>
+</html>
+<script>
+
+    layui.use('laydate', function() {
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#startDate' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#endDate' //指定元素
+        });
+    })
+    var TabClock;
+    $(function() {
+        TabClock = $('#TabClock')
+            .DataTable(
+                {
+                    responsive: true,
+                    "pagingType" : "simple_numbers",//设置分页控件的模式
+                    searching : false,//屏蔽datatales的查询框
+                    // aLengthMenu : [ count ],//设置一页展示10条记录
+                    "bSort" : false,// 是否排序功能
+                    "bLengthChange" : true,//屏蔽tables的一页展示多少条记录的下拉列表
+                    "bAutoWidth" : false,// 是否非自动宽度  设置为false
+                    "oLanguage" : { //对表格国际化
+                        "sLengthMenu" : "每页显示 _MENU_条",
+                        "sZeroRecords" : "没有找到符合条件的数据",
+                        //  "sProcessing": "&lt;img src=’./loading.gif’ /&gt;",
+                        "sInfo" : "当前第 _START_ - _END_ 条　共计 _TOTAL_ 条",
+                        "sInfoEmpty" : "木有记录",
+                        "sInfoFiltered" : "(从 _MAX_ 条记录中过滤)",
+                        "sSearch" : "搜索：",
+                        "sProcessing" : "正在加载中......",
+                        "oPaginate" : {
+                            "sFirst" : "首页",
+                            "sPrevious" : "前一页",
+                            "sNext" : "后一页",
+                            "sLast" : "尾页"
+
+                        }
+                    },
+                    "lengthMenu" : [ 2, 5, 10, 20, 50 ],
+                    "processing" : true, //打开数据加载时的等待效果
+                    "serverSide" : true,//打开后台分页
+                    "ajax" : {
+                        "url" : "/gateway/attend/findIFClock",
+                        "dataSrc" : "aaData",
+                        "data" : function(d) {
+                            d.userName = $("#userName").val();
+                            d.startDate=$("#startDate").val();
+                            d.endDate=$("#endDate").val();
+                        }
+                    },
+                    "columns" : [
+                        {
+                            "data" : null,
+                            render:function(data,type,row,meta) {
+                                return meta.row + 1 +
+                                    meta.settings._iDisplayStart;
+                            }
+                        },
+                        {
+                            "data" : "userName",
+                        },
+                        {
+                            "data" : function (obj) {
+                                return dateToStr(new Date(obj.startWorkTime))
+                            }
+                        },{
+                            "data" : "sstate",
+                        },
+                        {
+                            "data" : function (obj) {
+                                if(obj.offWork==null||obj.offWork==''){
+                                    return '未打卡';
+                                }else{
+                                    return dateToStr(new Date(obj.offWork))
+                                }
+                            }
+                        },
+                        {
+                            "data" : "xstate",
+                        },
+                        {
+                            "data" : function(obj) {
+                                return ' <button class="btn btn-info AuditRecord" id="' + obj.attendanceID
+                                    + '" value="'+obj.sectionID+'" name="'+obj.roleID+'" onclick="find(this.id,this.value,this.name)" id="update">查看详情</button> '
+                            },
+                        } ]
+
+                });
+
+    });
+    //不现实错误提示框
+    $.fn.dataTable.ext.errMode = 'none';
+    function Change() {
+        TabClock.ajax.reload();
+    }
+    //转换时间格式
+    function dateToStr(datetime){
+
+        var year = datetime.getFullYear();
+        var month = datetime.getMonth()+1;//js从0开始取
+        var date = datetime.getDate();
+        var hour = datetime.getHours();
+        var minutes = datetime.getMinutes();
+        var second = datetime.getSeconds();
+
+        if(month<10){
+            month = "0" + month;
+        }
+        if(date<10){
+            date = "0" + date;
+        }
+        if(hour <10){
+            hour = "0" + hour;
+        }
+        if(minutes <10){
+            minutes = "0" + minutes;
+        }
+        if(second <10){
+            second = "0" + second ;
+        }
+
+        var time = year+"-"+month+"-"+date+" "+hour+":"+minutes+":"+second; //2009-06-12 17:18:05
+// alert(time);
+        return time;
+    }
+
+
+    function find(ID,sectionID,roleID){
+        if(roleID=="1"&&sectionID=='2'){
+            $(".driver").show();
+        }else{
+            $(".driver").hide();
+        }
+        $.post("/gateway/attend/showClock",{"attendanceID":ID}, function(data) {
+            $("#title").text("上下班详情");
+            $("#startworktime").val(dateToStr(new Date(data.startWorkTime)));
+            if(data.offWork==null||data.offWork==""){
+                $("#offwork").val("");
+            }else{
+                $("#offwork").val(dateToStr(new Date(data.offWork)));
+            }
+
+            $("#sstate").val(data.sstate);
+            $("#xstate").val(data.xstate);
+            $("#startoilmass").val(data.startOilMass);
+            $("#offoilmass").val(data.offOilMass);
+            $("#startlocation").val(data.startLocation);
+            $("#offlocation").val(data.offLocation);
+            $("#startmileage").val(data.startMileage);
+            $("#offmileage").val(data.offMileage);
+            $("#KaiShi").val(data.startLocation);
+            $("#JieShu").val(data.offLocation);
+        },"json");
+        $("#modalthree").modal("toggle");
+    }
+
+    //查看上车位置
+    function ChaKan(ID){
+        if (ID == "start") {
+            if ($("#KaiShi").val() != null && $("#KaiShi").val() != '') {
+                mapAddress($("#KaiShi").val(),'上班位置');
+                $("#DiTu").show();
+                $("#modalthree").modal("toggle");
+                $("#cont").hide();
+            } else {
+                layer.msg("上班车辆位置为空！！！");
+            }
+
+        } else {
+            if ($("#JieShu").val() != null && $("#JieShu").val() != '') {
+                mapAddress($("#JieShu").val(),'下班位置');
+                $("#DiTu").show();
+                $("#modalthree").modal("toggle");
+                $("#cont").hide();
+            } else {
+                layer.msg("下班车辆位置为空！！！");
+            }
+        }
+
+    }
+    //地图返回
+    function back() {
+        $("#DiTu").hide();
+        $("#cont").show();
+    }
+</script>

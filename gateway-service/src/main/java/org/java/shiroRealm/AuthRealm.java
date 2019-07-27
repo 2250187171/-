@@ -5,11 +5,14 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.java.service.A_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 /**
  * shiro的认证授权类
@@ -21,7 +24,13 @@ public class AuthRealm extends AuthorizingRealm {
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
+        //获得用户凭证
+        String phoneNumber= (String) principalCollection.getPrimaryPrincipal();
+        //获得所有权限
+        List ps = service.findPer(phoneNumber);
+        SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
+        info.addStringPermissions(ps);
+        return info;
     }
     //认证
     @Override

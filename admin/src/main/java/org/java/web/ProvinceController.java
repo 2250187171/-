@@ -23,6 +23,14 @@ public class ProvinceController {
         return "/siteManage/circuitMessage";
     }
 
+    //获得所有省份
+    @RequestMapping("/siteManage/siteShow")
+    public String siteShow(Model model){
+        List<Map> ps = provinceService.findAll();
+        model.addAttribute("ps", ps);
+        return "/siteManage/siteMessage";
+    }
+
     //根据省份id查询城市返回json
     @RequestMapping("/siteManage/findByProID")
     @ResponseBody

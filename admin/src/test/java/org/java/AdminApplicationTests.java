@@ -22,10 +22,10 @@ public class AdminApplicationTests {
 
     @Test
     public void contextLoads() throws JSONException, FileNotFoundException {
-        String bpmnName="leave.bpmn";
-        String pngName="leave.png";
-        InputStream bpmn_in=new FileInputStream("D:/leave.bpmn");
-        InputStream png_in=new FileInputStream("D:/leave.png");
+        String bpmnName="Logistics.bpmn";
+        String pngName="Logistics.png";
+        InputStream bpmn_in=new FileInputStream("D:/Logistics.bpmn");
+        InputStream png_in=new FileInputStream("D:/Logistics.png");
         repositoryService.createDeployment()
                 .addInputStream(bpmnName, bpmn_in)
                 .addInputStream(pngName, png_in).deploy();
@@ -34,6 +34,6 @@ public class AdminApplicationTests {
 
     @Test
     public void aa(){
-        repositoryService.deleteDeployment("7501", true);
+        repositoryService.deleteDeployment("122501", true);
     }
 }
